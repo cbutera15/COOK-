@@ -19,6 +19,18 @@ struct HomeView: View {
         .tabItem() {
           Image(systemName: "sun.horizon")
         }
+      PlusView()
+        .tabItem() {
+          Image(systemName: "plus")
+        }
+      ThirdView()
+        .tabItem {
+          Image(systemName: "paperclip")
+        }
+      FourthView()
+        .tabItem {
+          Image(systemName: "person.fill")
+        }
     }
   }
 }
@@ -51,6 +63,43 @@ struct SecondView: View {
       Image(systemName: "sun.horizon")
       Spacer().frame(width: 0, height: 50)
       Text("Second View")
+    }
+    .padding()
+    .bottomLine()
+  }
+}
+
+
+struct PlusView: View {
+  var body: some View {
+    VStack {
+      Image(systemName: "plus")
+      Spacer().frame(width: 0, height: 50)
+      Text("Third View")
+    }
+    .padding()
+    .bottomLine()
+  }
+}
+
+struct ThirdView: View {
+  var body: some View {
+    VStack {
+      Image(systemName: "paperclip")
+      Spacer().frame(width: 0, height: 50)
+      Text("Third View")
+    }
+    .padding()
+    .bottomLine()
+  }
+}
+
+struct FourthView: View {
+  var body: some View {
+    VStack {
+      Image(systemName: "person.fill")
+      Spacer().frame(width: 0, height: 50)
+      Text("Fourth View")
     }
     .padding()
     .bottomLine()
