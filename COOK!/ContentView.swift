@@ -2,24 +2,72 @@
 //  ContentView.swift
 //  COOK!
 //
-//  Created by Colin Butera on 10/7/25.
+//  Created by Alexa Witkin on 10/7/25.
 //
 
-import SwiftUI
+
 import SwiftUI
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+struct HomeView: View {
+  var body: some View {
+    TabView {
+      FirstView()
+        .tabItem() {
+          Image(systemName: "star")
         }
-        .padding()
+      SecondView()
+        .tabItem() {
+          Image(systemName: "sun.horizon")
+        }
     }
+  }
 }
 
 #Preview {
-    ContentView()
+  HomeView()
 }
+
+
+struct FirstView: View {
+  var body: some View {
+      VStack {
+        Image(systemName: "star.fill")
+        Spacer().frame(width: 0, height: 50)
+        Text("First View")
+      }
+      .padding()
+      .bottomLine()
+  }
+}
+
+#Preview {
+  FirstView()
+}
+
+
+struct SecondView: View {
+  var body: some View {
+    VStack {
+      Image(systemName: "sun.horizon")
+      Spacer().frame(width: 0, height: 50)
+      Text("Second View")
+    }
+    .padding()
+    .bottomLine()
+  }
+}
+
+#Preview {
+  SecondView()
+}
+
+extension View {
+  func bottomLine() -> some View {
+    GeometryReader { geometry in
+      self
+        .frame(width: geometry.size.width, height: geometry.size.height).border(.black)
+    }      .ignoresSafeArea(.all, edges: .top)
+  }
+}
+
+
