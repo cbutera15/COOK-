@@ -43,12 +43,15 @@ struct HomeView: View {
 struct GroceryListView: View {
   var body: some View {
       VStack {
-        Image(systemName: "list.dash")
-        Spacer().frame(width: 0, height: 50)
-        Text("Grocery List View")
+          HStack {
+              Image(systemName: "list.dash").padding()
+              Text("Grocery List")
+              Spacer()
+          }.font(Font.largeTitle.bold())
+          Spacer()
       }
       .padding()
-      .bottomLine()
+//      .bottomLine()
   }
 }
 
@@ -60,12 +63,15 @@ struct GroceryListView: View {
 struct IngredientsView: View {
   var body: some View {
     VStack {
-      Image(systemName: "cabinet")
-      Spacer().frame(width: 0, height: 50)
-      Text("Ingredients View")
+        HStack {
+            Image(systemName: "cabinet").padding()
+            Text("Ingredients")
+            Spacer()
+        }.font(Font.largeTitle.bold())
+        Spacer()
     }
     .padding()
-    .bottomLine()
+//    .bottomLine()
   }
 }
 
@@ -78,31 +84,37 @@ struct PlusView: View {
       Text("Plus View")
     }
     .padding()
-    .bottomLine()
+//    .bottomLine()
   }
 }
 
 struct RecipesView: View {
   var body: some View {
-    VStack {
-      Image(systemName: "paperclip")
-      Spacer().frame(width: 0, height: 50)
-      Text("Recipes View")
-    }
-    .padding()
-    .bottomLine()
+      VStack {
+          HStack {
+              Image(systemName: "bookmark.fill").padding()
+              Text("Recipe Library")
+              Spacer()
+          }.font(Font.largeTitle.bold())
+          Spacer()
+      }
+      .padding()
+//    .bottomLine()
   }
 }
 
 struct ScheduleView: View {
   var body: some View {
-    VStack {
-      Image(systemName: "calendar")
-      Spacer().frame(width: 0, height: 50)
-      Text("Schedule View")
-    }
-    .padding()
-    .bottomLine()
+      VStack {
+          HStack {
+              Image(systemName: "calendar").padding()
+              Text("Schedule")
+              Spacer()
+          }.font(Font.largeTitle.bold())
+          Spacer()
+      }
+      .padding()
+//    .bottomLine()
   }
 }
 
