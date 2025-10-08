@@ -80,6 +80,15 @@ struct IngredientsView: View {
             Spacer()
         }.font(Font.largeTitle.bold())
         Spacer()
+        @State var selectedItems: Set<String> = []
+        let items = ["Bread", "Beef", "Butter"]
+        List(items, id: \.self, selection: $selectedItems) { item in
+            Text(item)
+        }
+        .environment(\.editMode, .constant(.active))
+        .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+        Spacer()
     }
     .padding()
 //    .bottomLine()
