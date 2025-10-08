@@ -11,13 +11,17 @@ struct IngredientsView: View {
   var body: some View {
     VStack {
         HStack {
-            Image(systemName: "cabinet").padding()
+            Image(systemName: "cabinet")
+                .foregroundStyle(Color(hue: 0.1528, saturation: 3, brightness: 1))
+                .padding()
             Text("Ingredients")
+                .foregroundStyle(Color(hue: 0.1528, saturation: 3, brightness: 1))
             Spacer()
         }.font(Font.largeTitle.bold())
         Spacer()
     }
     .padding()
+    .background(Color(hue: 0.1528, saturation: 0.04, brightness: 1))
 //    .bottomLine()
   }
 }

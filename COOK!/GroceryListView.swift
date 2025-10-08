@@ -8,29 +8,40 @@
 import SwiftUI
 
 struct GroceryListView: View {
+    @State private var selectedItems: Set<String> = []
+    private let items = ["Milk", "Eggs", "Cheese"]
+
     var body: some View {
         VStack {
             HStack {
-                Image(systemName: "list.dash").padding()
+                Image(systemName: "list.dash")
+                    .foregroundStyle(Color(hue: 0.9361, saturation: 0.84, brightness: 0.98))
+                    .padding()
                 Text("Grocery List")
+                    .foregroundStyle(Color(hue: 0.9361, saturation: 0.84, brightness: 0.98))
                 Spacer()
-            }.font(Font.largeTitle.bold())
+            }
+            .font(Font.largeTitle.bold())
+
             Spacer()
-            
-        @State var selectedItems: Set<String> = []
-        let items = ["Milk", "Eggs", "Cheese"]
-        List(items, id: \.self, selection: $selectedItems) { item in
-            Text(item)
+
+            List(items, id: \.self, selection: $selectedItems) { item in
+                Text(item)
+            }
+            .environment(\.editMode, .constant(.active))
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
+            .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1)
+            )
+
+            Spacer()
         }
-        .environment(\.editMode, .constant(.active))
-        .listStyle(.insetGrouped)
-        .scrollContentBackground(.hidden)
-        Spacer()
-            
-      }
-      .padding()
-//      .bottomLine()
-  }
+        .padding()
+        .background(
+            Color(hue: 0.9361, saturation: 0.03, brightness: 1)
+        )
+        // .bottomLine()
+    }
 }
 
 #Preview {
