@@ -1,5 +1,5 @@
 //
-//  ScheduleView.swift
+//  RecipeView.swift
 //  COOK!
 //
 //  Created by Sam Zimpfer on 10/7/25.
@@ -7,21 +7,21 @@
 
 import SwiftUI
 
-struct ScheduleView: View {
+struct RecipesView: View {
   var body: some View {
       VStack {
           HStack {
-              Image(systemName: "calendar").padding()
-              Text("Schedule")
+              Image(systemName: "bookmark.fill").padding()
+              Text("Recipe Library")
               Spacer()
           }.font(Font.largeTitle.bold())
           Spacer()
       }
       .padding()
-//    .bottomLine()
+      .bottomLine()
   }
 }
 
 #Preview {
-    ScheduleView()
+    RecipesView()
 }

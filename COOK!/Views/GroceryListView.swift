@@ -29,7 +29,7 @@ struct GroceryListView: View {
             
       }
       .padding()
-//      .bottomLine()
+      .bottomLine()
   }
 }
 

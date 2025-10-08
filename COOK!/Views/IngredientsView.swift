@@ -15,10 +15,25 @@ struct IngredientsView: View {
             Text("Ingredients")
             Spacer()
         }.font(Font.largeTitle.bold())
+        
         Spacer()
+        
+        NavigationStack {
+            HStack {
+                NavigationLink("Scan Food", destination: ScanFoodView())
+                
+                Spacer()
+                
+                NavigationLink("Search Food", destination: SearchFoodView())
+            }.padding()
+        }
+        
+        Spacer()
+        
+        
     }
     .padding()
-//    .bottomLine()
+    .bottomLine()
   }
 }
 

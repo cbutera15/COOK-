@@ -15,7 +15,7 @@ struct PlusView: View {
       Text("Plus View")
     }
     .padding()
-//    .bottomLine()
+    .bottomLine()
   }
 }
 
