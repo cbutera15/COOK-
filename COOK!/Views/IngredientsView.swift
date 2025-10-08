@@ -36,12 +36,7 @@ struct IngredientsView: View {
         
     }
     .padding()
-<<<<<<< HEAD:COOK!/IngredientsView.swift
     .background(Color(hue: 0.1528, saturation: 0.04, brightness: 1))
-//    .bottomLine()
-=======
-    .bottomLine()
->>>>>>> main:COOK!/Views/IngredientsView.swift
   }
 }
 

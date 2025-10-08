@@ -21,12 +21,7 @@ struct ScheduleView: View {
           Spacer()
       }
       .padding()
-<<<<<<< HEAD:COOK!/ScheduleView.swift
       .background(Color(hue: 0.3389, saturation: 0.05, brightness: 1))
-//    .bottomLine()
-=======
-      .bottomLine()
->>>>>>> main:COOK!/Views/ScheduleView.swift
   }
 }
 
