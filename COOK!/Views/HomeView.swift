@@ -52,5 +52,3 @@ extension View {
     }      .ignoresSafeArea(.all, edges: .top)
   }
 }
-
-
