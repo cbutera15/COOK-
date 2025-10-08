@@ -11,25 +11,25 @@ import SwiftUI
 struct HomeView: View {
   var body: some View {
     TabView {
-      FirstView()
+      GroceryListView()
         .tabItem() {
-          Image(systemName: "star")
+          Image(systemName: "list.dash")
         }
-      SecondView()
+      IngredientsView()
         .tabItem() {
-          Image(systemName: "sun.horizon")
+          Image(systemName: "cabinet")
         }
       PlusView()
         .tabItem() {
           Image(systemName: "plus")
         }
-      ThirdView()
+      RecipesView()
         .tabItem {
-          Image(systemName: "paperclip")
+          Image(systemName: "bookmark")
         }
-      FourthView()
+      ScheduleView()
         .tabItem {
-          Image(systemName: "person.fill")
+          Image(systemName: "calendar")
         }
     }
   }
@@ -40,12 +40,12 @@ struct HomeView: View {
 }
 
 
-struct FirstView: View {
+struct GroceryListView: View {
   var body: some View {
       VStack {
-        Image(systemName: "star.fill")
+        Image(systemName: "list.dash")
         Spacer().frame(width: 0, height: 50)
-        Text("First View")
+        Text("Grocery List View")
       }
       .padding()
       .bottomLine()
@@ -53,16 +53,16 @@ struct FirstView: View {
 }
 
 #Preview {
-  FirstView()
+  GroceryListView()
 }
 
 
-struct SecondView: View {
+struct IngredientsView: View {
   var body: some View {
     VStack {
-      Image(systemName: "sun.horizon")
+      Image(systemName: "cabinet")
       Spacer().frame(width: 0, height: 50)
-      Text("Second View")
+      Text("Ingredients View")
     }
     .padding()
     .bottomLine()
@@ -75,31 +75,31 @@ struct PlusView: View {
     VStack {
       Image(systemName: "plus")
       Spacer().frame(width: 0, height: 50)
-      Text("Third View")
+      Text("Plus View")
     }
     .padding()
     .bottomLine()
   }
 }
 
-struct ThirdView: View {
+struct RecipesView: View {
   var body: some View {
     VStack {
       Image(systemName: "paperclip")
       Spacer().frame(width: 0, height: 50)
-      Text("Third View")
+      Text("Recipes View")
     }
     .padding()
     .bottomLine()
   }
 }
 
-struct FourthView: View {
+struct ScheduleView: View {
   var body: some View {
     VStack {
-      Image(systemName: "person.fill")
+      Image(systemName: "calendar")
       Spacer().frame(width: 0, height: 50)
-      Text("Fourth View")
+      Text("Schedule View")
     }
     .padding()
     .bottomLine()
@@ -107,7 +107,7 @@ struct FourthView: View {
 }
 
 #Preview {
-  SecondView()
+  IngredientsView()
 }
 
 extension View {
