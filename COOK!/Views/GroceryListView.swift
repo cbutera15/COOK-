@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GroceryListView: View {
     @State private var selectedItems: Set<String> = []
-    private let items = ["Milk", "Eggs", "Cheese"]
+    @State private var items: [String] = ["Milk", "Eggs", "Cheese"]
 
     var body: some View {
         VStack {
@@ -24,18 +24,44 @@ struct GroceryListView: View {
             .font(Font.largeTitle.bold())
 
             Spacer()
+            
+            VStack(alignment: .leading, spacing: 0) {
+                List(items, id: \.self, selection: $selectedItems) { item in
+                    Text(item)
+                        .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
+                }
+                .environment(\.editMode, .constant(.active))
+                .listStyle(.insetGrouped)
+                .scrollContentBackground(.hidden)
+                .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
+                
+                HStack(spacing: 8) {
+                    Button(action: { items = [] }) {
+                        Text("Clear")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
 
-            List(items, id: \.self, selection: $selectedItems) { item in
-                Text(item)
+                    Button(action: { /*
+                                      PLACEHOLDER
+                                      */ }) {
+                        Text("Add Item")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+                .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
+                .padding(.horizontal)
+                
+                Spacer()
+                
+                
             }
-            .environment(\.editMode, .constant(.active))
-            .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
-            .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1))
+        
 
             Spacer()
         }
-        .padding()
+        .padding(.horizontal)
         .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1))
     }
 }
