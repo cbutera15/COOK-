@@ -21,8 +21,12 @@ struct RecipesView: View {
           Spacer()
       }
       .padding()
+<<<<<<< HEAD:COOK!/RecipesView.swift
       .background(Color(hue: 0.5611, saturation: 0.05, brightness: 1))
 //    .bottomLine()
+=======
+      .bottomLine()
+>>>>>>> main:COOK!/Views/RecipesView.swift
   }
 }
 

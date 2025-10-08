@@ -31,16 +31,12 @@ struct GroceryListView: View {
             .environment(\.editMode, .constant(.active))
             .listStyle(.insetGrouped)
             .scrollContentBackground(.hidden)
-            .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1)
-            )
+            .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1))
 
             Spacer()
         }
         .padding()
-        .background(
-            Color(hue: 0.9361, saturation: 0.03, brightness: 1)
-        )
-        // .bottomLine()
+        .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1))
     }
 }
 

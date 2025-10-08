@@ -18,11 +18,30 @@ struct IngredientsView: View {
                 .foregroundStyle(Color(hue: 0.1528, saturation: 3, brightness: 1))
             Spacer()
         }.font(Font.largeTitle.bold())
+        
         Spacer()
+        
+        NavigationStack {
+            HStack {
+                NavigationLink("Scan Food", destination: ScanFoodView())
+                
+                Spacer()
+                
+                NavigationLink("Search Food", destination: SearchFoodView())
+            }.padding()
+        }
+        
+        Spacer()
+        
+        
     }
     .padding()
+<<<<<<< HEAD:COOK!/IngredientsView.swift
     .background(Color(hue: 0.1528, saturation: 0.04, brightness: 1))
 //    .bottomLine()
+=======
+    .bottomLine()
+>>>>>>> main:COOK!/Views/IngredientsView.swift
   }
 }
 
