@@ -42,6 +42,14 @@ struct HomeView: View {
   HomeView()
 }
 
+#if DEBUG
+#Preview("GroceryList") { GroceryListView() }
+#Preview("Ingredients") { IngredientsView() }
+#Preview("Plus") { PlusView() }
+#Preview("Recipes") { RecipesView() }
+#Preview("Schedule") { ScheduleView() }
+#endif
+
 struct GroceryListView: View {
     @State private var selectedItems: Set<String> = []
     private let items = ["Milk", "Eggs", "Cheese"]
@@ -67,10 +75,6 @@ struct GroceryListView: View {
         .padding()
         // .bottomLine()
     }
-}
-
-#Preview {
-    GroceryListView()
 }
 
 struct IngredientsView: View {
@@ -144,10 +148,6 @@ struct ScheduleView: View {
     }
 }
 
-#Preview {
-    IngredientsView()
-}
-
 extension View {
   func bottomLine() -> some View {
     GeometryReader { geometry in
@@ -156,4 +156,5 @@ extension View {
     }      .ignoresSafeArea(.all, edges: .top)
   }
 }
+
 
