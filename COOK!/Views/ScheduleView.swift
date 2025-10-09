@@ -16,6 +16,16 @@ struct ScheduleView: View {
               Spacer()
           }.font(Font.largeTitle.bold())
           Spacer()
+          
+          Text("Monday")
+          Text("Tuesday")
+          Text("Wednesday")
+          Text("Thursday")
+          Text("Friday")
+          Text("Saturday")
+          Text("Sunday")
+          
+          Spacer()
       }
       .padding()
       .bottomLine()
