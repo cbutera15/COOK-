@@ -87,7 +87,10 @@ struct GroceryListView: View {
                     .buttonStyle(.borderedProminent)
                     
                     // Add Item button updates showAddItemMenu
-                    Button(action: { showAddItemMenu = true }) {
+                    Button(action: {
+                        showAddItemMenu = true
+                        quantity = 0
+                    }) {
                         Text("Add Item")
                             .frame(maxWidth: .infinity)
                     }
@@ -100,7 +103,7 @@ struct GroceryListView: View {
                                 text: $itemToAdd)
                             .textFieldStyle(.roundedBorder)
                                 .padding()
-                                Stepper("Quantity: \(quantity)", value: $quantity)
+                            Stepper("Quantity: \(quantity)", value: $quantity, in: 0...100)
                                 .padding()
                             HStack {
                                 // Cancel Button
