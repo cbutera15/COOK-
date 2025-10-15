@@ -9,10 +9,12 @@ import SwiftUI
 
 struct HomeView: View {
     var body: some View {
-        Text("Upcoming Meals")
-        Spacer()
-        Text("Favorite Meals")
-        Spacer()
+        VStack {
+            Text("Upcoming Meals")
+            Spacer()
+            Text("Favorite Meals")
+            Spacer()
+        }
     }
 }
 

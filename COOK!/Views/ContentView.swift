@@ -15,31 +15,37 @@ struct ContentView: View {
         ZStack(alignment: .top) {
             Text("COOK")
             
-            TabView {
+            TabView(selection: $selectedTab) {
                 HomeView()
                     .tabItem() {
                         Image(systemName: "house")
                     }
+                    .tag("Home")
                 GroceryListView()
                     .tabItem() {
                         Image(systemName: "list.dash")
                     }
+                    .tag("Grocery")
                 IngredientsView()
                     .tabItem() {
                         Image(systemName: "cabinet")
                     }
+                    .tag("Ingredients")
                 PlusView()
                     .tabItem() {
                         Image(systemName: "plus")
                     }
+                    .tag("Plus")
                 RecipesView()
                     .tabItem {
                         Image(systemName: "bookmark")
                     }
+                    .tag("Recipes")
                 ScheduleView()
                     .tabItem {
                         Image(systemName: "calendar")
                     }
+                    .tag("Schedule")
             }
             .tint(tabsColor)
             .onChange(of: selectedTab) { oldTab, newTab in
