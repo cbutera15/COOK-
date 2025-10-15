@@ -8,34 +8,54 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab: String = "Grocery"
+    @State private var tabsColor: Color = .blue
+    
     var body: some View {
-        Text("COOK")
-        
-        TabView {
-            HomeView()
-                .tabItem() {
-                    Image(systemName: "house")
+        ZStack(alignment: .top) {
+            Text("COOK")
+            
+            TabView {
+                HomeView()
+                    .tabItem() {
+                        Image(systemName: "house")
+                    }
+                GroceryListView()
+                    .tabItem() {
+                        Image(systemName: "list.dash")
+                    }
+                IngredientsView()
+                    .tabItem() {
+                        Image(systemName: "cabinet")
+                    }
+                PlusView()
+                    .tabItem() {
+                        Image(systemName: "plus")
+                    }
+                RecipesView()
+                    .tabItem {
+                        Image(systemName: "bookmark")
+                    }
+                ScheduleView()
+                    .tabItem {
+                        Image(systemName: "calendar")
+                    }
+            }
+            .tint(tabsColor)
+            .onChange(of: selectedTab) { oldTab, newTab in
+                switch newTab {
+                case "Grocery":
+                    tabsColor = .pink
+                case "Ingredients":
+                    tabsColor = .yellow
+                case "Recipes":
+                    tabsColor = Color(hue: 0.5611, saturation: 0.88, brightness: 1)
+                case "Schedule":
+                    tabsColor = Color(hue: 0.3389, saturation: 1, brightness: 0.85)
+                default:
+                    tabsColor = .blue
                 }
-            GroceryListView()
-                .tabItem() {
-                    Image(systemName: "list.dash")
-                }
-            IngredientsView()
-                .tabItem() {
-                    Image(systemName: "cabinet")
-                }
-            PlusView()
-                .tabItem() {
-                    Image(systemName: "plus")
-                }
-            RecipesView()
-                .tabItem {
-                    Image(systemName: "bookmark")
-                }
-            ScheduleView()
-                .tabItem {
-                    Image(systemName: "calendar")
-                }
+            }
         }
     }
 }
@@ -43,7 +63,6 @@ struct ContentView: View {
 #Preview {
     ContentView()
 }
-
 
 extension View {
   func bottomLine() -> some View {
