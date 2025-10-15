@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipesView: View {
-    @State public var recipes = ["Chicken and rice", "Pasta salad", "Spaghetti with meatballs"]
+    @State private var recipes: [String] = ["Chicken and rice", "Pasta salad", "Spaghetti with meatballs"]
     var body: some View {
         VStack {
             HStack {
