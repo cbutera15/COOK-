@@ -11,8 +11,11 @@ struct RecipesView: View {
   var body: some View {
       VStack {
           HStack {
-              Image(systemName: "bookmark.fill").padding()
+              Image(systemName: "bookmark.fill")
+                  .foregroundStyle(Color(hue: 0.5611, saturation: 0.88, brightness: 1))
+                  .padding()
               Text("Recipe Library")
+                  .foregroundStyle(Color(hue: 0.5611, saturation: 0.88, brightness: 1))
               Spacer()
           }.font(Font.largeTitle.bold())
           Spacer()
@@ -27,7 +30,7 @@ struct RecipesView: View {
           }
       }
       .padding()
-      .bottomLine()
+      .background(Color(hue: 0.5611, saturation: 0.05, brightness: 1))
   }
 }
 
