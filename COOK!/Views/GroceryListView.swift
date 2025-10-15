@@ -8,8 +8,6 @@
 import SwiftUI
 import UIKit
 
-
-
 struct GroceryListView: View {
     @State private var selectedItems: Set<String> = []
     @State private var items: [String] = ["Milk", "Eggs", "Cheese"]
@@ -36,9 +34,14 @@ struct GroceryListView: View {
             // List content
             VStack(alignment: .leading, spacing: 0) {
                 // Actual list
-                List(items, id: \.self, selection: $selectedItems) { item in
-                    Text(item)
-                        .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
+                List(selection: $selectedItems) {
+                    ForEach(items, id: \.self) { item in
+                        Text(item)
+                            .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
+                    }
+                    .onDelete { indexSet in
+                        items.remove(atOffsets: indexSet)
+                    }
                 }
                 .environment(\.editMode, .constant(.active))
                 .listStyle(.insetGrouped)
@@ -77,13 +80,6 @@ struct GroceryListView: View {
                                         .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.borderedProminent)
-//                                Button("Add") {
-//                                    if !itemToAdd.isEmpty {
-//                                        items.append(itemToAdd)
-//                                        showAddItemMenu = false
-//                                        itemToAdd = ""
-//                                    }
-//                                }
                                 Button(action: {
                                     if !itemToAdd.isEmpty {
                                         items.append(itemToAdd)
