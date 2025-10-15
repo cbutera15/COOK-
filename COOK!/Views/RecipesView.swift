@@ -19,6 +19,15 @@ struct RecipesView: View {
               Spacer()
           }.font(Font.largeTitle.bold())
           Spacer()
+          
+          let recipes = ["Chicken and rice", "Pasta salad", "Spaghetti with meatballs"]
+          NavigationStack {
+              ForEach(recipes, id: \.self) { recipe in
+                  NavigationLink(destination: RecipeView()) {
+                      Text(recipe)
+                  }
+              }
+          }
       }
       .padding()
       .background(Color(hue: 0.5611, saturation: 0.05, brightness: 1))
