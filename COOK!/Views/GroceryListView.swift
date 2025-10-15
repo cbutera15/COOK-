@@ -38,15 +38,22 @@ struct GroceryListView: View {
                     ForEach(items, id: \.self) { item in
                         Text(item)
                             .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
+                            .swipeActions {
+                                Button("Delete") {
+                                    print("h")
+                                }
+                                .tint(.red)
+                            }
                     }
-                    .onDelete { indexSet in
-                        items.remove(atOffsets: indexSet)
-                    }
+//                    .onDelete { indexSet in
+//                        items.remove(atOffsets: indexSet)
+//                    }
                 }
                 .environment(\.editMode, .constant(.active))
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
                 .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
+            
                 
                 // Clear and add buttons
                 HStack(spacing: 8) {
