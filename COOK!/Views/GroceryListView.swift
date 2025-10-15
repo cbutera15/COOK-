@@ -9,8 +9,9 @@ import SwiftUI
 import UIKit
 
 struct GroceryListView: View {
-    @State private var selectedItems: Set<String> = []
-    @State private var items: [String] = ["Milk", "Eggs", "Cheese"]
+    @State private var selectedItems: [Ingredient] = []
+    @State private var items: [Ingredient] = [Ingredient(name: "Milk", quantity: 1), Ingredient(name: "Eggs", quantity: 2), Ingredient(name: "Cheese", quantity: 3)]
+    @State private var quantity = 0
     
     // For Adding Items
     @State private var showAddItemMenu = false
@@ -34,34 +35,42 @@ struct GroceryListView: View {
             // List content
             VStack(alignment: .leading, spacing: 0) {
                 // Actual list
-                List(/*selection: $selectedItems*/) {
-                    ForEach(items, id: \.self) { item in
+                List() {
+                    ForEach(items) { item in
                         HStack {
-                            Image(systemName: selectedItems.contains(item) ? "checkmark.circle.fill" : "circle")
+                            // Custom checkmark to allow for selection and deletion
+                            Image(systemName: selectedItems.contains(where: { $0.id == item.id }) ? "checkmark.circle.fill" : "circle")
                                 .foregroundStyle(.pink)
-                            Text(item)
-                                .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
-                                .swipeActions {
-                                    Button("Delete") {
-                                        print("h")
+                                .font(.title3)
+                            HStack {
+                                Text(item.name)
+                                    .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
+                                // Allows deletion
+                                    .swipeActions {
+                                        Button(role: .destructive) {
+                                            // checking items against their unique item ids.
+                                            if let idx = items.firstIndex(where: { $0.id == item.id }) {
+                                                items.remove(at: idx)
+                                            }
+                                        } label: {
+                                            Text("Delete")
+                                        }.tint(Color(hue: 0.9361, saturation: 1, brightness: 0.76))
                                     }
-                                    .tint(Color(hue: 0.9361, saturation: 0.75, brightness: 0.75))
-                                }
-                            Spacer()
+                                Spacer()
+                                Text(String(item.quantity))
+                            }
                         }
                         .contentShape(Rectangle())
-                        .onTapGesture {tapGesture in
-                            if selectedItems.contains(item) {
-                                selectedItems.remove(item)
+                        .onTapGesture {
+                            // Matching item IDS
+                            if let idx = selectedItems.firstIndex(where: { $0.id == item.id }) {
+                                selectedItems.remove(at: idx)
                             } else {
-                                selectedItems.insert(item)
+                                selectedItems.append(item)
                             }
                         }
                         
                     }
-//                    .onDelete { indexSet in
-//                        items.remove(atOffsets: indexSet)
-//                    }
                 }
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
@@ -85,13 +94,16 @@ struct GroceryListView: View {
                     .buttonStyle(.borderedProminent)
                     // Context menu for adding an item
                     .sheet(isPresented: $showAddItemMenu) {
-                        VStack(spacing: 10) {
+                        VStack() {
                             TextField(
                                 "Item Name",
                                 text: $itemToAdd)
                             .textFieldStyle(.roundedBorder)
                                 .padding()
+                                Stepper("Quantity: \(quantity)", value: $quantity)
+                                .padding()
                             HStack {
+                                // Cancel Button
                                 Button(action: {
                                     showAddItemMenu = false
                                     itemToAdd = ""
@@ -100,9 +112,10 @@ struct GroceryListView: View {
                                         .frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.borderedProminent)
+                                // Add Item button
                                 Button(action: {
                                     if !itemToAdd.isEmpty {
-                                        items.append(itemToAdd)
+                                        items.append(Ingredient(name: itemToAdd, quantity: quantity))
                                         showAddItemMenu = false
                                         itemToAdd = ""
                                     }
@@ -114,7 +127,7 @@ struct GroceryListView: View {
                             }
                             .padding(.horizontal)
                         }
-                        .presentationDetents([.height(150)])
+                        .presentationDetents([.height(200)])
                     }
                 }
                 .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))

@@ -7,7 +7,13 @@
 
 import Foundation
 
-struct Ingredient {
+struct Ingredient: Identifiable {
     var name: String
     var quantity: Int
+    let id = UUID()
+    
+    init(name: String, quantity: Int) {
+        self.name = name
+        self.quantity = quantity
+    }
 }
