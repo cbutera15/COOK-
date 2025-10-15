@@ -40,7 +40,7 @@ struct GroceryListView: View {
                         HStack {
                             // Custom checkmark to allow for selection and deletion
                             Image(systemName: selectedItems.contains(where: { $0.id == item.id }) ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(.pink)
+                                .foregroundStyle(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
                                 .font(.title3)
                             HStack {
                                 Text(item.name)
@@ -105,6 +105,7 @@ struct GroceryListView: View {
                                 .padding()
                             Stepper("Quantity: \(quantity)", value: $quantity, in: 0...100)
                                 .padding()
+ 
                             HStack {
                                 // Cancel Button
                                 Button(action: {
