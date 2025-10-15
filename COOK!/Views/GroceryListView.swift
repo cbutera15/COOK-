@@ -34,22 +34,35 @@ struct GroceryListView: View {
             // List content
             VStack(alignment: .leading, spacing: 0) {
                 // Actual list
-                List(selection: $selectedItems) {
+                List(/*selection: $selectedItems*/) {
                     ForEach(items, id: \.self) { item in
-                        Text(item)
-                            .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
-                            .swipeActions {
-                                Button("Delete") {
-                                    print("h")
+                        HStack {
+                            Image(systemName: selectedItems.contains(item) ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(.pink)
+                            Text(item)
+                                .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
+                                .swipeActions {
+                                    Button("Delete") {
+                                        print("h")
+                                    }
+                                    .tint(Color(hue: 0.9361, saturation: 0.75, brightness: 0.75))
                                 }
-                                .tint(.red)
+                            Spacer()
+                        }
+                        .contentShape(Rectangle())
+                        .onTapGesture {tapGesture in
+                            if selectedItems.contains(item) {
+                                selectedItems.remove(item)
+                            } else {
+                                selectedItems.insert(item)
                             }
+                        }
+                        
                     }
 //                    .onDelete { indexSet in
 //                        items.remove(atOffsets: indexSet)
 //                    }
                 }
-                .environment(\.editMode, .constant(.active))
                 .listStyle(.insetGrouped)
                 .scrollContentBackground(.hidden)
                 .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
