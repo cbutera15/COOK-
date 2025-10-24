@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct RecipeView: View {
+    let recipe: Recipe
     var body: some View {
         VStack {
-            Text("Recipe Title")
+            Text(recipe.name)
             Spacer()
             Text("Image")
             Spacer()
@@ -19,10 +20,11 @@ struct RecipeView: View {
             Text("Instructions")
         }
         .padding()
-        .bottomLine()
+        //.bottomLine()
+        .navigationTitle(recipe.name)
     }
 }
 
 #Preview {
-    RecipeView()
+    RecipeView(recipe: Recipe(name:"Chicken and Pasta"))
 }
