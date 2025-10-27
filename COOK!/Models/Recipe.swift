@@ -29,6 +29,10 @@ struct Recipe: Identifiable {
         ingredients.append(ingredient)
     }
     
+    mutating func addIngredient(_ name: String, _ quantity: Int) {
+        ingredients.append(Ingredient(name: name, quantity: quantity))
+    }
+    
     mutating func addInstruction(_ instruction: String) {
         instructions.append(instruction)
     }
