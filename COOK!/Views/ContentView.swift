@@ -8,61 +8,63 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var selectedTab: String = "Grocery"
-    @State private var tabsColor: Color = .blue
+    @EnvironmentObject var appState: AppState
     
     var body: some View {
         ZStack(alignment: .top) {
             VStack {
                 Text("COOK")
                 
-                TabView(selection: $selectedTab) {
+                switch appState.selectedTab {
+                case .home:
                     HomeView()
-                        .tabItem() {
-                            Image(systemName: "house")
-                        }
-                        .tag("Home")
+                case .groceryList:
                     GroceryListView()
-                        .tabItem() {
-                            Image(systemName: "list.dash")
-                        }
-                        .tag("Grocery")
+                case .ingredients:
                     IngredientsView()
-                        .tabItem() {
-                            Image(systemName: "cabinet")
-                        }
-                        .tag("Ingredients")
+                case .plus:
                     PlusView()
-                        .tabItem() {
-                            Image(systemName: "plus")
-                        }
-                        .tag("Plus")
+                case .recipes:
                     RecipesView()
-                        .tabItem {
-                            Image(systemName: "bookmark")
-                        }
-                        .tag("Recipes")
+                case .schedule:
                     ScheduleView()
-                        .tabItem {
-                            Image(systemName: "calendar")
-                        }
-                        .tag("Schedule")
                 }
-                .tint(tabsColor)
-                .onChange(of: selectedTab) { oldTab, newTab in
-                    switch newTab {
-                    case "Grocery":
-                        tabsColor = .pink
-                    case "Ingredients":
-                        tabsColor = .yellow
-                    case "Recipes":
-                        tabsColor = Color(hue: 0.5611, saturation: 0.88, brightness: 1)
-                    case "Schedule":
-                        tabsColor = Color(hue: 0.3389, saturation: 1, brightness: 0.85)
-                    default:
-                        tabsColor = .blue
-                    }
+                
+                HStack() {
+                    CustomTabButton(
+                        iconName: "list.dash",
+                        destination: .groceryList,
+                        tabColor: .pink)
+                    
+                    CustomTabButton(
+                        iconName: "cabinet",
+                        destination: .ingredients,
+                        tabColor: .yellow)
+                    
+                    CustomTabButton(
+                        iconName: "plus",
+                        destination: .plus,
+                        tabColor: .blue)
+                    
+                    CustomTabButton(
+                        iconName: "bookmark",
+                        destination: .recipes,
+                        tabColor: Color(hue: 0.5611, saturation: 0.88, brightness: 1))
+                    
+                    CustomTabButton(
+                        iconName: "calendar",
+                        destination: .schedule,
+                        tabColor: Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                 }
+                .frame(maxWidth: .infinity)
+                .background(.ultraThinMaterial)
+                .ignoresSafeArea(edges: .bottom)
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.black),
+                    alignment: .top
+                )
             }
         }
     }
@@ -70,6 +72,7 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+        .environmentObject(AppState())
 }
 
 extension View {
