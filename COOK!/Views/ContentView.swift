@@ -31,8 +31,6 @@ struct ContentView: View {
                         ScheduleView()
                 }
                 
-                }
-                
                 HStack() {
                     CustomTabButton(
                         iconName: "list.dash",
@@ -68,6 +66,7 @@ struct ContentView: View {
                         .foregroundColor(.black),
                     alignment: .top
                 )
+            }
         }
     }
 }
