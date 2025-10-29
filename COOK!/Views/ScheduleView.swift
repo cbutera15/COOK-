@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ScheduleView: View {
+    @EnvironmentObject var appState: AppState
   var body: some View {
       VStack {
           HStack {
@@ -36,5 +37,5 @@ struct ScheduleView: View {
 }
 
 #Preview {
-    ScheduleView()
+    ScheduleView().environmentObject(AppState())
 }

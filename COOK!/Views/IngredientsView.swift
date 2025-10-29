@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct IngredientsView: View {
+    @EnvironmentObject var appState: AppState
+    
   var body: some View {
     VStack {
         HStack {
@@ -36,10 +38,10 @@ struct IngredientsView: View {
         
     }
     .padding()
-    .background(Color(hue: 0.1528, saturation: 0.04, brightness: 1))
+    .background(appState.backgroundColor)
   }
 }
 
 #Preview {
-    IngredientsView()
+    IngredientsView().environmentObject(AppState())
 }

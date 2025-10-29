@@ -8,79 +8,77 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var appState: AppState
     @State private var selectedTab: String = "Grocery"
-    @State private var tabsColor: Color = .pink
-    @State private var backgroundColor: Color = Color(hue: 0.9361, saturation: 0.03, brightness: 1)
     
     var body: some View {
         ZStack(alignment: .top) {
             VStack {
                 Text("COOK")
                 
-                TabView(selection: $selectedTab) {
-                    HomeView()
-                        .tabItem() {
-                            Image(systemName: "house")
-                        }
-                        .tag("Home")
-                    GroceryListView()
-                        .tabItem() {
-                            Image(systemName: "list.dash")
-                        }
-                        .tag("Grocery")
-                    IngredientsView()
-                        .tabItem() {
-                            Image(systemName: "cabinet")
-                        }
-                        .tag("Ingredients")
-                    PlusView()
-                        .tabItem() {
-                            Image(systemName: "plus")
-                        }
-                        .tag("Plus")
-                    RecipesView()
-                        .tabItem {
-                            Image(systemName: "bookmark")
-                        }
-                        .tag("Recipes")
-                    ScheduleView()
-                        .tabItem {
-                            Image(systemName: "calendar")
-                        }
-                        .tag("Schedule")
+                switch appState.selectedTab {
+                    case .home:
+                        HomeView()
+                    case .groceryList:
+                        GroceryListView()
+                    case .ingredients:
+                        IngredientsView()
+                    case .plus:
+                        PlusView()
+                    case .recipes:
+                        RecipesView()
+                    case .schedule:
+                        ScheduleView()
                 }
-                .tint(tabsColor)
-                .onChange(of: selectedTab) { oldTab, newTab in
-                    switch newTab {
-                    case "Home":
-                        backgroundColor = Color(hue: 0.7444, saturation: 0.03, brightness: 0.99)
-                        tabsColor = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
-                    case "Grocery":
-                        tabsColor = .pink
-                        backgroundColor = Color(hue: 0.9361, saturation: 0.03, brightness: 1)
-                    case "Ingredients":
-                        tabsColor = .yellow
-                        backgroundColor = Color(hue: 0.1528, saturation: 0.04, brightness: 1)
-                    case "Recipes":
-                        tabsColor = Color(hue: 0.5611, saturation: 0.88, brightness: 1)
-                        backgroundColor = Color(hue: 0.5611, saturation: 0.05, brightness: 1)
-                    case "Plus":
-                        tabsColor = .blue
-                    case "Schedule":
-                        tabsColor = Color(hue: 0.3389, saturation: 1, brightness: 0.85)
-                        backgroundColor = Color(hue: 0.3389, saturation: 0.05, brightness: 1)
-                    default:
-                        tabsColor = .pink
-                    }
+                
+                HStack() {
+                    CustomTabButton(
+                        iconName: "list.dash",
+                        destination: .groceryList,
+                        tabColor: .pink,
+                        appColor: Color(hue: 0.9361, saturation: 0.03, brightness: 1))
+                    
+                    CustomTabButton(
+                        iconName: "cabinet",
+                        destination: .ingredients,
+                        tabColor: .yellow,
+                        appColor: Color(hue: 0.1528, saturation: 0.04, brightness: 1))
+                    
+                    CustomTabButton(
+                        iconName: "plus",
+                        destination: .plus,
+                        tabColor: .blue,
+                        appColor: .white)
+                    
+                    CustomTabButton(
+                        iconName: "bookmark",
+                        destination: .recipes,
+                        tabColor: Color(hue: 0.5611, saturation: 0.88, brightness: 1),
+                        appColor: Color(hue: 0.5611, saturation: 0.05, brightness: 1))
+                    
+                    CustomTabButton(
+                        iconName: "calendar",
+                        destination: .schedule,
+                        tabColor: Color(hue: 0.3389, saturation: 1, brightness: 0.85),
+                        appColor: Color(hue: 0.3389, saturation: 0.05, brightness: 1)   )
                 }
-            }
-            .background(backgroundColor)
+                .frame(maxWidth: .infinity)
+                .background(appState.backgroundColor)
+                .ignoresSafeArea(edges: .bottom)
+                .overlay(
+                    Rectangle()
+                        .frame(height: 1)
+                        .foregroundColor(.black),
+                    alignment: .top
+                )
+            }.background(appState.backgroundColor)
         }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(AppState())
 }
 
 extension View {
