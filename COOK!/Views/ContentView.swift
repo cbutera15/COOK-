@@ -43,7 +43,7 @@ struct ContentView: View {
                             Image(systemName: "bookmark")
                         }
                         .tag("Recipes")
-                    ScheduleView()
+                    ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "", selectedTime: "")
                         .tabItem {
                             Image(systemName: "calendar")
                         }
