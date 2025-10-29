@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
+    @State private var selectedTab: String = "Grocery"
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -16,18 +17,20 @@ struct ContentView: View {
                 Text("COOK")
                 
                 switch appState.selectedTab {
-                case .home:
-                    HomeView()
-                case .groceryList:
-                    GroceryListView()
-                case .ingredients:
-                    IngredientsView()
-                case .plus:
-                    PlusView()
-                case .recipes:
-                    RecipesView()
-                case .schedule:
-                    ScheduleView()
+                    case .home:
+                        HomeView()
+                    case .groceryList:
+                        GroceryListView()
+                    case .ingredients:
+                        IngredientsView()
+                    case .plus:
+                        PlusView()
+                    case .recipes:
+                        RecipesView()
+                    case .schedule:
+                        ScheduleView()
+                }
+                
                 }
                 
                 HStack() {
@@ -65,7 +68,6 @@ struct ContentView: View {
                         .foregroundColor(.black),
                     alignment: .top
                 )
-            }
         }
     }
 }
