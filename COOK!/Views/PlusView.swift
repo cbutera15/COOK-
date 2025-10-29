@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct PlusView: View {
+    @EnvironmentObject var appState: AppState
+    
   var body: some View {
     VStack {
       Image(systemName: "plus")
@@ -15,10 +17,10 @@ struct PlusView: View {
       Text("Plus View")
     }
     .padding()
-    .bottomLine()
+    .background(appState.backgroundColor)
   }
 }
 
 #Preview {
-    PlusView()
+    PlusView().environmentObject(AppState())
 }
