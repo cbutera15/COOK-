@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 
 struct RecipesView: View {
+    @EnvironmentObject var appState: AppState
     @State private var favoriteRecipes: [Recipe] = []
     @State private var recipes: [Recipe] = [
         Recipe(name: "Chicken and rice"),
@@ -57,7 +58,7 @@ struct RecipesView: View {
                 Spacer()
             }
             .padding(.horizontal)
-            .background(Color(hue: 0.5611, saturation: 0.05, brightness: 1))
+            .background(appState.backgroundColor)
         }
     }
     
@@ -126,5 +127,5 @@ struct RecipeRow: View {
 //}
 
 #Preview {
-    RecipesView()
+    RecipesView().environmentObject(AppState())
 }

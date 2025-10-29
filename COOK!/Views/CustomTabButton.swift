@@ -12,10 +12,12 @@ struct CustomTabButton: View {
     let iconName: String
     let destination: AppState.MenuTab
     let tabColor: Color
+    let appColor: Color
     
     var body: some View {
         Button(action: {
             appState.selectedTab = destination
+            appState.backgroundColor = appColor
         }) {
             Image(systemName: iconName)
                 .font(.system(size: 28))  
@@ -26,6 +28,6 @@ struct CustomTabButton: View {
 }
 
 #Preview {
-    CustomTabButton(iconName: "list.dash", destination: .groceryList, tabColor: .pink)
+    CustomTabButton(iconName: "list.dash", destination: .groceryList, tabColor: .pink, appColor: .white)
         .environmentObject(AppState())
 }

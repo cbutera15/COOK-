@@ -10,12 +10,9 @@ import SwiftUI
 
 @main
 struct SimpleTabViewApp: App {
-    @EnvironmentObject var appState: AppState
-    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(appState)
         }
     }
 }

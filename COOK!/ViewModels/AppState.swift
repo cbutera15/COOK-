@@ -19,12 +19,10 @@ class AppState: ObservableObject {
     }
     
     @Published var selectedTab: MenuTab
+    @Published var backgroundColor: Color
     
     init() {
         self.selectedTab = .home
-    }
-    
-    func setTab(_ tab: MenuTab) {
-        selectedTab = tab
+        self.backgroundColor = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
     }
 }

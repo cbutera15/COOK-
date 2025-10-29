@@ -35,30 +35,35 @@ struct ContentView: View {
                     CustomTabButton(
                         iconName: "list.dash",
                         destination: .groceryList,
-                        tabColor: .pink)
+                        tabColor: .pink,
+                        appColor: Color(hue: 0.9361, saturation: 0.03, brightness: 1))
                     
                     CustomTabButton(
                         iconName: "cabinet",
                         destination: .ingredients,
-                        tabColor: .yellow)
+                        tabColor: .yellow,
+                        appColor: Color(hue: 0.1528, saturation: 0.04, brightness: 1))
                     
                     CustomTabButton(
                         iconName: "plus",
                         destination: .plus,
-                        tabColor: .blue)
+                        tabColor: .blue,
+                        appColor: .white)
                     
                     CustomTabButton(
                         iconName: "bookmark",
                         destination: .recipes,
-                        tabColor: Color(hue: 0.5611, saturation: 0.88, brightness: 1))
+                        tabColor: Color(hue: 0.5611, saturation: 0.88, brightness: 1),
+                        appColor: Color(hue: 0.5611, saturation: 0.05, brightness: 1))
                     
                     CustomTabButton(
                         iconName: "calendar",
                         destination: .schedule,
-                        tabColor: Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                        tabColor: Color(hue: 0.3389, saturation: 1, brightness: 0.85),
+                        appColor: Color(hue: 0.3389, saturation: 0.05, brightness: 1)   )
                 }
                 .frame(maxWidth: .infinity)
-                .background(.ultraThinMaterial)
+                .background(appState.backgroundColor)
                 .ignoresSafeArea(edges: .bottom)
                 .overlay(
                     Rectangle()
@@ -66,7 +71,7 @@ struct ContentView: View {
                         .foregroundColor(.black),
                     alignment: .top
                 )
-            }
+            }.background(appState.backgroundColor)
         }
     }
 }

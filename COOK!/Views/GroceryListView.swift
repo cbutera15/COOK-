@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 
 struct GroceryListView: View {
+    @EnvironmentObject var appState: AppState
     @State private var selectedItems: [Ingredient] = []
     @State private var items: [Ingredient] = [Ingredient(name: "Milk", quantity: 1), Ingredient(name: "Eggs", quantity: 2), Ingredient(name: "Cheese", quantity: 3)]
     @State private var quantity = 0
@@ -142,10 +143,10 @@ struct GroceryListView: View {
             Spacer()
         }
         .padding(.horizontal)
-        .background(Color(hue: 0.9361, saturation: 0.03, brightness: 1))
+        .background(appState.backgroundColor)
     }
 }
 
 #Preview {
-    GroceryListView()
+    GroceryListView().environmentObject(AppState())
 }
