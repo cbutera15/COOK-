@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ScheduleView: View {
+    @EnvironmentObject var appState: AppState
+    
     @State private var showAddRecipe = false
     @State private var recipes: [Recipe] = [Recipe(name: "Recipe 1"), Recipe(name:"Recipe 2"), Recipe(name: "Recipe 3")]
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -59,37 +61,6 @@ struct ScheduleView: View {
                   }
               }
           }
-          
-          
-//          Text("Monday").font(.title)
-//          if !schedule[0].morning.isEmpty {
-//              Text("Morning").font(.title2)
-//              Text(schedule[0].morning[0].name)
-//          }
-//          Text("Tuesday").font(.title)
-//          if !schedule[1].morning.isEmpty {
-//              Text(schedule[1].morning[0].name)
-//          }
-//          Text("Wednesday").font(.title)
-//          if !schedule[2].morning.isEmpty {
-//              Text(schedule[2].morning[0].name)
-//          }
-//          Text("Thursday").font(.title)
-//          if !schedule[3].morning.isEmpty {
-//              Text(schedule[3].morning[0].name)
-//          }
-//          Text("Friday").font(.title)
-//          if !schedule[4].morning.isEmpty {
-//              Text(schedule[4].morning[0].name)
-//          }
-//          Text("Saturday").font(.title)
-//          if !schedule[5].morning.isEmpty {
-//              Text(schedule[5].morning[0].name)
-//          }
-//          Text("Sunday").font(.title)
-//          if !schedule[6].morning.isEmpty {
-//              Text(schedule[6].morning[0].name)
-//          }
           
           Spacer()
           
@@ -173,5 +144,5 @@ struct ScheduleView: View {
 }
 
 #Preview {
-    ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "", selectedTime: "")
+    ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "", selectedTime: "").environmentObject(AppState())
 }
