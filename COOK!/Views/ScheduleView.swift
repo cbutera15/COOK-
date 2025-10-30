@@ -107,7 +107,7 @@ struct ScheduleView: View {
                     var dayIndex = monday!
                     
                     // Iterate over master schedule to calculate which day goes to which date.
-                    for (index, day) in schedule.enumerated() {
+                    for day in schedule {
                         for recipe in day.morning {
                             calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
                         }
