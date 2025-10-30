@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ScheduleView: View {
+    @StateObject private var calendarManager = CalendarManager()
+    
     @EnvironmentObject var appState: AppState
     
     @State private var showAddRecipe = false
@@ -68,84 +70,93 @@ struct ScheduleView: View {
                 .padding(.horizontal, 20)
             }
           
-          Spacer()
-          
-          Button(action: {
-              showAddRecipe = true}
-          ) {
-              Text("Add To Schedule")
-                  .frame(maxWidth: .infinity)
-              
-          }
-          .buttonStyle(BorderedProminentButtonStyle())
-          .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
-          .padding()
-          .sheet(isPresented: $showAddRecipe) {
-              VStack {
-                  Spacer()
-                  Text("Add Recipe to Schedule")
-                      .font(.title)
-                      .padding()
-                  Spacer()
-                  
-                  List {
-                      Picker("Recipe", selection: $selectedRecipe) {
-                          ForEach(recipes, id: \.name) { recipe in
-                              Text(recipe.name)
-                                  .tag(recipe.name)
-                          }
-                      }
-                      Picker("Day", selection: $selectedDay) {
-                          ForEach(days, id: \.self) { day in
-                              Text(day)
-                                  .tag(day)
-                          }
-                      }
-                      Picker("Time", selection: $selectedTime) {
-                          ForEach(times, id: \.self) { time in
-                              Text(time)
-                                  .tag(time)
-                          }
-                      }
-                  }
-                  .listStyle(.plain)
-                  Spacer()
-                  Button(action: {
-                      showAddRecipe = false
-                      for (index, day) in days.enumerated() {
-                          if day == selectedDay {
-                              for recipe in recipes {
-                                  if selectedRecipe == recipe.name {
-                                      schedule[index].addRecipe(recipe: recipe, time: selectedTime)
-                                  }
-                              }
-                          }
-                      }
-                      
-                  }) {
-                      Text("Add")
-                          .frame(maxWidth: .infinity)
-                  }
-                  .buttonStyle(.borderedProminent)
-                  .padding()
-                  .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
-                  Spacer()
-              }.presentationDetents([.height(400)])
-          }
-          .onAppear() {
-              for recipe in recipes {
-                  recipesHash.append(recipe.name)
-              }
-              selectedRecipe = recipesHash[0]
-              selectedDay = days[0]
-              selectedTime = times[0]
-          }
-          
-              
-      }
-      .padding()
-      .background(Color(hue: 0.3389, saturation: 0.05, brightness: 1))
-  }
+            Spacer()
+            HStack {
+                Button(action: {
+                    
+                }) {
+                    Text("Export to Calendar")
+                }
+                .buttonStyle(BorderedProminentButtonStyle())
+                .padding()
+                .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                
+                Button(action: {
+                    Task { await calendarManager.requestAccess() }
+                    showAddRecipe = true
+                }) {
+                    Text("Add To Schedule")
+                        .frame(maxWidth: .infinity)
+                    
+                }
+                .buttonStyle(BorderedProminentButtonStyle())
+                .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                .padding()
+                .sheet(isPresented: $showAddRecipe) {
+                    VStack {
+                        Spacer()
+                        Text("Add Recipe to Schedule")
+                            .font(.title)
+                            .padding()
+                        Spacer()
+                        
+                        List {
+                            Picker("Recipe", selection: $selectedRecipe) {
+                                ForEach(recipes, id: \.name) { recipe in
+                                    Text(recipe.name)
+                                        .tag(recipe.name)
+                                }
+                            }
+                            Picker("Day", selection: $selectedDay) {
+                                ForEach(days, id: \.self) { day in
+                                    Text(day)
+                                        .tag(day)
+                                }
+                            }
+                            Picker("Time", selection: $selectedTime) {
+                                ForEach(times, id: \.self) { time in
+                                    Text(time)
+                                        .tag(time)
+                                }
+                            }
+                        }
+                        .listStyle(.plain)
+                        Spacer()
+                        Button(action: {
+                            showAddRecipe = false
+                            for (index, day) in days.enumerated() {
+                                if day == selectedDay {
+                                    for recipe in recipes {
+                                        if selectedRecipe == recipe.name {
+                                            schedule[index].addRecipe(recipe: recipe, time: selectedTime)
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }) {
+                            Text("Add")
+                                .frame(maxWidth: .infinity)
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                        .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                        Spacer()
+                    }.presentationDetents([.height(400)])
+                }
+                .onAppear() {
+                    for recipe in recipes {
+                        recipesHash.append(recipe.name)
+                    }
+                    selectedRecipe = recipesHash[0]
+                    selectedDay = days[0]
+                    selectedTime = times[0]
+                }
+            }
+        }
+        .padding()
+        .background(Color(hue: 0.3389, saturation: 0.05, brightness: 1))
+    }
 }
 
 #Preview {

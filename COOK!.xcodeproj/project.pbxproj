@@ -415,6 +415,8 @@
 				DEVELOPMENT_TEAM = F6NHNHM557;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "COOK--Info.plist";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "This app needs permission to add events to your calendar.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -448,6 +450,8 @@
 				DEVELOPMENT_TEAM = F6NHNHM557;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "COOK--Info.plist";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "This app needs permission to add events to your calendar.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
