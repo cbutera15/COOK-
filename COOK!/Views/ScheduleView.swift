@@ -97,11 +97,21 @@ struct ScheduleView: View {
             HStack {
                 // Add to calendar button (uses EventKit)
                 Button(action: {
+                    // Request write only access to user's calendar
+                    Task { await calendarManager.requestAccess() }
+                    
+                    let dayOfWeek = Date().getWeekdayNumber()
+                    
+                    // Calculate the date of Monday this week for Calendar event information
+                    let monday = Calendar.current.date(byAdding: .day, value: 0 - Int(dayOfWeek! - 2), to: Date())
+                    var dayIndex = monday!
+                    
+                    // Iterate over master schedule to calculate which day goes to which date.
                     for (index, day) in schedule.enumerated() {
                         for recipe in day.morning {
-                            let currentDate = Date()
-                            calendarManager.addEvent(title: recipe.name, startDate: "")
+                            calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
                         }
+                        dayIndex = Calendar.current.date(byAdding: .day, value: 1, to: dayIndex)!
                     }
                 }) {
                     Text("Export to Calendar")
@@ -113,7 +123,6 @@ struct ScheduleView: View {
                 
                 // Add to schedule button
                 Button(action: {
-                    Task { await calendarManager.requestAccess() }
                     showAddRecipe = true
                 }) {
                     Text("Add To Schedule")

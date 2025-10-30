@@ -38,6 +38,7 @@ class CalendarManager: ObservableObject {
         
         do {
             try eventStore.save(event, span: .thisEvent)
+            print("Event saved successfully.")
         } catch {
             print("Error saving event: \(error)")
         }
