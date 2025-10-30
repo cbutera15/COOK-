@@ -13,7 +13,7 @@ struct ScheduleView: View {
     @State private var showAddRecipe = false
     @State private var recipes: [Recipe] = [Recipe(name: "Recipe 1"), Recipe(name:"Recipe 2"), Recipe(name: "Recipe 3")]
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-    @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snack"]
+    @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snacks"]
     
     @State private var schedule = [Day(id: 0, name: "Monday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 1, name: "Tuesday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 2, name: "Wednesday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 3, name: "Thursday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 4, name: "Friday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 5, name: "Saturday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 6, name: "Sunday", morning: [], afternoon: [], evening: [], snacks: [])]
     
@@ -23,7 +23,7 @@ struct ScheduleView: View {
     @State var selectedTime: String
     
     var body: some View {
-      VStack {
+        VStack(alignment: .leading) {
           HStack {
               Image(systemName: "calendar")
                   .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
@@ -34,33 +34,39 @@ struct ScheduleView: View {
           }.font(Font.largeTitle.bold())
           Spacer()
           
-          ForEach(days.indices, id: \.self) { i in
-              Text(days[i]).font(.title)
-              if !schedule[i].morning.isEmpty {
-                  Text("Morning").font(.title2)
-                  ForEach(schedule[i].morning, id: \.name) { item in
-                      Text(item.name)
-                  }
-              }
-              if !schedule[i].afternoon.isEmpty {
-                  Text("Afternoon").font(.title2)
-                  ForEach(schedule[i].afternoon, id: \.name) { item in
-                      Text(item.name)
-                  }
-              }
-              if !schedule[i].evening.isEmpty {
-                  Text("Evening").font(.title2)
-                  ForEach(schedule[i].evening, id: \.name) { item in
-                      Text(item.name)
-                  }
-              }
-              if !schedule[i].snacks.isEmpty {
-                  Text("Snacks").font(.title2)
-                  ForEach(schedule[i].snacks, id: \.name) { item in
-                      Text(item.name)
-                  }
-              }
-          }
+            ScrollView {
+                VStack(alignment: .leading) {
+                    ForEach(days.indices, id: \.self) { i in
+                        Text(days[i]).font(.title).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                        if !schedule[i].morning.isEmpty {
+                            Text("Morning").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                            ForEach(schedule[i].morning, id: \.name) { item in
+                                Text(item.name)
+                            }
+                        }
+                        if !schedule[i].afternoon.isEmpty {
+                            Text("Afternoon").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                            ForEach(schedule[i].afternoon, id: \.name) { item in
+                                Text(item.name)
+                            }
+                        }
+                        if !schedule[i].evening.isEmpty {
+                            Text("Evening").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                            ForEach(schedule[i].evening, id: \.name) { item in
+                                Text(item.name)
+                            }
+                        }
+                        if !schedule[i].snacks.isEmpty {
+                            Text("Snacks").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                            ForEach(schedule[i].snacks, id: \.name) { item in
+                                Text(item.name)
+                            }
+                        }
+                        Spacer()
+                    }
+                }
+                .padding(.horizontal, 20)
+            }
           
           Spacer()
           
@@ -102,7 +108,6 @@ struct ScheduleView: View {
                           }
                       }
                   }
-//                  .frame(maxHeight: 100)
                   .listStyle(.plain)
                   Spacer()
                   Button(action: {
@@ -135,7 +140,7 @@ struct ScheduleView: View {
               selectedDay = days[0]
               selectedTime = times[0]
           }
-          Spacer()
+          
               
       }
       .padding()
