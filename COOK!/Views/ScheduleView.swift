@@ -12,6 +12,15 @@ extension Date {
     func getWeekdayNumber() -> Int? {
         return Calendar.current.dateComponents([.weekday], from: self).weekday
     }
+    
+    func withTime(hour: Int, minute: Int = 0, second: Int = 0) -> Date {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day], from: self)
+        components.hour = hour
+        components.minute = minute
+        components.second = second
+        return calendar.date(from: components) ?? self
+    }
 }
 
 struct ScheduleView: View {
@@ -37,7 +46,12 @@ struct ScheduleView: View {
     @State var selectedDay: String
     @State var selectedTime: String
     
+    
     var body: some View {
+        let hasAnyRecipes = schedule.contains {
+            !$0.morning.isEmpty || !$0.afternoon.isEmpty || !$0.evening.isEmpty || !$0.snacks.isEmpty
+        }
+        
         VStack(alignment: .leading) {
             
             // Heading
@@ -60,9 +74,12 @@ struct ScheduleView: View {
                 .padding()
                 .buttonStyle(.bordered)
                 .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.65))
+                .disabled(!hasAnyRecipes)
+                
             }
             Spacer()
-          
+            
+            
             // Main Schedule View
             ScrollView {
                 VStack(alignment: .leading) {
@@ -180,6 +197,15 @@ struct ScheduleView: View {
                     for day in schedule {
                         for recipe in day.morning {
                             calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
+                            dayIndex = dayIndex.withTime(hour: 9)
+                        }
+                        for recipe in day.afternoon {
+                            calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
+                            dayIndex = dayIndex.withTime(hour: 13)
+                        }
+                        for recipe in day.evening {
+                            calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
+                            dayIndex = dayIndex.withTime(hour: 18)
                         }
                         dayIndex = Calendar.current.date(byAdding: .day, value: 1, to: dayIndex)!
                     }
@@ -273,3 +299,4 @@ struct ScheduleView: View {
 #Preview {
     ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "", selectedTime: "").environmentObject(AppState())
 }
+
