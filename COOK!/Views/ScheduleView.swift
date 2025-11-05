@@ -23,6 +23,8 @@ struct ScheduleView: View {
     
     // Defining private vars for recipes, days and times.
     @State private var showAddRecipe = false
+    @State private var showDeleteButtons = false
+    
     @State private var recipes: [Recipe] = [Recipe(name: "Recipe 1"), Recipe(name:"Recipe 2"), Recipe(name: "Recipe 3")]
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snacks"]
@@ -43,10 +45,22 @@ struct ScheduleView: View {
                 Image(systemName: "calendar")
                     .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                     .padding()
+                    .font(Font.largeTitle.bold())
                 Text("Schedule")
                     .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                    .font(Font.largeTitle.bold())
                 Spacer()
-            }.font(Font.largeTitle.bold())
+                Button(action: {
+                    withAnimation {
+                        showDeleteButtons.toggle()
+                    }
+                }) {
+                    Text("Edit")
+                }
+                .padding()
+                .buttonStyle(.bordered)
+                .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.65))
+            }
             Spacer()
           
             // Main Schedule View
@@ -54,35 +68,91 @@ struct ScheduleView: View {
                 VStack(alignment: .leading) {
                     
                     // Iterate through day list
-                    ForEach(days.indices, id: \.self) { i in
+                    ForEach(0..<days.count, id: \.self) { i in
                         Text(days[i]).font(.title).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                         
                         // Getting morning recipes
                         if !schedule[i].morning.isEmpty {
                             Text("Morning").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
                             ForEach(schedule[i].morning, id: \.name) { item in
-                                Text(item.name)
+                                HStack {
+                                    Text(item.name)
+                                    Spacer()
+                                    if showDeleteButtons {
+                                        Button(action: {
+                                            if let idx = schedule[i].morning.firstIndex(where: { $0.name == item.name }) {
+                                                schedule[i].morning.remove(at: idx)
+                                            }
+                                        }) {
+                                            Image(systemName: "x.circle")
+                                                .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                                                .transition(.move(edge: .leading).combined(with: .opacity))
+                                        }
+                                    }
+                                }
                             }
                         }
                         // Getting afternoon recipes
                         if !schedule[i].afternoon.isEmpty {
                             Text("Afternoon").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
                             ForEach(schedule[i].afternoon, id: \.name) { item in
-                                Text(item.name)
+                                HStack {
+                                    Text(item.name)
+                                    Spacer()
+                                    if showDeleteButtons {
+                                        Button(action: {
+                                            if let idx = schedule[i].afternoon.firstIndex(where: { $0.name == item.name }) {
+                                                schedule[i].afternoon.remove(at: idx)
+                                            }
+                                        }) {
+                                            Image(systemName: "x.circle")
+                                                .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                                                .transition(.move(edge: .leading).combined(with: .opacity))
+                                        }
+                                    }
+                                }
                             }
                         }
                         // Getting evening recipes
                         if !schedule[i].evening.isEmpty {
                             Text("Evening").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
                             ForEach(schedule[i].evening, id: \.name) { item in
-                                Text(item.name)
+                                HStack {
+                                    Text(item.name)
+                                    Spacer()
+                                    if showDeleteButtons {
+                                        Button(action: {
+                                            if let idx = schedule[i].evening.firstIndex(where: { $0.name == item.name }) {
+                                                schedule[i].evening.remove(at: idx)
+                                            }
+                                        }) {
+                                            Image(systemName: "x.circle")
+                                                .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                                                .transition(.move(edge: .leading))
+                                        }
+                                    }
+                                }
                             }
                         }
                         // Getting snacks recipes
                         if !schedule[i].snacks.isEmpty {
                             Text("Snacks").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
                             ForEach(schedule[i].snacks, id: \.name) { item in
-                                Text(item.name)
+                                HStack {
+                                    Text(item.name)
+                                    Spacer()
+                                    if showDeleteButtons {
+                                        Button(action: {
+                                            if let idx = schedule[i].snacks.firstIndex(where: { $0.name == item.name }) {
+                                                schedule[i].snacks.remove(at: idx)
+                                            }
+                                        }) {
+                                            Image(systemName: "x.circle")
+                                                .foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
+                                                .transition(.move(edge: .leading).combined(with: .opacity))
+                                        }
+                                    }
+                                }
                             }
                         }
                         Spacer()
@@ -117,9 +187,9 @@ struct ScheduleView: View {
                     Text("Export to Calendar")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(BorderedProminentButtonStyle())
-                .padding()
-                .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                .buttonStyle(BorderedButtonStyle())
+//                .padding()
+                .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.65))
                 
                 // Add to schedule button
                 Button(action: {
@@ -131,7 +201,7 @@ struct ScheduleView: View {
                 }
                 .buttonStyle(BorderedProminentButtonStyle())
                 .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
-                .padding()
+//                .padding()
                 // Pop up sheet for adding recipes to shedule.
                 .sheet(isPresented: $showAddRecipe) {
                     VStack {
@@ -187,19 +257,16 @@ struct ScheduleView: View {
                         Spacer()
                     }.presentationDetents([.height(400)])
                 }
-                .onAppear() {
-                    // Initializing variables for recipe picker list
-                    for recipe in recipes {
-                        recipesHash.append(recipe.name)
-                    }
-                    selectedRecipe = recipesHash[0]
-                    selectedDay = days[0]
-                    selectedTime = times[0]
-                }
             }
         }
         .padding()
         .background(Color(hue: 0.3389, saturation: 0.05, brightness: 1))
+        .onAppear {
+            recipesHash = recipes.map { $0.name }
+            if let firstRecipe = recipesHash.first { selectedRecipe = firstRecipe }
+            if let firstDay = days.first { selectedDay = firstDay }
+            if let firstTime = times.first { selectedTime = firstTime }
+        }
     }
 }
 
