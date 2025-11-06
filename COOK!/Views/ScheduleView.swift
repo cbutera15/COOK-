@@ -33,6 +33,7 @@ struct ScheduleView: View {
     // Defining private vars for recipes, days and times.
     @State private var showAddRecipe = false
     @State private var showDeleteButtons = false
+    @State private var showEventsAddedAlert = false
     
     @State private var recipes: [Recipe] = [Recipe(name: "Recipe 1"), Recipe(name:"Recipe 2"), Recipe(name: "Recipe 3")]
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -209,13 +210,18 @@ struct ScheduleView: View {
                         }
                         dayIndex = Calendar.current.date(byAdding: .day, value: 1, to: dayIndex)!
                     }
+                    showEventsAddedAlert = true
                 }) {
                     Text("Export to Calendar")
                         .frame(maxWidth: .infinity)
                 }
                 .buttonStyle(BorderedButtonStyle())
-//                .padding()
                 .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.65))
+                .alert("Added to Calendar", isPresented: $showEventsAddedAlert) {
+                    
+                } message: {
+                    Text("Recipes added to default device calendar.")
+                }
                 
                 // Add to schedule button
                 Button(action: {
@@ -227,7 +233,6 @@ struct ScheduleView: View {
                 }
                 .buttonStyle(BorderedProminentButtonStyle())
                 .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
-//                .padding()
                 // Pop up sheet for adding recipes to shedule.
                 .sheet(isPresented: $showAddRecipe) {
                     VStack {
