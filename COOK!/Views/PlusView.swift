@@ -12,11 +12,10 @@ struct PlusView: View {
     
   var body: some View {
     VStack {
-      Image(systemName: "plus")
-      Spacer().frame(width: 0, height: 50)
-      Text("Plus View")
+      Spacer()
     }
-    .padding()
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//    .padding()
     .background(appState.backgroundColor)
   }
 }

@@ -10,6 +10,8 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedTab: String = "Grocery"
+    @State private var showPlusMenu = false
+    @State private var showAddRecipe = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -47,8 +49,8 @@ struct ContentView: View {
                     CustomTabButton(
                         iconName: "plus",
                         destination: .plus,
-                        tabColor: .blue,
-                        appColor: .white)
+                        tabColor: Color(hue: 0.7444, saturation: 0.46, brightness: 0.93),
+                        appColor: Color(hue: 0.7444, saturation: 0.05, brightness: 1))
                     
                     CustomTabButton(
                         iconName: "bookmark",
@@ -71,7 +73,32 @@ struct ContentView: View {
                         .foregroundColor(.black),
                     alignment: .top
                 )
-            }.background(appState.backgroundColor)
+                
+            }
+            .background(appState.backgroundColor)
+        }
+        .onChange(of: appState.selectedTab) { oldValue, newValue in
+            if newValue == .plus {
+                appState.selectedTab = .plus
+                showPlusMenu = true
+            }
+        }
+        .confirmationDialog("What would you like to do?", isPresented: $showPlusMenu, titleVisibility: .visible) {
+            Button("Add Recipe") {
+                showPlusMenu = false
+                showAddRecipe = true
+            }
+            Button("Add Ingredient") {
+                // handle action
+            }
+            Button("Add to Grocery List") {
+                // handle action
+            }
+            Button("Cancel", role: .cancel) { }
+        }
+        .sheet(isPresented: $showAddRecipe) {
+            AddRecipeView()
+                .interactiveDismissDisabled(true)
         }
     }
 }
@@ -89,3 +116,4 @@ extension View {
     }      .ignoresSafeArea(.all, edges: .top)
   }
 }
+
