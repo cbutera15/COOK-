@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct AddRecipeView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var recipeTitle = ""
     @State private var recipeDescription = ""
     @State private var recipeIngredients: [String] = []
@@ -29,13 +31,23 @@ struct AddRecipeView: View {
             
             Spacer()
             
+            Text("Title")
+                .font(Font.title2.bold())
+                .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal)
             TextField("Recipe Title", text: $recipeTitle)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+                .padding(.horizontal)
             
+            Text("Description")
+                .font(Font.title2.bold())
+                .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding([.horizontal, .top])
             TextField("Recipe Description", text: $recipeDescription)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                .padding()
+                .padding(.horizontal)
             
             Text("Ingredients")
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -46,6 +58,16 @@ struct AddRecipeView: View {
             List {
                 ForEach(recipeIngredients, id: \.self) { ingredient in
                     Text(ingredient)
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                if let idx = recipeIngredients.firstIndex(of: ingredient) {
+                                    recipeIngredients.remove(at: idx)
+                                }
+                            } label: {
+                                Text("Delete")
+                            }
+                            .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                        }
                 }
                 Button(action: {
                     showAddItemAlert = true
@@ -68,6 +90,31 @@ struct AddRecipeView: View {
                 Text("Enter the name for the new item.")
             }
 
+            HStack {
+                Button(action: {
+                    dismiss()
+                    recipeTitle = ""
+                    recipeDescription = ""
+                    recipeIngredients = []
+                }) {
+                    Text("Cancel")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .padding(.leading)
+                
+                Button(action: {
+                    dismiss()
+                    // add recipe code
+                }) {
+                    Text("Save")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .padding(.trailing)
+            }
             
             Spacer()
         }
