@@ -11,7 +11,6 @@ import UIKit
 struct GroceryListView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedItems: [Ingredient] = []
-    @State private var items: [Ingredient] = [Ingredient(name: "Milk", quantity: 1), Ingredient(name: "Eggs", quantity: 2), Ingredient(name: "Cheese", quantity: 3)]
     @State private var quantity = 0
     
     // For Adding Items
@@ -37,7 +36,7 @@ struct GroceryListView: View {
             VStack(alignment: .leading, spacing: 0) {
                 // Actual list
                 List() {
-                    ForEach(items) { item in
+                    ForEach(appState.groceryList) { item in
                         HStack {
                             // Custom checkmark to allow for selection and deletion
                             Image(systemName: selectedItems.contains(where: { $0.id == item.id }) ? "checkmark.circle.fill" : "circle")
@@ -50,8 +49,8 @@ struct GroceryListView: View {
                                     .swipeActions {
                                         Button(role: .destructive) {
                                             // checking items against their unique item ids.
-                                            if let idx = items.firstIndex(where: { $0.id == item.id }) {
-                                                items.remove(at: idx)
+                                            if let idx = appState.groceryList.firstIndex(where: { $0.id == item.id }) {
+                                                appState.groceryList.remove(at: idx)
                                             }
                                         } label: {
                                             Text("Delete")
@@ -81,7 +80,7 @@ struct GroceryListView: View {
                 // Clear and add buttons
                 HStack(spacing: 8) {
                     // Clear Button
-                    Button(action: { items = [] }) {
+                    Button(action: { appState.groceryList = [] }) {
                         Text("Clear")
                             .frame(maxWidth: .infinity)
                     }
@@ -120,7 +119,7 @@ struct GroceryListView: View {
                                 // Add Item button
                                 Button(action: {
                                     if !itemToAdd.isEmpty {
-                                        items.append(Ingredient(name: itemToAdd, quantity: quantity))
+                                        appState.addToGroceryList(name: itemToAdd, quantity: quantity)
                                         showAddItemMenu = false
                                         itemToAdd = ""
                                     }

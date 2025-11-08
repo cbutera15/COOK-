@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
-import FirebaseCore
+//import FirebaseCore
 
 
 func application(_ application: UIApplication,
                  didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-    FirebaseApp.configure()
+    //FirebaseApp.configure()
     return true
 }
 
@@ -19,7 +19,7 @@ func application(_ application: UIApplication,
 struct SimpleTabViewApp: App {
     @StateObject private var appState = AppState()
     init() {
-            FirebaseApp.configure()
+            //FirebaseApp.configure()
         }
     var body: some Scene {
         WindowGroup {
