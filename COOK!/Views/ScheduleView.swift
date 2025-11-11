@@ -5,6 +5,8 @@
 //  Created by Sam Zimpfer on 10/7/25.
 //
 
+// TODO - Scrollable Cards
+
 import SwiftUI
 
 // Extending date to access day of week # (1, sunday -> 7, saturday)

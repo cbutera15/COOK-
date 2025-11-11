@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct AddRecipeView: View {
     @Environment(\.dismiss) private var dismiss
@@ -16,6 +17,9 @@ struct AddRecipeView: View {
     @State private var newIngredientName: String = ""
     
     @State private var showAddItemAlert = false
+    
+    @State private var selectedPhoto: PhotosPickerItem?
+    @State private var selectedImage: Image?
     
     var body: some View {
         VStack {
@@ -48,6 +52,37 @@ struct AddRecipeView: View {
             TextField("Recipe Description", text: $recipeDescription)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .padding(.horizontal)
+            
+//            HStack() {
+                Text("Image")
+                    .font(Font.title2.bold())
+                    .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding([.horizontal, .top])
+                PhotosPicker(
+                    "Add Recipe Image",
+                    selection: $selectedPhoto,
+                    matching: .images
+                )
+                .photosPickerStyle(.presentation)
+                .buttonStyle(.bordered)
+                .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .padding([.top, .horizontal])
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: selectedPhoto) { _, newValue in
+                    Task {
+                        if let data = try await newValue?.loadTransferable(type: Data.self) {
+                            if let uiImage = UIImage(data: data) {
+                                selectedImage = Image(uiImage: uiImage)
+                            }
+                        }
+                    }
+                }
+
+                
+                Spacer()
+                Spacer()
+//            }
             
             Text("Ingredients")
                 .frame(maxWidth: .infinity, alignment: .leading)

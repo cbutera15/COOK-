@@ -92,7 +92,7 @@ struct ContentView: View {
             Button("Add Ingredient") {
                 // handle action
             }
-            Button("Add to Grocery List") {
+            Button("Add to AI") {
                 // handle action
             }
             Button("Cancel", role: .cancel) { }
