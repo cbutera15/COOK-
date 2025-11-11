@@ -40,6 +40,8 @@ class AppState: ObservableObject {
         var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3)
         
         groceryList = [milk, eggs, cheese]
+        
+        ingredients = [milk, eggs, cheese]
     }
     
     func addToGroceryList(_ item: Ingredient) {
@@ -56,5 +58,21 @@ class AppState: ObservableObject {
     
     func addToPantry(_ items: [Ingredient]) {
         ingredients.append(contentsOf: items)
+    }
+    
+    func addToFavorites(_ recipe: Recipe) {
+        favoriteRecipes.append(recipe)
+    }
+    
+    func removeFromFavorites(_ recipe: Recipe) {
+        favoriteRecipes.removeAll { $0.id == recipe.id }
+    }
+    
+    
+    
+    
+    func updateBackend() {
+        // placeholder to save data to backend
+        // could execute on app close or on every update to AppState
     }
 }

@@ -76,6 +76,7 @@ struct ContentView: View {
                 
             }
             .background(appState.backgroundColor)
+            //.frame(maxWidth: .infinity)
         }
         .onChange(of: appState.selectedTab) { oldValue, newValue in
             if newValue == .plus {

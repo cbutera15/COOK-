@@ -42,7 +42,7 @@ struct PantryView: View {
             backgroundColor: appState.backgroundColor,
             selectable: false,
             incrementable: true,
-            deletable: false
+            deletable: true
         )
     }
     .padding()
