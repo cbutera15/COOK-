@@ -14,9 +14,13 @@ struct AddRecipeView: View {
     @State private var recipeTitle = ""
     @State private var recipeDescription = ""
     @State private var recipeIngredients: [String] = []
+    @State private var recipeSteps: [String] = []
+    
     @State private var newIngredientName: String = ""
+    @State private var newStep: String = ""
     
     @State private var showAddItemAlert = false
+    @State private var showAddStepAlert = false
     
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
@@ -125,6 +129,49 @@ struct AddRecipeView: View {
                 Text("Enter the name for the new item.")
             }
 
+            Text("Steps")
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .padding([.leading, .top])
+                .font(.title2.bold())
+            
+            List {
+                ForEach(recipeSteps, id: \.self) { step in
+                    Text(step)
+                        .swipeActions {
+                            Button(role: .destructive) {
+                                if let idx = recipeSteps.firstIndex(of: step) {
+                                    recipeSteps.remove(at: idx)
+                                }
+                            } label: {
+                                Text("Delete")
+                            }
+                            .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                        }
+                }
+                Button(action: {
+                    showAddStepAlert = true
+                }) {
+                    Text("Add Step")
+                        .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .alert("Add New Step", isPresented: $showAddStepAlert) {
+                TextField("Step", text: $newStep)
+                Button("Add") {
+                    if !newStep.isEmpty {
+                        recipeSteps.append(newStep)
+                        newStep = "" // Clear the text field
+                    }
+                }
+                Button("Cancel", role: .cancel) { }
+            } message: {
+                Text("Enter the name for the new item.")
+            }
+            
+            
+            
             HStack {
                 Button(action: {
                     dismiss()
