@@ -7,13 +7,23 @@
 
 import Foundation
 
-struct Ingredient: Identifiable {
+struct Ingredient: Identifiable, Equatable {
+    let id = UUID()
     var name: String
     var quantity: Int
-    let id = UUID()
     
     init(name: String, quantity: Int) {
         self.name = name
         self.quantity = quantity
+    }
+    
+    mutating func increment() {
+        quantity += 1
+    }
+    
+    mutating func decrement() {
+        if quantity > 0 {
+            quantity -= 1
+        }
     }
 }

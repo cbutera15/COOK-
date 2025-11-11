@@ -10,6 +10,11 @@ import SwiftUI
 struct IngredientsView: View {
     @EnvironmentObject var appState: AppState
     
+    @State var ingredients: [Ingredient] = [
+        Ingredient(name: "Milk", quantity: 1),
+        Ingredient(name: "Eggs", quantity: 3)
+    ]
+    
   var body: some View {
     VStack {
         HStack {
@@ -35,7 +40,15 @@ struct IngredientsView: View {
         
         Spacer()
         
-        
+        IngredientList(
+            ingredients: $ingredients,
+            selected: .constant([]),
+            color: .black,
+            backgroundColor: appState.backgroundColor,
+            selectable: false,
+            incrementable: true,
+            deletable: false
+        )
     }
     .padding()
     .background(appState.backgroundColor)

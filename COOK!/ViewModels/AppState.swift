@@ -24,6 +24,7 @@ class AppState: ObservableObject {
     @Published var groceryList: [Ingredient] = []
     @Published var ingredients: [Ingredient] = []
     @Published var recipes: [Recipe] = []
+    @Published var favoriteRecipes: [Recipe] = []
     
     init() {
         self.selectedTab = .home
