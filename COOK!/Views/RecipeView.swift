@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct RecipeView: View {
+    @EnvironmentObject var appState: AppState
+    
     @Binding var recipe: Recipe
     
     @State var selected: [Ingredient] = []
@@ -23,6 +25,18 @@ struct RecipeView: View {
             Text("Description") // placeholder
             Spacer()
             Text("Ingredients").font(.title2)
+            if appState.hasAllIngredients(recipe.ingredients) {
+                HStack {
+                    Text("All ingredients owned")
+                    Image(systemName: "checkmark.circle.fill")
+                }
+            } else {
+                Button(action: {
+                    appState.addToGroceryList(recipe.ingredients) // maybe change this to add only as needed
+                }) {
+                    Text("Add ingredints to grocery list")
+                }
+            }
             IngredientList(
                 ingredients: $recipe.ingredients,
                 selected: $selected,
@@ -56,5 +70,5 @@ struct RecipeView: View {
     var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
     
-    RecipeView(recipe: $chickenAndRice)
+    RecipeView(recipe: $chickenAndRice).environmentObject(AppState())
 }

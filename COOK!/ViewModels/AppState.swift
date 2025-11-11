@@ -38,6 +38,7 @@ class AppState: ObservableObject {
         var milk: Ingredient = Ingredient(name: "Milk", quantity: 1)
         var eggs: Ingredient = Ingredient(name: "Eggs", quantity: 2)
         var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3)
+        var toast: Ingredient = Ingredient(name: "Toast", quantity: 2)
         
         var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
         var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
@@ -50,14 +51,15 @@ class AppState: ObservableObject {
         var pastaSalad = Recipe(name: "Pasta salad", ingredients: [pasta, cheese])
         var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", ingredients: [pasta, redSauce, meatballs, cheese])
         var grilledSalmon = Recipe(name: "Grilled salmon", ingredients: [salmon])
+        var eggsAndToast = Recipe(name: "Eggs and toast", ingredients: [eggs, toast])
         
-        groceryList = [milk, eggs, cheese]
-        ingredients = [milk, eggs, cheese]
-        savedRecipes = [chickenAndRice, pastaSalad, spaghettiWithMeatballs, grilledSalmon]
+        groceryList = [chicken, pasta]
+        ingredients = [milk, eggs, cheese, toast]
+        savedRecipes = [chickenAndRice, pastaSalad, spaghettiWithMeatballs, grilledSalmon, eggsAndToast]
     }
     
-    func addToGroceryList(_ item: Ingredient) {
-        groceryList.append(item)
+    func addToGroceryList(_ items: [Ingredient]) {
+        groceryList.append(contentsOf: items)
     }
     
     func addToGroceryList(name: String, quantity: Int) {
@@ -82,6 +84,19 @@ class AppState: ObservableObject {
     
     func removeFromFavorites(_ recipe: Recipe) {
         favoriteRecipes.removeAll { $0.id == recipe.id }
+    }
+    
+    func hasAllIngredients(_ items: [Ingredient]) -> Bool {
+        for item in items {
+            guard let matching = ingredients.first(where: { $0.name == item.name }) else {
+                return false
+            }
+            if matching.quantity < item.quantity {
+                return false
+            }
+        }
+        
+        return true
     }
     
     
