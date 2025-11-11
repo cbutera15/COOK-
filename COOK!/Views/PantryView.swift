@@ -7,13 +7,8 @@
 
 import SwiftUI
 
-struct IngredientsView: View {
+struct PantryView: View {
     @EnvironmentObject var appState: AppState
-    
-    @State var ingredients: [Ingredient] = [
-        Ingredient(name: "Milk", quantity: 1),
-        Ingredient(name: "Eggs", quantity: 3)
-    ]
     
   var body: some View {
     VStack {
@@ -21,7 +16,7 @@ struct IngredientsView: View {
             Image(systemName: "cabinet")
                 .foregroundStyle(Color(hue: 0.1528, saturation: 3, brightness: 1))
                 .padding()
-            Text("Ingredients")
+            Text("Pantry")
                 .foregroundStyle(Color(hue: 0.1528, saturation: 3, brightness: 1))
             Spacer()
         }.font(Font.largeTitle.bold())
@@ -41,7 +36,7 @@ struct IngredientsView: View {
         Spacer()
         
         IngredientList(
-            ingredients: $ingredients,
+            ingredients: $appState.ingredients,
             selected: .constant([]),
             color: .black,
             backgroundColor: appState.backgroundColor,
@@ -56,5 +51,5 @@ struct IngredientsView: View {
 }
 
 #Preview {
-    IngredientsView().environmentObject(AppState())
+    PantryView().environmentObject(AppState())
 }

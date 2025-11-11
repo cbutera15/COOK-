@@ -12,7 +12,7 @@ class AppState: ObservableObject {
     enum MenuTab {
         case home
         case groceryList
-        case ingredients
+        case pantry
         case plus
         case recipes
         case schedule
@@ -22,6 +22,7 @@ class AppState: ObservableObject {
     @Published var backgroundColor: Color
     
     @Published var groceryList: [Ingredient] = []
+    @Published var selectedGroceryItems: [Ingredient] = []
     @Published var ingredients: [Ingredient] = []
     @Published var recipes: [Recipe] = []
     @Published var favoriteRecipes: [Recipe] = []
@@ -41,11 +42,19 @@ class AppState: ObservableObject {
         groceryList = [milk, eggs, cheese]
     }
     
-    func addToGroceryList(_ ingredient: Ingredient) {
-        groceryList.append(ingredient)
+    func addToGroceryList(_ item: Ingredient) {
+        groceryList.append(item)
     }
     
     func addToGroceryList(name: String, quantity: Int) {
         groceryList.append(Ingredient(name: name, quantity: quantity))
+    }
+    
+    func removeFromGroceryList(_ items: [Ingredient]) {
+        groceryList.removeAll { items.contains($0) }
+    }
+    
+    func addToPantry(_ items: [Ingredient]) {
+        ingredients.append(contentsOf: items)
     }
 }

@@ -10,81 +10,89 @@ import UIKit
 
 struct GroceryListView: View {
     @EnvironmentObject var appState: AppState
-    @State private var selectedItems: [Ingredient] = []
+    
+    // context menu variables
+    @State private var showAddItemMenu = false
+    @State private var showClearMenu = false
+    @State private var itemToAdd = ""
     @State private var quantity = 0
     
-    // For Adding Items
-    @State private var showAddItemMenu = false
-    @State private var itemToAdd = ""
+    let pink: Color = Color(hue: 0.9361, saturation: 0.84, brightness: 1)
+    let white: Color = Color(hue: 0.9361, saturation: 0.008, brightness: 1)
 
     var body: some View {
         VStack {
             // Heading + Title
             HStack {
                 Image(systemName: "list.dash")
-                    .foregroundStyle(Color(hue: 0.9361, saturation: 0.84, brightness: 0.98))
+                    .foregroundStyle(pink)
                     .padding()
                 Text("Grocery List")
-                    .foregroundStyle(Color(hue: 0.9361, saturation: 0.84, brightness: 0.98))
+                    .foregroundStyle(pink)
                 Spacer()
             }
             .font(Font.largeTitle.bold())
 
             Spacer()
             
-            // List content
             VStack(alignment: .leading, spacing: 0) {
-                // Actual list
-                List() {
-                    ForEach(appState.groceryList) { item in
-                        HStack {
-                            // Custom checkmark to allow for selection and deletion
-                            Image(systemName: selectedItems.contains(where: { $0.id == item.id }) ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
-                                .font(.title3)
-                            HStack {
-                                Text(item.name)
-                                    .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
-                                // Allows deletion
-                                    .swipeActions {
-                                        Button(role: .destructive) {
-                                            // checking items against their unique item ids.
-                                            if let idx = appState.groceryList.firstIndex(where: { $0.id == item.id }) {
-                                                appState.groceryList.remove(at: idx)
-                                            }
-                                        } label: {
-                                            Text("Delete")
-                                        }.tint(Color(hue: 0.9361, saturation: 1, brightness: 0.76))
-                                    }
-                                Spacer()
-                                Text(String(item.quantity))
-                            }
-                        }
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            // Matching item IDS
-                            if let idx = selectedItems.firstIndex(where: { $0.id == item.id }) {
-                                selectedItems.remove(at: idx)
-                            } else {
-                                selectedItems.append(item)
-                            }
-                        }
-                        
-                    }
-                }
-                .listStyle(.insetGrouped)
-                .scrollContentBackground(.hidden)
-                .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
-            
+                // List content
+                IngredientList(
+                    ingredients: $appState.groceryList,
+                    selected: $appState.selectedGroceryItems,
+                    color: pink,
+                    backgroundColor: white,
+                    selectable: true,
+                    incrementable: true,
+                    deletable: true
+                )
                 
                 // Clear and add buttons
                 HStack(spacing: 8) {
                     // Clear Button
-                    Button(action: { appState.groceryList = [] }) {
+                    Button(action: {
+                        showClearMenu = true
+                    }) {
                         Text("Clear")
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
+                    // Context menu for clearing
+                    .sheet(isPresented: $showClearMenu) {
+                        VStack {
+                            Button(action: {
+                                appState.addToPantry(appState.selectedGroceryItems)
+                                showClearMenu = false
+                            }) {
+                                Text("Add selected to pantry").frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            
+                            Button(action: {
+                                appState.removeFromGroceryList(appState.selectedGroceryItems)
+                                appState.selectedGroceryItems = []
+                                showClearMenu = false
+                            }) {
+                                Text("Clear selected").frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            
+                            Button(action: {
+                                appState.groceryList = []
+                                showClearMenu = false
+                            }) {
+                                Text("Clear all").frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            
+                            Button(action: { showClearMenu = false }) {
+                                Text("Cancel").frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                        }
+                        .presentationDetents([.height(250)])
+                        .padding(.horizontal, 50)
+                    }
                     
                     // Add Item button updates showAddItemMenu
                     Button(action: {
@@ -134,7 +142,7 @@ struct GroceryListView: View {
                         .presentationDetents([.height(200)])
                     }
                 }
-                .tint(Color(hue: 0.9361, saturation: 0.84, brightness: 1))
+                .tint(pink)
                 .padding(.horizontal)
                 
                 Spacer()

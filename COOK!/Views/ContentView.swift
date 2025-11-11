@@ -23,8 +23,8 @@ struct ContentView: View {
                         HomeView()
                     case .groceryList:
                         GroceryListView()
-                    case .ingredients:
-                        IngredientsView()
+                    case .pantry:
+                        PantryView()
                     case .plus:
                         PlusView()
                     case .recipes:
@@ -42,7 +42,7 @@ struct ContentView: View {
                     
                     CustomTabButton(
                         iconName: "cabinet",
-                        destination: .ingredients,
+                        destination: .pantry,
                         tabColor: .yellow,
                         appColor: Color(hue: 0.1528, saturation: 0.04, brightness: 1))
                     
