@@ -34,7 +34,6 @@ struct IngredientList: View {
                         } else {
                             selected.append(item)
                         }
-                        print("Select")
                     },
                     onDelete: {
                         if let index = ingredients.firstIndex(where: { $0.id == item.id}) {
