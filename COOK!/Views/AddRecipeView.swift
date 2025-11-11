@@ -129,7 +129,7 @@ struct AddRecipeView: View {
                 Text("Enter the name for the new item.")
             }
 
-            Text("Steps")
+            Text("Instructions")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                 .padding([.leading, .top])
