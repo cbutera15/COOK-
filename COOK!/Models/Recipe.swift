@@ -23,6 +23,14 @@ struct Recipe: Identifiable {
         self.instructions = []
     }
     
+    init(name: String, ingredients: [Ingredient]) {
+        self.name = name
+        self.description = ""
+        self.imagePath = ""
+        self.ingredients = ingredients
+        self.instructions = []
+    }
+    
     init(name: String, description: String, imagePath: String, ingredients: [Ingredient], instructions: [String]) {
         self.name = name
         self.description = description

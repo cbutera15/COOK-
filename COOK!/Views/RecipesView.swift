@@ -10,14 +10,6 @@ import UIKit
 
 struct RecipesView: View {
     @EnvironmentObject var appState: AppState
-    @State private var favoriteRecipes: [Recipe] = []
-    @State private var recipes: [Recipe] = [
-        Recipe(name: "Chicken and rice"),
-        Recipe(name: "Pasta salad"),
-        Recipe(name: "Spaghetti with meatballs"),
-        Recipe(name: "Grilled Salmon"),
-        Recipe(name: "Vegetable Stir Fry")
-    ]
     
     var body: some View {
         NavigationStack {
@@ -28,9 +20,9 @@ struct RecipesView: View {
                 
                 List {
                     // Favorite section
-                    if !favoriteRecipes.isEmpty {
+                    if !appState.favoriteRecipes.isEmpty {
                         Section(header: Text("Favorite Recipes").font(.headline)) {
-                            ForEach(favoriteRecipes) { recipe in
+                            ForEach(appState.favoriteRecipes) { recipe in
                                 RecipeRow(
                                     recipe: recipe,
                                     isFavorite: true,
@@ -42,10 +34,10 @@ struct RecipesView: View {
                     
                     // All Recipes section
                     Section(header: Text("All Recipes").font(.headline)) {
-                        ForEach(recipes) { recipe in
+                        ForEach(appState.savedRecipes) { recipe in
                             RecipeRow(
                                 recipe: recipe,
-                                isFavorite: favoriteRecipes.contains(where: { $0.id == recipe.id }),
+                                isFavorite: appState.favoriteRecipes.contains(where: { $0.id == recipe.id }),
                                 toggleFavorite: { toggleFavorite(recipe) }
                             )
                         }
@@ -75,10 +67,10 @@ struct RecipesView: View {
     }
     
     private func toggleFavorite(_ recipe: Recipe) {
-        if let idx = favoriteRecipes.firstIndex(where: { $0.id == recipe.id }) {
-            favoriteRecipes.remove(at: idx)
+        if let idx = appState.favoriteRecipes.firstIndex(where: { $0.id == recipe.id }) {
+            appState.removeFromFavorites(recipe)
         } else {
-            favoriteRecipes.append(recipe)
+            appState.addToFavorites(recipe)
         }
     }
 }
