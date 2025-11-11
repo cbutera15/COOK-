@@ -24,7 +24,7 @@ class AppState: ObservableObject {
     @Published var groceryList: [Ingredient] = []
     @Published var selectedGroceryItems: [Ingredient] = []
     @Published var ingredients: [Ingredient] = []
-    @Published var recipes: [Recipe] = []
+    @Published var savedRecipes: [Recipe] = []
     @Published var favoriteRecipes: [Recipe] = []
     
     init() {
@@ -58,6 +58,10 @@ class AppState: ObservableObject {
     
     func addToPantry(_ items: [Ingredient]) {
         ingredients.append(contentsOf: items)
+    }
+    
+    func addSavedRecipe(_ recipe: Recipe) {
+        savedRecipes.append(recipe)
     }
     
     func addToFavorites(_ recipe: Recipe) {
