@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct RecipeView: View {
-    let recipe: Recipe
+    @Binding var recipe: Recipe
+    
+    @State var selected: [Ingredient] = []
     
     var body: some View {
         VStack {
@@ -17,6 +19,14 @@ struct RecipeView: View {
             Text("Image")
             Spacer()
             Text("Ingredients")
+            IngredientList(
+                ingredients: $recipe.ingredients,
+                selected: $selected,
+                color: .black,
+                backgroundColor: .white,
+                selectable: true,
+                incrementable: false,
+                deletable: false)
             Spacer()
             Text("Instructions")
         }
@@ -27,5 +37,9 @@ struct RecipeView: View {
 }
 
 #Preview {
-    RecipeView(recipe: Recipe(name:"Chicken and Pasta"))
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
+    
+    RecipeView(recipe: $chickenAndRice)
 }
