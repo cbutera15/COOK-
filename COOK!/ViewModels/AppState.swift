@@ -24,7 +24,7 @@ class AppState: ObservableObject {
     @Published var groceryList: [Ingredient] = []
     @Published var selectedGroceryItems: [Ingredient] = []
     @Published var ingredients: [Ingredient] = []
-    @Published var recipes: [Recipe] = []
+    @Published var savedRecipes: [Recipe] = []
     @Published var favoriteRecipes: [Recipe] = []
     
     init() {
@@ -39,9 +39,21 @@ class AppState: ObservableObject {
         var eggs: Ingredient = Ingredient(name: "Eggs", quantity: 2)
         var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3)
         
-        groceryList = [milk, eggs, cheese]
+        var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
+        var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+        var pasta: Ingredient = Ingredient(name: "Pasta", quantity: 1)
+        var redSauce: Ingredient = Ingredient(name: "Red sauce", quantity: 1)
+        var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6)
+        var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1)
         
+        var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
+        var pastaSalad = Recipe(name: "Pasta salad", ingredients: [pasta, cheese])
+        var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", ingredients: [pasta, redSauce, meatballs, cheese])
+        var grilledSalmon = Recipe(name: "Grilled salmon", ingredients: [salmon])
+        
+        groceryList = [milk, eggs, cheese]
         ingredients = [milk, eggs, cheese]
+        savedRecipes = [chickenAndRice, pastaSalad, spaghettiWithMeatballs, grilledSalmon]
     }
     
     func addToGroceryList(_ item: Ingredient) {
@@ -58,6 +70,10 @@ class AppState: ObservableObject {
     
     func addToPantry(_ items: [Ingredient]) {
         ingredients.append(contentsOf: items)
+    }
+    
+    func addSavedRecipe(_ recipe: Recipe) {
+        savedRecipes.append(recipe)
     }
     
     func addToFavorites(_ recipe: Recipe) {

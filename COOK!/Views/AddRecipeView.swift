@@ -11,19 +11,25 @@ import PhotosUI
 struct AddRecipeView: View {
     @Environment(\.dismiss) private var dismiss
     
+    @EnvironmentObject var appState: AppState
+    
     @State private var recipeTitle = ""
     @State private var recipeDescription = ""
-    @State private var recipeIngredients: [String] = []
+    @State private var recipeIngredients: [Ingredient] = []
     @State private var recipeSteps: [String] = []
     
     @State private var newIngredientName: String = ""
     @State private var newStep: String = ""
-    
+    @State private var newIngredientQuantity: Int = 0
     @State private var showAddItemAlert = false
     @State private var showAddStepAlert = false
     
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
+    
+    let purple: Color = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
+    let lightPurple: Color = Color(hue: 0.7444, saturation: 0.05, brightness: 1)
+    let white: Color = .white
     
     var body: some View {
         VStack {
@@ -94,34 +100,35 @@ struct AddRecipeView: View {
                 .padding([.leading, .top])
                 .font(.title2.bold())
             
-            List {
-                ForEach(recipeIngredients, id: \.self) { ingredient in
-                    Text(ingredient)
-                        .swipeActions {
-                            Button(role: .destructive) {
-                                if let idx = recipeIngredients.firstIndex(of: ingredient) {
-                                    recipeIngredients.remove(at: idx)
-                                }
-                            } label: {
-                                Text("Delete")
-                            }
-                            .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                        }
-                }
-                Button(action: {
-                    showAddItemAlert = true
-                }) {
-                    Text("Add Ingredient")
-                        .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                }
+            IngredientList(
+                ingredients: $recipeIngredients,
+                selected: .constant([]),
+                color: purple,
+                backgroundColor: white,
+                selectable: false,
+                incrementable: true,
+                deletable: true
+            )
+            
+            Button(action: { showAddItemAlert = true }) {
+                Text("Add Ingredient")
+                    .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
             }
-            .scrollContentBackground(.hidden)
+            .tint(white)
+            .buttonStyle(BorderedButtonStyle())
+            .contentShape(Rectangle())
             .alert("Add New Item", isPresented: $showAddItemAlert) {
                 TextField("Item Name", text: $newIngredientName)
+                TextField("Item Quantity", value: $newIngredientQuantity, format: .number)
                 Button("Add") {
-                    if !newIngredientName.isEmpty {
-                        recipeIngredients.append(newIngredientName)
+                    if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
+                        recipeIngredients.append(
+                            Ingredient(
+                                name: newIngredientName,
+                                quantity: newIngredientQuantity
+                            ))
                         newIngredientName = "" // Clear the text field
+                        newIngredientQuantity = 0
                     }
                 }
                 Button("Cancel", role: .cancel) { }
@@ -129,6 +136,7 @@ struct AddRecipeView: View {
                 Text("Enter the name for the new item.")
             }
 
+            Text("Instructions")
             Text("Instructions")
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
@@ -172,7 +180,6 @@ struct AddRecipeView: View {
             
             
             
-            HStack {
                 Button(action: {
                     dismiss()
                     recipeTitle = ""
@@ -188,7 +195,16 @@ struct AddRecipeView: View {
                 
                 Button(action: {
                     dismiss()
-                    // add recipe code
+                    
+                    appState.addSavedRecipe(
+                        Recipe(
+                            name: recipeTitle,
+                            description: recipeDescription,
+                            imagePath: "",
+                            ingredients: recipeIngredients,
+                            instructions: []
+                        )
+                    )
                 }) {
                     Text("Save")
                         .frame(maxWidth: .infinity)
@@ -206,5 +222,5 @@ struct AddRecipeView: View {
 }
 
 #Preview {
-    AddRecipeView()
+    AddRecipeView().environmentObject(AppState())
 }

@@ -10,15 +10,37 @@ import Foundation
 struct Recipe: Identifiable {
     let id = UUID()
     var name: String
+    var description: String
     var imagePath: String
     var ingredients: [Ingredient]
     var instructions: [String]
     
     init(name: String) {
         self.name = name
+        self.description = ""
         self.imagePath = ""
         self.ingredients = []
         self.instructions = []
+    }
+    
+    init(name: String, ingredients: [Ingredient]) {
+        self.name = name
+        self.description = ""
+        self.imagePath = ""
+        self.ingredients = ingredients
+        self.instructions = []
+    }
+    
+    init(name: String, description: String, imagePath: String, ingredients: [Ingredient], instructions: [String]) {
+        self.name = name
+        self.description = description
+        self.imagePath = imagePath
+        self.ingredients = ingredients
+        self.instructions = instructions
+    }
+    
+    mutating func setDescription(_ description: String) {
+        self.description = description
     }
     
     mutating func setImagePath(_ path: String) {
