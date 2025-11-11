@@ -12,13 +12,17 @@ struct RecipeView: View {
     
     @State var selected: [Ingredient] = []
     
+    @State private var showEditRecipe = false
+    
     var body: some View {
         VStack {
-            Text(recipe.name)
+            Text(recipe.name).font(.largeTitle)
             Spacer()
-            Text("Image")
+            Text("Image") // placeholder
             Spacer()
-            Text("Ingredients")
+            Text("Description") // placeholder
+            Spacer()
+            Text("Ingredients").font(.title2)
             IngredientList(
                 ingredients: $recipe.ingredients,
                 selected: $selected,
@@ -26,13 +30,24 @@ struct RecipeView: View {
                 backgroundColor: .white,
                 selectable: true,
                 incrementable: false,
-                deletable: false)
+                deletable: false
+            )
             Spacer()
-            Text("Instructions")
+            Text("Instructions").font(.title2)
+            // add instructions here
         }
         .padding()
-        //.bottomLine()
-        .navigationTitle(recipe.name)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { showEditRecipe = true}) {
+                    Text("Edit")
+                }
+            }
+        }
+        .sheet(isPresented: $showEditRecipe) {
+            EditRecipeView(recipe: $recipe, addRecipe: false)
+                .interactiveDismissDisabled(true)
+        }
     }
 }
 

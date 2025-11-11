@@ -99,25 +99,6 @@ struct RecipeRow: View {
     }
 }
 
-//// MARK: - Supporting Types
-//struct Recipe: Identifiable, Hashable {
-//    let id = UUID()
-//    let name: String
-//}
-//
-//struct RecipeView: View {
-//    let recipe: Recipe
-//    var body: some View {
-//        VStack {
-//            Text(recipe.name)
-//                .font(.largeTitle)
-//                .padding()
-//            Spacer()
-//        }
-//        .navigationTitle(recipe.name)
-//    }
-//}
-
 #Preview {
     RecipesView().environmentObject(AppState())
 }

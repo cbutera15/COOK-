@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var selectedTab: String = "Grocery"
     @State private var showPlusMenu = false
     @State private var showAddRecipe = false
+    @State private var newRecipe = Recipe()
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -88,6 +89,7 @@ struct ContentView: View {
             Button("Add Recipe") {
                 showPlusMenu = false
                 showAddRecipe = true
+                newRecipe = Recipe()
             }
             Button("Add Ingredient") {
                 // handle action
@@ -98,7 +100,7 @@ struct ContentView: View {
             Button("Cancel", role: .cancel) { }
         }
         .sheet(isPresented: $showAddRecipe) {
-            AddRecipeView()
+            EditRecipeView(recipe: $newRecipe, addRecipe: true)
                 .interactiveDismissDisabled(true)
         }
     }
