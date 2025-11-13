@@ -42,6 +42,7 @@ struct PantryView: View {
             backgroundColor: appState.backgroundColor,
             selectable: false,
             incrementable: true,
+            unitEditable: false,
             deletable: true
         )
     }

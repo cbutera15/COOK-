@@ -70,6 +70,7 @@ struct AddRecipeView: View {
                 backgroundColor: white,
                 selectable: false,
                 incrementable: true,
+                unitEditable: true,
                 deletable: true
             )
             

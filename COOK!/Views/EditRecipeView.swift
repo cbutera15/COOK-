@@ -20,7 +20,8 @@ struct EditRecipeView: View {
     @State private var recipeIngredients: [Ingredient] = []
     
     @State private var newIngredientName: String = ""
-    @State private var newIngredientQuantity: Int = 0
+    @State private var newIngredientQuantity: Int = 1
+    @State private var newIngredientUnit: Ingredient.Unit = .none
     
     @State private var showAddItemAlert = false
     
@@ -79,6 +80,7 @@ struct EditRecipeView: View {
                 backgroundColor: white,
                 selectable: false,
                 incrementable: true,
+                unitEditable: true,
                 deletable: true
             )
             
@@ -100,7 +102,7 @@ struct EditRecipeView: View {
                                 quantity: newIngredientQuantity
                             ))
                         newIngredientName = "" // Clear the text field
-                        newIngredientQuantity = 0
+                        newIngredientQuantity = 1
                     }
                 }
                 Button("Cancel", role: .cancel) { }

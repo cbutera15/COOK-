@@ -67,7 +67,9 @@ class AppState: ObservableObject {
     }
     
     func removeFromGroceryList(_ items: [Ingredient]) {
-        groceryList.removeAll { items.contains($0) }
+        groceryList.removeAll { item in
+            items.contains(where: { $0.id == item.id })
+        }
     }
     
     func addToPantry(_ items: [Ingredient]) {

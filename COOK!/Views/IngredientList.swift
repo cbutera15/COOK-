@@ -15,6 +15,7 @@ struct IngredientList: View {
     let backgroundColor: Color
     let selectable: Bool
     let incrementable: Bool
+    let unitEditable: Bool
     let deletable: Bool
     
     var body: some View {
@@ -26,6 +27,7 @@ struct IngredientList: View {
                     backgroundColor: backgroundColor,
                     selectable: selectable,
                     incrementable: incrementable,
+                    unitEditable: unitEditable,
                     deletable: deletable,
                     selected: selected.contains(where: { $0.id == item.id }),
                     onSelect: {
@@ -52,7 +54,7 @@ struct IngredientList: View {
 
 #Preview {
     @Previewable @State var ingredients: [Ingredient] = [
-        Ingredient(name: "Milk", quantity: 1),
+        Ingredient(name: "Milk", quantity: 1, unit: .gallon),
         Ingredient(name: "Eggs", quantity: 3)
     ]
     
@@ -65,6 +67,7 @@ struct IngredientList: View {
         backgroundColor: .gray,
         selectable: true,
         incrementable: true,
+        unitEditable: true,
         deletable: true
     )
 }

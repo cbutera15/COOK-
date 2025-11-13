@@ -44,6 +44,7 @@ struct RecipeView: View {
                 backgroundColor: .white,
                 selectable: true,
                 incrementable: false,
+                unitEditable: false,
                 deletable: false
             )
             Spacer()
