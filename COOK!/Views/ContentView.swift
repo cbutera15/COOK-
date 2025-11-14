@@ -10,8 +10,6 @@ import SwiftUI
 struct ContentView: View {
     @EnvironmentObject var appState: AppState
     @State private var selectedTab: String = "Grocery"
-    @State private var showPlusMenu = false
-    @State private var showAddRecipe = false
     
     var body: some View {
         ZStack(alignment: .top) {
@@ -77,29 +75,6 @@ struct ContentView: View {
             }
             .background(appState.backgroundColor)
             //.frame(maxWidth: .infinity)
-        }
-        .onChange(of: appState.selectedTab) { oldValue, newValue in
-            if newValue == .plus {
-                appState.selectedTab = .plus
-                showPlusMenu = true
-            }
-        }
-        .confirmationDialog("What would you like to do?", isPresented: $showPlusMenu, titleVisibility: .visible) {
-            Button("Add Recipe") {
-                showPlusMenu = false
-                showAddRecipe = true
-            }
-            Button("Add Ingredient") {
-                // handle action
-            }
-            Button("Add to AI") {
-                // handle action
-            }
-            Button("Cancel", role: .cancel) { }
-        }
-        .sheet(isPresented: $showAddRecipe) {
-            AddRecipeView()
-                .interactiveDismissDisabled(true)
         }
     }
 }

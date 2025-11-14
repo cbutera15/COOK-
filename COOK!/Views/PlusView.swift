@@ -12,6 +12,7 @@ struct PlusView: View {
     
   var body: some View {
     VStack {
+        // add buttons as needed
       Spacer()
     }
     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -21,5 +22,9 @@ struct PlusView: View {
 }
 
 #Preview {
-    PlusView().environmentObject(AppState())
+    // Explicitly set preview background color to shadow what happens in deployment
+    let state = AppState()
+    state.selectedTab = .plus
+    state.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 1)
+    return PlusView().environmentObject(state)
 }
