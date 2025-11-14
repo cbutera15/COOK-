@@ -10,26 +10,47 @@ import SwiftUI
 struct PlusView: View {
     @EnvironmentObject var appState: AppState
     
+    @State private var showAddRecipe = false
+    
     var body: some View {
         VStack {
             Button(action: {
-                
+                showAddRecipe = true
             }) {
                 Text("Add Recipe")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .font(.title)
             }
             .buttonStyle(.borderedProminent)
+            .padding()
+            .tint(.purple)
+            .sheet(isPresented: $showAddRecipe) {
+                AddRecipeView()
+                    .interactiveDismissDisabled()
+            }
+            
             
             Button(action: {
                 
             }) {
                 Text("Edit Recipe")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .font(.title)
             }
+            .buttonStyle(.borderedProminent)
+            .padding()
+            .tint(.purple)
+            
             Button(action: {
                 
             }) {
                 Text("Add with AI")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .font(.title)
             }
-            Spacer()
+            .buttonStyle(.borderedProminent)
+            .padding()
+            .tint(.purple)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .padding()
