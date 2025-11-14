@@ -9,10 +9,12 @@ import SwiftUI
 
 struct IngredientView: View {
     @Binding var ingredient: Ingredient
+    
     let color: Color
     let backgroundColor: Color
     let selectable: Bool
     let incrementable: Bool
+    let unitEditable: Bool
     let deletable: Bool
     
     var selected: Bool
@@ -46,7 +48,24 @@ struct IngredientView: View {
                 }
             }
             
-            Text(String(ingredient.quantity))
+            if unitEditable {
+                Menu {
+                    ForEach(Ingredient.Unit.allSorted, id: \.self) { unit in
+                        Button(action: { ingredient.setUnit(unit) }) {
+                            Text(unit.name.name)
+                        }
+                    }
+                } label: {
+                    Text(ingredient.displayQuantity())
+                        .foregroundStyle(color)
+                        .padding(.horizontal, 4)
+                        .background(RoundedRectangle(cornerRadius: 6)
+                            .fill(.gray.opacity(0.2))
+                        )
+                }
+            } else {
+                Text(String(ingredient.displayQuantity()))
+            }
         }
         .contentShape(Rectangle())
         .onTapGesture {
@@ -64,7 +83,7 @@ struct IngredientView: View {
 }
 
 #Preview {
-    @Previewable @State var ingredient: Ingredient = Ingredient(name: "Milk", quantity: 1)
+    @Previewable @State var ingredient: Ingredient = Ingredient(name: "Milk", quantity: 1, unit: .cup)
     
     IngredientView(
         ingredient: $ingredient,
@@ -72,6 +91,7 @@ struct IngredientView: View {
         backgroundColor: .gray,
         selectable: true,
         incrementable: true,
+        unitEditable: true,
         deletable: true,
         selected: false,
         onSelect: {},

@@ -77,7 +77,7 @@ struct RecipesView: View {
 
 // MARK: - Row View
 struct RecipeRow: View {
-    let recipe: Recipe
+    @State var recipe: Recipe
     let isFavorite: Bool
     let toggleFavorite: () -> Void
     
@@ -90,7 +90,7 @@ struct RecipeRow: View {
             }
             .buttonStyle(.plain)
             
-            NavigationLink(destination: RecipeView(recipe: recipe)) {
+            NavigationLink(destination: RecipeView(recipe: $recipe)) {
                 Text(recipe.name)
                     .foregroundStyle(.primary)
             }
@@ -98,25 +98,6 @@ struct RecipeRow: View {
         .listRowBackground(Color(hue: 0.9361, saturation: 0.008, brightness: 1))
     }
 }
-
-//// MARK: - Supporting Types
-//struct Recipe: Identifiable, Hashable {
-//    let id = UUID()
-//    let name: String
-//}
-//
-//struct RecipeView: View {
-//    let recipe: Recipe
-//    var body: some View {
-//        VStack {
-//            Text(recipe.name)
-//                .font(.largeTitle)
-//                .padding()
-//            Spacer()
-//        }
-//        .navigationTitle(recipe.name)
-//    }
-//}
 
 #Preview {
     RecipesView().environmentObject(AppState())

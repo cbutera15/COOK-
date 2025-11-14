@@ -15,6 +15,14 @@ struct Recipe: Identifiable {
     var ingredients: [Ingredient]
     var instructions: [String]
     
+    init() {
+        self.name = ""
+        self.description = ""
+        self.imagePath = ""
+        self.ingredients = []
+        self.instructions = []
+    }
+    
     init(name: String) {
         self.name = name
         self.description = ""
@@ -39,12 +47,20 @@ struct Recipe: Identifiable {
         self.instructions = instructions
     }
     
+    mutating func setName(_ name: String) {
+        self.name = name
+    }
+    
     mutating func setDescription(_ description: String) {
         self.description = description
     }
     
     mutating func setImagePath(_ path: String) {
         imagePath = path
+    }
+    
+    mutating func setIngredients(_ ingredients: [Ingredient]) {
+        self.ingredients = ingredients
     }
     
     mutating func addIngredient(_ ingredient: Ingredient) {

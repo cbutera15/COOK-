@@ -44,6 +44,7 @@ struct GroceryListView: View {
                     backgroundColor: white,
                     selectable: true,
                     incrementable: true,
+                    unitEditable: true,
                     deletable: true
                 )
                 

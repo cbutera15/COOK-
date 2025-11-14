@@ -8,23 +8,68 @@
 import SwiftUI
 
 struct RecipeView: View {
-    let recipe: Recipe
+    @EnvironmentObject var appState: AppState
+    
+    @Binding var recipe: Recipe
+    
+    @State var selected: [Ingredient] = []
+    
+    @State private var showEditRecipe = false
+    
     var body: some View {
         VStack {
-            Text(recipe.name)
+            Text(recipe.name).font(.largeTitle)
             Spacer()
-            Text("Image")
+            Text("Image") // placeholder
             Spacer()
-            Text("Ingredients")
+            Text("Description") // placeholder
             Spacer()
-            Text("Instructions")
+            Text("Ingredients").font(.title2)
+            if appState.hasAllIngredients(recipe.ingredients) {
+                HStack {
+                    Text("All ingredients owned")
+                    Image(systemName: "checkmark.circle.fill")
+                }
+            } else {
+                Button(action: {
+                    appState.addToGroceryList(recipe.ingredients) // maybe change this to add only as needed
+                }) {
+                    Text("Add ingredints to grocery list")
+                }
+            }
+            IngredientList(
+                ingredients: $recipe.ingredients,
+                selected: $selected,
+                color: .black,
+                backgroundColor: .white,
+                selectable: true,
+                incrementable: false,
+                unitEditable: false,
+                deletable: false
+            )
+            Spacer()
+            Text("Instructions").font(.title2)
+            // add instructions here
         }
         .padding()
-        //.bottomLine()
-        .navigationTitle(recipe.name)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: { showEditRecipe = true}) {
+                    Text("Edit")
+                }
+            }
+        }
+        .sheet(isPresented: $showEditRecipe) {
+            EditRecipeView(recipe: $recipe, addRecipe: false)
+                .interactiveDismissDisabled(true)
+        }
     }
 }
 
 #Preview {
-    RecipeView(recipe: Recipe(name:"Chicken and Pasta"))
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
+    
+    RecipeView(recipe: $chickenAndRice).environmentObject(AppState())
 }
