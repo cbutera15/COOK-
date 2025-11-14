@@ -14,8 +14,10 @@ struct AddRecipeView: View {
     
     // Environment object that handles current tab and colors
     @EnvironmentObject var appState: AppState
+    @Binding var recipe: Recipe
     
-    // Add recipe fields
+    let addRecipe: Bool
+    
     @State private var recipeTitle = ""
     @State private var recipeDescription = ""
     @State private var recipeIngredients: [Ingredient] = []
@@ -24,7 +26,8 @@ struct AddRecipeView: View {
     // Add ingredient fields
     @State private var newIngredientName: String = ""
     @State private var newStep: String = ""
-    @State private var newIngredientQuantity: Int = 0
+    @State private var newIngredientQuantity: Int = 1
+    @State private var newIngredientUnit: Ingredient.Unit = .none
     @State private var showAddItemAlert = false
     @State private var showAddStepAlert = false
     
@@ -41,9 +44,15 @@ struct AddRecipeView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 HStack {
-                    Image(systemName: "text.badge.plus")
-                        .padding()
-                    Text("Add Recipe")
+                    if addRecipe {
+                        Image(systemName: "text.badge.plus")
+                            .padding()
+                        Text("Add Recipe")
+                    } else {
+                        Image(systemName: "square.and.pencil")
+                            .padding()
+                        Text("Edit Recipe")
+                    }
                     Spacer()
                 }
                 .font(Font.largeTitle.bold())
@@ -149,8 +158,9 @@ struct AddRecipeView: View {
                                     name: newIngredientName,
                                     quantity: newIngredientQuantity
                                 ))
+                            print("Add")
                             newIngredientName = "" // Clear the text field
-                            newIngredientQuantity = 0
+                            newIngredientQuantity = 1
                         }
                     }
                     Button("Cancel", role: .cancel) { }
@@ -225,15 +235,17 @@ struct AddRecipeView: View {
                     Button(action: {
                         dismiss()
                         
-                        appState.addSavedRecipe(
-                            Recipe(
-                                name: recipeTitle,
-                                description: recipeDescription,
-                                imagePath: "",
-                                ingredients: recipeIngredients,
-                                instructions: recipeSteps
-                            )
+                        recipe = Recipe(
+                            name: recipeTitle,
+                            description: recipeDescription,
+                            imagePath: "",
+                            ingredients: recipeIngredients,
+                            instructions: recipeSteps
                         )
+                        
+                        if addRecipe {
+                            appState.addSavedRecipe(recipe)
+                        }
                     }) {
                         Text("Save")
                             .frame(maxWidth: .infinity)
@@ -245,6 +257,15 @@ struct AddRecipeView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(hue: 0.7444, saturation: 0.05, brightness: 1))
+            .onAppear {
+                // load current fields when editting
+                
+                recipeTitle = recipe.name
+                recipeDescription = recipe.description
+                // set current image to edit
+                recipeIngredients = recipe.ingredients
+                recipeSteps = recipe.instructions
+            }
         }
         .background(lightPurple)
     }
@@ -252,5 +273,10 @@ struct AddRecipeView: View {
 
 
 #Preview {
-    AddRecipeView().environmentObject(AppState())
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
+    @State var blankRecipe = Recipe()
+    
+    AddRecipeView(recipe: $chickenAndRice, addRecipe: false).environmentObject(AppState())
 }
