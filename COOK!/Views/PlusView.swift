@@ -10,14 +10,21 @@ import SwiftUI
 struct PlusView: View {
     @EnvironmentObject var appState: AppState
     
+    @State var showAddRecipe = false
+    @State var newRecipe = Recipe()
+    
     var body: some View {
         VStack {
             Button(action: {
-                
+                showAddRecipe = true
+                newRecipe = Recipe()
             }) {
                 Text("Add Recipe")
             }
             .buttonStyle(.borderedProminent)
+            .sheet(isPresented: $showAddRecipe) {
+                EditRecipeView(recipe: $newRecipe, addRecipe: true)
+            }
             
             Button(action: {
                 
