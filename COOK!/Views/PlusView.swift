@@ -10,15 +10,31 @@ import SwiftUI
 struct PlusView: View {
     @EnvironmentObject var appState: AppState
     
-  var body: some View {
-    VStack {
-        // add buttons as needed
-      Spacer()
+    var body: some View {
+        VStack {
+            Button(action: {
+                
+            }) {
+                Text("Add Recipe")
+            }
+            .buttonStyle(.borderedProminent)
+            
+            Button(action: {
+                
+            }) {
+                Text("Edit Recipe")
+            }
+            Button(action: {
+                
+            }) {
+                Text("Add with AI")
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+//        .padding()
+        .background(appState.backgroundColor)
     }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//    .padding()
-    .background(appState.backgroundColor)
-  }
 }
 
 #Preview {
