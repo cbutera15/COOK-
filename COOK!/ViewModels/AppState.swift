@@ -62,8 +62,8 @@ class AppState: ObservableObject {
         groceryList.append(contentsOf: items)
     }
     
-    func addToGroceryList(name: String, quantity: Int) {
-        groceryList.append(Ingredient(name: name, quantity: quantity))
+    func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
+        groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
     }
     
     func removeFromGroceryList(_ items: [Ingredient]) {
@@ -109,3 +109,4 @@ class AppState: ObservableObject {
         // could execute on app close or on every update to AppState
     }
 }
+
