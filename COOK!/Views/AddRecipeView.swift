@@ -127,7 +127,7 @@ struct AddRecipeView: View {
                         unitEditable: true,
                         deletable: true
                     )
-                    .frame(minHeight: 200)
+                    .frame(minHeight: 120)
                     
                     Button(action: {
                         showAddItemAlert = true
@@ -257,3 +257,4 @@ struct AddRecipeView: View {
 #Preview {
     AddRecipeView().environmentObject(AppState())
 }
+

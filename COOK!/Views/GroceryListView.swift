@@ -175,6 +175,7 @@ struct GroceryListView: View {
                                             appState.addToGroceryList(name: itemToAdd, quantity: quantity, unit: ingredientUnit)
                                             showAddItemMenu = false
                                             itemToAdd = ""
+                                            unitToAdd = "None"
                                         }
                                     }) {
                                         Text("Add")
