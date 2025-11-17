@@ -11,11 +11,13 @@ struct PlusView: View {
     @EnvironmentObject var appState: AppState
     
     @State private var showAddRecipe = false
+    @State var newRecipe = Recipe()
     
     var body: some View {
         VStack {
             Button(action: {
                 showAddRecipe = true
+                newRecipe = Recipe()
             }) {
                 Text("Add Recipe")
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -29,6 +31,9 @@ struct PlusView: View {
                     .interactiveDismissDisabled()
             }
             
+            .sheet(isPresented: $showAddRecipe) {
+                EditRecipeView(recipe: $newRecipe, addRecipe: true)
+            }
             
             Button(action: {
                 

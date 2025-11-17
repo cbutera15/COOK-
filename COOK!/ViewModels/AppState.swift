@@ -8,6 +8,22 @@
 import SwiftUI
 import Combine
 
+// Extending date to access day of week # (1, sunday -> 7, saturday)
+extension Date {
+    func getWeekdayNumber() -> Int? {
+        return Calendar.current.dateComponents([.weekday], from: self).weekday
+    }
+    
+    func withTime(hour: Int, minute: Int = 0, second: Int = 0) -> Date {
+        let calendar = Calendar.current
+        var components = calendar.dateComponents([.year, .month, .day], from: self)
+        components.hour = hour
+        components.minute = minute
+        components.second = second
+        return calendar.date(from: components) ?? self
+    }
+}
+
 class AppState: ObservableObject {
     enum MenuTab {
         case home
@@ -26,10 +42,11 @@ class AppState: ObservableObject {
     @Published var ingredients: [Ingredient] = []
     @Published var savedRecipes: [Recipe] = []
     @Published var favoriteRecipes: [Recipe] = []
+    @Published var schedule: [Day] = []
     
     init() {
         self.selectedTab = .home
-        self.backgroundColor = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
+        self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()
     }
@@ -56,6 +73,31 @@ class AppState: ObservableObject {
         groceryList = [chicken, pasta]
         ingredients = [milk, eggs, cheese, toast]
         savedRecipes = [chickenAndRice, pastaSalad, spaghettiWithMeatballs, grilledSalmon, eggsAndToast]
+        schedule = [
+            Day(id: 0, name: "Monday", morning: [], afternoon: [], evening: [], snacks: []),
+            Day(id: 1, name: "Tuesday", morning: [], afternoon: [], evening: [], snacks: []),
+            Day(id: 2, name: "Wednesday", morning: [], afternoon: [], evening: [], snacks: []),
+            Day(id: 3, name: "Thursday", morning: [], afternoon: [], evening: [], snacks: []),
+            Day(id: 4, name: "Friday", morning: [], afternoon: [], evening: [], snacks: []),
+            Day(id: 5, name: "Saturday", morning: [], afternoon: [], evening: [], snacks: []),
+            Day(id: 6, name: "Sunday", morning: [], afternoon: [], evening: [], snacks: [])
+        ]
+    }
+    
+    // grocery list functions
+    func addGroceryListToPantry() {
+        ingredients.append(contentsOf: groceryList)
+    }
+    
+    func clearSelectedFromGroceryList() {
+        groceryList.removeAll { item in
+            selectedGroceryItems.contains(where: { $0.id == item.id })
+        }
+        selectedGroceryItems = []
+    }
+    
+    func clearGroceryList() {
+        groceryList.removeAll()
     }
     
     func addToGroceryList(_ items: [Ingredient]) {
@@ -64,12 +106,6 @@ class AppState: ObservableObject {
     
     func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
         groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
-    }
-    
-    func removeFromGroceryList(_ items: [Ingredient]) {
-        groceryList.removeAll { item in
-            items.contains(where: { $0.id == item.id })
-        }
     }
     
     func addToPantry(_ items: [Ingredient]) {
