@@ -11,17 +11,14 @@ struct HomeView: View {
     @EnvironmentObject var appState: AppState
     
     var body: some View {
-        ZStack {
-            Color(hue: 0.7444, saturation: 0.03, brightness: 0.99).ignoresSafeArea()
-            VStack {
-                Text("Upcoming Meals")
-                Spacer()
-                Text("Favorite Meals")
-                Spacer()
-            }
-            .padding(.horizontal)
-            .background(appState.backgroundColor)
+        VStack {
+            Text("Upcoming Meals")
+            Spacer()
+            Text("Favorite Meals")
+            Spacer()
         }
+        .padding(.horizontal)
+        .background(appState.backgroundColor)
     }
 }
 

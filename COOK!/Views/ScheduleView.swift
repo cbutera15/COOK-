@@ -9,22 +9,6 @@
 
 import SwiftUI
 
-// Extending date to access day of week # (1, sunday -> 7, saturday)
-extension Date {
-    func getWeekdayNumber() -> Int? {
-        return Calendar.current.dateComponents([.weekday], from: self).weekday
-    }
-    
-    func withTime(hour: Int, minute: Int = 0, second: Int = 0) -> Date {
-        let calendar = Calendar.current
-        var components = calendar.dateComponents([.year, .month, .day], from: self)
-        components.hour = hour
-        components.minute = minute
-        components.second = second
-        return calendar.date(from: components) ?? self
-    }
-}
-
 struct ScheduleView: View {
     // Calendar manager for EventKit
     @StateObject private var calendarManager = CalendarManager()
@@ -37,12 +21,8 @@ struct ScheduleView: View {
     @State private var showDeleteButtons = false
     @State private var showEventsAddedAlert = false
     
-    @State private var recipes: [Recipe] = [Recipe(name: "Recipe 1"), Recipe(name:"Recipe 2"), Recipe(name: "Recipe 3")]
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snacks"]
-    
-    // Master schedule view schedule (TODO - change to get from Firebase)
-    @State private var schedule = [Day(id: 0, name: "Monday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 1, name: "Tuesday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 2, name: "Wednesday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 3, name: "Thursday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 4, name: "Friday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 5, name: "Saturday", morning: [], afternoon: [], evening: [], snacks: []), Day(id: 6, name: "Sunday", morning: [], afternoon: [], evening: [], snacks: [])]
     
     @State var recipesHash: [String]
     @State var selectedRecipe: String
@@ -51,7 +31,7 @@ struct ScheduleView: View {
     
     
     var body: some View {
-        let hasAnyRecipes = schedule.contains {
+        let hasAnyRecipes = appState.schedule.contains {
             !$0.morning.isEmpty || !$0.afternoon.isEmpty || !$0.evening.isEmpty || !$0.snacks.isEmpty
         }
         
@@ -92,16 +72,16 @@ struct ScheduleView: View {
                         Text(days[i]).font(.title).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                         
                         // Getting morning recipes
-                        if !schedule[i].morning.isEmpty {
+                        if !appState.schedule[i].morning.isEmpty {
                             Text("Morning").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
-                            ForEach(schedule[i].morning, id: \.name) { item in
+                            ForEach(appState.schedule[i].morning, id: \.name) { item in
                                 HStack {
                                     Text(item.name)
                                     Spacer()
                                     if showDeleteButtons {
                                         Button(action: {
-                                            if let idx = schedule[i].morning.firstIndex(where: { $0.name == item.name }) {
-                                                schedule[i].morning.remove(at: idx)
+                                            if let idx = appState.schedule[i].morning.firstIndex(where: { $0.name == item.name }) {
+                                                appState.schedule[i].morning.remove(at: idx)
                                             }
                                         }) {
                                             Image(systemName: "x.circle")
@@ -113,16 +93,16 @@ struct ScheduleView: View {
                             }
                         }
                         // Getting afternoon recipes
-                        if !schedule[i].afternoon.isEmpty {
+                        if !appState.schedule[i].afternoon.isEmpty {
                             Text("Afternoon").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
-                            ForEach(schedule[i].afternoon, id: \.name) { item in
+                            ForEach(appState.schedule[i].afternoon, id: \.name) { item in
                                 HStack {
                                     Text(item.name)
                                     Spacer()
                                     if showDeleteButtons {
                                         Button(action: {
-                                            if let idx = schedule[i].afternoon.firstIndex(where: { $0.name == item.name }) {
-                                                schedule[i].afternoon.remove(at: idx)
+                                            if let idx = appState.schedule[i].afternoon.firstIndex(where: { $0.name == item.name }) {
+                                                appState.schedule[i].afternoon.remove(at: idx)
                                             }
                                         }) {
                                             Image(systemName: "x.circle")
@@ -134,16 +114,16 @@ struct ScheduleView: View {
                             }
                         }
                         // Getting evening recipes
-                        if !schedule[i].evening.isEmpty {
+                        if !appState.schedule[i].evening.isEmpty {
                             Text("Evening").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
-                            ForEach(schedule[i].evening, id: \.name) { item in
+                            ForEach(appState.schedule[i].evening, id: \.name) { item in
                                 HStack {
                                     Text(item.name)
                                     Spacer()
                                     if showDeleteButtons {
                                         Button(action: {
-                                            if let idx = schedule[i].evening.firstIndex(where: { $0.name == item.name }) {
-                                                schedule[i].evening.remove(at: idx)
+                                            if let idx = appState.schedule[i].evening.firstIndex(where: { $0.name == item.name }) {
+                                                appState.schedule[i].evening.remove(at: idx)
                                             }
                                         }) {
                                             Image(systemName: "x.circle")
@@ -155,16 +135,16 @@ struct ScheduleView: View {
                             }
                         }
                         // Getting snacks recipes
-                        if !schedule[i].snacks.isEmpty {
+                        if !appState.schedule[i].snacks.isEmpty {
                             Text("Snacks").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
-                            ForEach(schedule[i].snacks, id: \.name) { item in
+                            ForEach(appState.schedule[i].snacks, id: \.name) { item in
                                 HStack {
                                     Text(item.name)
                                     Spacer()
                                     if showDeleteButtons {
                                         Button(action: {
-                                            if let idx = schedule[i].snacks.firstIndex(where: { $0.name == item.name }) {
-                                                schedule[i].snacks.remove(at: idx)
+                                            if let idx = appState.schedule[i].snacks.firstIndex(where: { $0.name == item.name }) {
+                                                appState.schedule[i].snacks.remove(at: idx)
                                             }
                                         }) {
                                             Image(systemName: "x.circle")
@@ -197,7 +177,7 @@ struct ScheduleView: View {
                     var dayIndex = monday!
                     
                     // Iterate over master schedule to calculate which day goes to which date.
-                    for day in schedule {
+                    for day in appState.schedule {
                         for recipe in day.morning {
                             calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
                             dayIndex = dayIndex.withTime(hour: 9)
@@ -246,7 +226,7 @@ struct ScheduleView: View {
                         
                         List {
                             Picker("Recipe", selection: $selectedRecipe) {
-                                ForEach(recipes, id: \.name) { recipe in
+                                ForEach(appState.savedRecipes, id: \.name) { recipe in
                                     Text(recipe.name)
                                         .tag(recipe.name)
                                 }
@@ -272,9 +252,9 @@ struct ScheduleView: View {
                             showAddRecipe = false
                             for (index, day) in days.enumerated() {
                                 if day == selectedDay {
-                                    for recipe in recipes {
+                                    for recipe in appState.savedRecipes {
                                         if selectedRecipe == recipe.name {
-                                            schedule[index].addRecipe(recipe: recipe, time: selectedTime)
+                                            appState.schedule[index].addRecipe(recipe: recipe, time: selectedTime)
                                         }
                                     }
                                 }
@@ -295,7 +275,7 @@ struct ScheduleView: View {
         .padding()
         .background(Color(hue: 0.3389, saturation: 0.05, brightness: 1))
         .onAppear {
-            recipesHash = recipes.map { $0.name }
+            recipesHash = appState.savedRecipes.map { $0.name }
             if let firstRecipe = recipesHash.first { selectedRecipe = firstRecipe }
             if let firstDay = days.first { selectedDay = firstDay }
             if let firstTime = times.first { selectedTime = firstTime }
