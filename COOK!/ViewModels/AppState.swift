@@ -84,18 +84,28 @@ class AppState: ObservableObject {
         ]
     }
     
+    // grocery list functions
+    func addGroceryListToPantry() {
+        ingredients.append(contentsOf: groceryList)
+    }
+    
+    func clearSelectedFromGroceryList() {
+        groceryList.removeAll { item in
+            selectedGroceryItems.contains(where: { $0.id == item.id })
+        }
+        selectedGroceryItems = []
+    }
+    
+    func clearGroceryList() {
+        groceryList.removeAll()
+    }
+    
     func addToGroceryList(_ items: [Ingredient]) {
         groceryList.append(contentsOf: items)
     }
     
     func addToGroceryList(name: String, quantity: Int) {
         groceryList.append(Ingredient(name: name, quantity: quantity))
-    }
-    
-    func removeFromGroceryList(_ items: [Ingredient]) {
-        groceryList.removeAll { item in
-            items.contains(where: { $0.id == item.id })
-        }
     }
     
     func addToPantry(_ items: [Ingredient]) {

@@ -52,7 +52,7 @@ struct GroceryListView: View {
                 
                 VStack() {
                     Button(action: {
-                        appState.addToPantry(appState.selectedGroceryItems)
+                        appState.addGroceryListToPantry()
                     }) {
                         Text("Add selected to pantry").frame(maxWidth: .infinity)
                     }
@@ -71,8 +71,7 @@ struct GroceryListView: View {
                         // Context menu for clearing
                         .sheet(isPresented: $showClearMenu) {
                             VStack {Button(action: {
-                                    appState.removeFromGroceryList(appState.selectedGroceryItems)
-                                    appState.selectedGroceryItems = []
+                                    appState.clearSelectedFromGroceryList()
                                     showClearMenu = false
                                 }) {
                                     Text("Clear selected").frame(maxWidth: .infinity)
@@ -80,14 +79,16 @@ struct GroceryListView: View {
                                 .buttonStyle(.borderedProminent)
                                 
                                 Button(action: {
-                                    appState.groceryList = []
+                                    appState.clearGroceryList()
                                     showClearMenu = false
                                 }) {
                                     Text("Clear all").frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.borderedProminent)
                                 
-                                Button(action: { showClearMenu = false }) {
+                                Button(action: {
+                                    showClearMenu = false
+                                }) {
                                     Text("Cancel").frame(maxWidth: .infinity)
                                 }
                                 .buttonStyle(.borderedProminent)
