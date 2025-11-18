@@ -67,9 +67,8 @@ struct RecipeView: View {
 }
 
 #Preview {
-    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
-    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
-    
     RecipeView(recipe: $chickenAndRice).environmentObject(AppState())
 }

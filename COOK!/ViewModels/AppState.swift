@@ -52,17 +52,17 @@ class AppState: ObservableObject {
     }
     
     func setMockData() {
-        var milk: Ingredient = Ingredient(name: "Milk", quantity: 1)
-        var eggs: Ingredient = Ingredient(name: "Eggs", quantity: 2)
-        var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3)
-        var toast: Ingredient = Ingredient(name: "Toast", quantity: 2)
+        var milk: Ingredient = Ingredient(name: "Milk", quantity: 1, unit: .cup)
+        var eggs: Ingredient = Ingredient(name: "Eggs", quantity: 2, unit: .none)
+        var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3, unit: .tablespoon)
+        var toast: Ingredient = Ingredient(name: "Toast", quantity: 2, unit: .none)
         
-        var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
-        var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
-        var pasta: Ingredient = Ingredient(name: "Pasta", quantity: 1)
-        var redSauce: Ingredient = Ingredient(name: "Red sauce", quantity: 1)
-        var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6)
-        var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1)
+        var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
+        var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
+        var pasta: Ingredient = Ingredient(name: "Pasta", quantity: 1, unit: .pound)
+        var redSauce: Ingredient = Ingredient(name: "Red sauce", quantity: 1, unit: .none)
+        var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6, unit: .none)
+        var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1, unit: .pound)
         
         var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
         var pastaSalad = Recipe(name: "Pasta salad", ingredients: [pasta, cheese])
@@ -104,8 +104,13 @@ class AppState: ObservableObject {
         groceryList.append(contentsOf: items)
     }
     
+<<<<<<< HEAD
     func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
         groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
+=======
+    func addToGroceryList(name: String, quantity: Int) {
+        groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
+>>>>>>> main
     }
     
     func addToPantry(_ items: [Ingredient]) {

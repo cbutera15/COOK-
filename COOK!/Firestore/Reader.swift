@@ -76,6 +76,8 @@ class Reader:ObservableObject{
         
     }
     
+    
+    
     func writeRecipeUser(_ recipe: Recipe) {
         if user.id == "N/A"{
             print("no user signed in")
@@ -138,7 +140,8 @@ class Reader:ObservableObject{
     
     //Snapshot to Recipe(ssToR): takes a QueryDocumentSnapshot and returns a single recipe obj
     func ssToR(_ query: QueryDocumentSnapshot) -> Recipe{
-        var recipe = Recipe(query.get("id") as! String, name: query.get("title") as! String)
+        var recipe = Recipe(name: query.get("title") as! String)
+        recipe.setId(query.get("id") as! String)
         recipe.instructions = query.get("instructions") as! String
         
         let amounts = query.get("amounts") as? [String] ?? []
@@ -146,11 +149,11 @@ class Reader:ObservableObject{
         let names = query.get("types") as? [String] ?? []
         
         if names.count < 1{
-            return Recipe("Fail")
+            return Recipe(name: "Fail")
         }
         
         for i in 0...names.count-1{
-            recipe.addIngredient(Ingredient(name: names[i], quantity: amounts[i], unit: units[i]))
+            recipe.addIngredient(Ingredient(name: names[i], quantity: Int(amounts[i]) ?? -1, unit: Ingredient.Unit(rawValue: units[i]) ?? .none))
         }
         
         return recipe
@@ -181,7 +184,7 @@ class Reader:ObservableObject{
             }
         }
 
-        return Recipe("Fail")
+        return Recipe(name:"Fail")
     }
     
     //will search for any recipes that contain words in the title or ingredients

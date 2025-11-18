@@ -64,6 +64,7 @@ struct EditRecipeView: View {
                     Text("Title")
                         .font(Font.title2.bold())
                         .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+<<<<<<< HEAD
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                     TextField("Recipe Title", text: $recipeTitle)
@@ -96,6 +97,37 @@ struct EditRecipeView: View {
                     .buttonStyle(.bordered)
                     .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                     .padding([.top, .horizontal])
+=======
+                }
+                .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                .buttonStyle(BorderedButtonStyle())
+                .contentShape(Rectangle())
+                .padding(.horizontal)
+                // Add ingredient diologue
+                .alert("Add New Item", isPresented: $showAddItemAlert) {
+                    TextField("Item Name", text: $newIngredientName)
+                    TextField("Item Quantity", value: $newIngredientQuantity, format: .number)
+                    Button("Add") {
+                        // Conditionally constructing new ingredient item
+                        if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
+                            recipeIngredients.append(
+                                Ingredient(
+                                    name: newIngredientName,
+                                    quantity: newIngredientQuantity,
+                                    unit: .none
+                                ))
+                            newIngredientName = "" // Clear the text field
+                            newIngredientQuantity = 1
+                        }
+                    }
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("Enter the name for the new item.")
+                }
+                
+                // Add recipe instructions
+                Text("Instructions")
+>>>>>>> main
                     .frame(maxWidth: .infinity, alignment: .leading)
                     // Load new image using key from photo picker
                     .onChange(of: selectedPhoto) { _, newValue in
@@ -249,9 +281,8 @@ struct EditRecipeView: View {
                         recipe = Recipe(
                             name: recipeTitle,
                             description: recipeDescription,
-                            imagePath: "",
                             ingredients: recipeIngredients,
-                            instructions: recipeSteps
+                            instructions: recipeSteps.joined(separator: "\n")
                         )
                         if addRecipe {
                             appState.addSavedRecipe(recipe)
@@ -263,9 +294,23 @@ struct EditRecipeView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                 }
+<<<<<<< HEAD
                 .padding(.horizontal)
                 .padding(.top, 8)
                 .padding(.bottom)
+=======
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color(hue: 0.7444, saturation: 0.05, brightness: 1))
+            .onAppear {
+                // load current fields when editting
+                
+                recipeTitle = recipe.name
+                recipeDescription = recipe.description
+                // set current image to edit
+                recipeIngredients = recipe.ingredients
+                recipeSteps = recipe.instructions.split(separator: "\n") as! [String]
+>>>>>>> main
             }
         }
         .background(lightPurple)
@@ -274,8 +319,8 @@ struct EditRecipeView: View {
 
 
 #Preview {
-    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
-    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
     @State var blankRecipe = Recipe()
     
