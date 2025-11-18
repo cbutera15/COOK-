@@ -157,7 +157,8 @@ struct EditRecipeView: View {
                             recipeIngredients.append(
                                 Ingredient(
                                     name: newIngredientName,
-                                    quantity: newIngredientQuantity
+                                    quantity: newIngredientQuantity,
+                                    unit: .none
                                 ))
                             newIngredientName = "" // Clear the text field
                             newIngredientQuantity = 1
@@ -238,9 +239,8 @@ struct EditRecipeView: View {
                         recipe = Recipe(
                             name: recipeTitle,
                             description: recipeDescription,
-                            imagePath: "",
                             ingredients: recipeIngredients,
-                            instructions: recipeSteps
+                            instructions: recipeSteps.joined(separator: "\n")
                         )
                         
                         if addRecipe {
@@ -264,7 +264,7 @@ struct EditRecipeView: View {
                 recipeDescription = recipe.description
                 // set current image to edit
                 recipeIngredients = recipe.ingredients
-                recipeSteps = recipe.instructions
+                recipeSteps = recipe.instructions.split(separator: "\n") as! [String]
             }
         }
         .background(lightPurple)
@@ -273,8 +273,8 @@ struct EditRecipeView: View {
 
 
 #Preview {
-    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
-    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
     @State var blankRecipe = Recipe()
     

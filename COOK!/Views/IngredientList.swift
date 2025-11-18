@@ -55,7 +55,7 @@ struct IngredientList: View {
 #Preview {
     @Previewable @State var ingredients: [Ingredient] = [
         Ingredient(name: "Milk", quantity: 1, unit: .gallon),
-        Ingredient(name: "Eggs", quantity: 3)
+        Ingredient(name: "Eggs", quantity: 3, unit: .none)
     ]
     
     @Previewable @State var selected: [Ingredient] = []
