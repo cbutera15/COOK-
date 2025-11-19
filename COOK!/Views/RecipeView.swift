@@ -20,7 +20,15 @@ struct RecipeView: View {
         VStack {
             Text(recipe.name).font(.largeTitle)
             Spacer()
-            Text("Image") // placeholder
+            Text("Image")
+            if (recipe.imagePath != nil) {
+                recipe.imagePath?
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 180)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                    .padding(.horizontal)
+            }
             Spacer()
             Text("Description") // placeholder
             Spacer()
