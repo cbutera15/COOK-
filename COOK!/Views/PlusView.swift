@@ -27,11 +27,6 @@ struct PlusView: View {
             .padding()
             .tint(.purple)
             .sheet(isPresented: $showAddRecipe) {
-                AddRecipeView()
-                    .interactiveDismissDisabled()
-            }
-            
-            .sheet(isPresented: $showAddRecipe) {
                 EditRecipeView(recipe: $newRecipe, addRecipe: true)
             }
             

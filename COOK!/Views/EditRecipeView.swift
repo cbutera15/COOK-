@@ -97,25 +97,19 @@ struct EditRecipeView: View {
                     .buttonStyle(.bordered)
                     .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                     .padding([.top, .horizontal])
-
-                    // Keep subsequent content within the same vertical stack
-                    VStack(alignment: .leading, spacing: 16) {
-                    
-                    // Add recipe instructions
-                    Text("Instructions")
-
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        // Load new image using key from photo picker
-                        .onChange(of: selectedPhoto) { _, newValue in
-                            Task {
-                                if let data = try await newValue?.loadTransferable(type: Data.self) {
-                                    if let uiImage = UIImage(data: data) {
-                                        selectedImage = Image(uiImage: uiImage)
-                                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    // Load new image using key from photo picker
+                    .onChange(of: selectedPhoto) { _, newValue in
+                        Task {
+                            if let data = try await newValue?.loadTransferable(type: Data.self) {
+                                if let uiImage = UIImage(data: data) {
+                                    selectedImage = Image(uiImage: uiImage)
                                 }
                             }
                         }
-                        
+                    }
+
+                    VStack(alignment: .leading, spacing: 16) {
                         // Show image if loaded correctly
                         if let selectedImage {
                             selectedImage
@@ -262,7 +256,7 @@ struct EditRecipeView: View {
                             instructions: recipeSteps.joined(separator: "\n")
                         )
                         if addRecipe {
-                            $appState.addSavedRecipe(recipe)
+                            appState.addSavedRecipe(recipe)
                         }
                     }) {
                         Text("Save")
