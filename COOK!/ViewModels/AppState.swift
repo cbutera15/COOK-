@@ -86,7 +86,13 @@ class AppState: ObservableObject {
     
     // grocery list functions
     func addGroceryListToPantry() {
-        ingredients.append(contentsOf: groceryList)
+        // Only add items from groceryList that are not exact duplicates
+        let newItems = groceryList.filter { item in
+            !ingredients.contains(where: { existing in
+                existing.name == item.name && existing.quantity == item.quantity && existing.unit == item.unit
+            })
+        }
+        ingredients.append(contentsOf: newItems)
     }
     
     func clearSelectedFromGroceryList() {

@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SearchFoodView: View {
     var body: some View {
-        Text("Search Food View")
+        VStack {
+            Text("Search Ingredients")
+        }
     }
 }
 
