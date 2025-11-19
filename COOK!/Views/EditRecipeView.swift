@@ -27,6 +27,7 @@ struct EditRecipeView: View {
     @State private var newIngredientName: String = ""
     @State private var newStep: String = ""
     @State private var newIngredientQuantity: Int = 1
+    @State private var newIngredientUnitUnform: String = "None"
     @State private var newIngredientUnit: Ingredient.Unit = .none
     @State private var showAddItemAlert = false
     @State private var showAddStepAlert = false
@@ -34,6 +35,9 @@ struct EditRecipeView: View {
     // Photo picker variables (encrypted photo, loaded photo)
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
+    
+    // Unit list
+    let units = ["None", "Teaspoon", "Tablespoon", "Ounce", "Pound", "Milliliter", "Liter", "Kilogram", "Gram", "Gallon", "Cup"]
     
     // Custom colors
     let purple: Color = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
@@ -150,25 +154,99 @@ struct EditRecipeView: View {
                         .buttonStyle(BorderedButtonStyle())
                         .contentShape(Rectangle())
                         .padding(.horizontal)
-                        .alert("Add New Item", isPresented: $showAddItemAlert) {
-                            TextField("Item Name", text: $newIngredientName)
-                            TextField("Item Quantity", value: $newIngredientQuantity, format: .number)
-                            Button("Add") {
-                                if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
-                                    recipeIngredients.append(
-                                        Ingredient(
-                                            name: newIngredientName,
-                                            quantity: newIngredientQuantity,
-                                            unit: .none
-                                        )
-                                    )
-                                    newIngredientName = ""
-                                    newIngredientQuantity = 1
+                        .sheet(isPresented: $showAddItemAlert) {
+                            VStack(spacing: 20) {
+                                Spacer()
+                                Text("Add New Item")
+                                    .font(.title)
+                                    .padding()
+                                
+                                Text("Ingredient Name")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.title2)
+                                TextField("Ingredient Name", text: $newIngredientName)
+                                    .textFieldStyle(.roundedBorder)
+                                
+                                Text("Ingredient Quantity")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .font(.title2)
+                                TextField("Ingredent Quantity", value: $newIngredientQuantity, format: .number)
+                                    .textFieldStyle(.roundedBorder)
+                                
+                                HStack {
+                                    Text("Unit: ")
+                                    Picker("Unit", selection: $newIngredientUnitUnform) {
+                                        ForEach(units, id: \.self) { unit in
+                                            Text(unit)
+                                        }
+                                    }
+                                    .scaleEffect(1.2)
                                 }
+                                .font(.title2)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+
+                                HStack {
+                                    Button(action: {
+                                        showAddItemAlert = false
+                                    }) {
+                                        Text("Cancel")
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                    .buttonStyle(.bordered)
+
+                                    Button(action: {
+                                        switch newIngredientUnitUnform {
+                                        case "None":
+                                            newIngredientUnit = .none
+                                        case "Teaspoon":
+                                            newIngredientUnit = .teaspoon
+                                        case "Tablespoon":
+                                            newIngredientUnit = .tablespoon
+                                        case "Ounce":
+                                            newIngredientUnit = .ounce
+                                        case "Pound":
+                                            newIngredientUnit = .pound
+                                        case "Milliliter":
+                                            newIngredientUnit = .milliliter
+                                        case "Liter":
+                                            newIngredientUnit = .liter
+                                        case "Kilogram":
+                                            newIngredientUnit = .kilogram
+                                        case "Gram":
+                                            newIngredientUnit = .gram
+                                        case "Gallon":
+                                            newIngredientUnit = .gallon
+                                        case "Cup":
+                                            newIngredientUnit = .cup
+                                        default:
+                                            newIngredientUnit = .none
+                                        }
+                                        
+                                        if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
+                                            recipeIngredients.append(
+                                                Ingredient(
+                                                    name: newIngredientName,
+                                                    quantity: newIngredientQuantity,
+                                                    unit: newIngredientUnit
+                                                )
+                                            )
+                                            newIngredientName = ""
+                                            newIngredientQuantity = 1
+                                            showAddItemAlert = false
+                                        }
+                                    }) {
+                                        Text("Add")
+                                            .frame(maxWidth: .infinity)
+                                    }
+                                    .buttonStyle(.borderedProminent)
+                                }
+                                .padding(.top)
+
+                                Spacer()
                             }
-                            Button("Cancel", role: .cancel) { }
-                        } message: {
-                            Text("Enter the name for the new item.")
+                            .presentationDetents([.height(400)])
+                            .tint(purple)
+                            .padding()
                         }
                         
                         // Add recipe instructions

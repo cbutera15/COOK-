@@ -29,7 +29,7 @@ struct RecipeCardView: View {
                     }
                 })
         } else {
-            Image(recipe.imagePath)
+            recipe.imagePath?
                 .resizable()
                 .scaledToFill()
                 .frame(width: 200, height: 100)

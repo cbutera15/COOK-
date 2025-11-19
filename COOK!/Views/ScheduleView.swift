@@ -82,7 +82,7 @@ struct ScheduleView: View {
                                         RecipeCardView(recipe: $meal, color: .gray, showDelete: showDeleteButtons)
                                     }
                                     
-                                    RecipeCardView(recipe: $newRecipe, color: .gray)
+                                    RecipeCardView(recipe: $newRecipe, color: .gray, showDelete: true)
                                 }
                             }
                         }
