@@ -79,7 +79,7 @@ struct ScheduleView: View {
                             ScrollView(.horizontal) {
                                 HStack {
                                     ForEach(mealBinding) { $meal in
-                                        RecipeCardView(recipe: $meal, color: .gray)
+                                        RecipeCardView(recipe: $meal, color: .gray, showDelete: showDeleteButtons)
                                     }
                                     
                                     RecipeCardView(recipe: $newRecipe, color: .gray)

@@ -11,6 +11,7 @@ struct RecipeCardView: View {
     @Binding var recipe: Recipe
     
     var color: Color
+    var showDelete: Bool
     
     var body: some View {
         if recipe.name == "" {
@@ -47,5 +48,5 @@ struct RecipeCardView: View {
     var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
     
-    RecipeCardView(recipe: $chickenAndRice, color: .gray)
+    RecipeCardView(recipe: $chickenAndRice, color: .gray, showDelete: true)
 }
