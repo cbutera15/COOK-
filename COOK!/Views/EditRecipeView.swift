@@ -252,8 +252,9 @@ struct EditRecipeView: View {
                         recipe = Recipe(
                             name: recipeTitle,
                             description: recipeDescription,
+                            imagePath: selectedImage!,
                             ingredients: recipeIngredients,
-                            instructions: recipeSteps.joined(separator: "\n")
+                            instructions: recipeSteps.joined(separator: "\n"),
                         )
                         if addRecipe {
                             appState.addSavedRecipe(recipe)
