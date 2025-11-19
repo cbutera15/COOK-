@@ -64,7 +64,7 @@ struct EditRecipeView: View {
                     Text("Title")
                         .font(Font.title2.bold())
                         .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-<<<<<<< HEAD
+
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
                     TextField("Recipe Title", text: $recipeTitle)
@@ -97,158 +97,135 @@ struct EditRecipeView: View {
                     .buttonStyle(.bordered)
                     .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                     .padding([.top, .horizontal])
-=======
-                }
-                .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                .buttonStyle(BorderedButtonStyle())
-                .contentShape(Rectangle())
-                .padding(.horizontal)
-                // Add ingredient diologue
-                .alert("Add New Item", isPresented: $showAddItemAlert) {
-                    TextField("Item Name", text: $newIngredientName)
-                    TextField("Item Quantity", value: $newIngredientQuantity, format: .number)
-                    Button("Add") {
-                        // Conditionally constructing new ingredient item
-                        if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
-                            recipeIngredients.append(
-                                Ingredient(
-                                    name: newIngredientName,
-                                    quantity: newIngredientQuantity,
-                                    unit: .none
-                                ))
-                            newIngredientName = "" // Clear the text field
-                            newIngredientQuantity = 1
-                        }
-                    }
-                    Button("Cancel", role: .cancel) { }
-                } message: {
-                    Text("Enter the name for the new item.")
-                }
-                
-                // Add recipe instructions
-                Text("Instructions")
->>>>>>> main
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    // Load new image using key from photo picker
-                    .onChange(of: selectedPhoto) { _, newValue in
-                        Task {
-                            if let data = try await newValue?.loadTransferable(type: Data.self) {
-                                if let uiImage = UIImage(data: data) {
-                                    selectedImage = Image(uiImage: uiImage)
-                                }
-                            }
-                        }
-                    }
-                    
-                    // Show image if loaded correctly
-                    if let selectedImage {
-                        selectedImage
-                            .resizable()
-                            .scaledToFill()
-                            .frame(height: 180)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .padding(.horizontal)
-                    }
-                    
-                    // Add ingredients to recipe
-                    Text("Ingredients")
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                        .padding([.leading, .top])
-                        .font(.title2.bold())
-                    
-                    // Custom IngredientList
-                    IngredientList(
-                        ingredients: $recipeIngredients,
-                        selected: .constant([]),
-                        color: purple,
-                        backgroundColor: white,
-                        selectable: false,
-                        incrementable: true,
-                        unitEditable: true,
-                        deletable: true
-                    )
-                    .frame(minHeight: 200)
-                    
-                    Button(action: {
-                        showAddItemAlert = true
-                    }) {
-                        Text("+ Add Ingredient")
-                            .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                    }
-                    .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                    .buttonStyle(BorderedButtonStyle())
-                    .contentShape(Rectangle())
-                    .padding(.horizontal)
-                    // Add ingredient diologue
-                    .alert("Add New Item", isPresented: $showAddItemAlert) {
-                        TextField("Item Name", text: $newIngredientName)
-                        TextField("Item Quantity", value: $newIngredientQuantity, format: .number)
-                        Button("Add") {
-                            // Conditionally constructing new ingredient item
-                            if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
-                                recipeIngredients.append(
-                                    Ingredient(
-                                        name: newIngredientName,
-                                        quantity: newIngredientQuantity
-                                    ))
-                                newIngredientName = "" // Clear the text field
-                                newIngredientQuantity = 1
-                            }
-                        }
-                        Button("Cancel", role: .cancel) { }
-                    } message: {
-                        Text("Enter the name for the new item.")
-                    }
+
+                    // Keep subsequent content within the same vertical stack
+                    VStack(alignment: .leading, spacing: 16) {
                     
                     // Add recipe instructions
                     Text("Instructions")
+
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                        .padding([.leading, .top])
-                        .font(.title2.bold())
-                    
-                    // Recipe intructions list
-                    List {
-                        ForEach(recipeSteps, id: \.self) { step in
-                            Text(step)
-                                // Custom delete button
-                                .swipeActions {
-                                    Button(role: .destructive) {
-                                        // Remove ingredients based on index
-                                        if let idx = recipeSteps.firstIndex(of: step) {
-                                            recipeSteps.remove(at: idx)
-                                        }
-                                    } label: {
-                                        Text("Delete")
+                        // Load new image using key from photo picker
+                        .onChange(of: selectedPhoto) { _, newValue in
+                            Task {
+                                if let data = try await newValue?.loadTransferable(type: Data.self) {
+                                    if let uiImage = UIImage(data: data) {
+                                        selectedImage = Image(uiImage: uiImage)
                                     }
-                                    .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                                 }
-                        }
-                        Button(action: {
-                            showAddStepAlert = true
-                        }) {
-                            Text("Add Step")
-                                .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
-                        }
-                    }
-                    .frame(minHeight: 300, maxHeight: 1000)
-                    .scrollContentBackground(.hidden)
-                    // Custom button added to button of list
-                    .alert("Add New Step", isPresented: $showAddStepAlert) {
-                        TextField("Step", text: $newStep)
-                        // Add new step to instructions
-                        Button("Add") {
-                            if !newStep.isEmpty {
-                                recipeSteps.append(newStep)
-                                newStep = ""
                             }
                         }
-                        Button("Cancel", role: .cancel) { }
-                    } message: {
-                        Text("Enter the name for the new item.")
-                    }
+                        
+                        // Show image if loaded correctly
+                        if let selectedImage {
+                            selectedImage
+                                .resizable()
+                                .scaledToFill()
+                                .frame(height: 180)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .padding(.horizontal)
+                        }
+                        
+                        // Add ingredients to recipe
+                        Text("Ingredients")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                            .padding([.leading, .top])
+                            .font(.title2.bold())
+                        
+                        // Custom IngredientList
+                        IngredientList(
+                            ingredients: $recipeIngredients,
+                            selected: .constant([]),
+                            color: purple,
+                            backgroundColor: white,
+                            selectable: false,
+                            incrementable: true,
+                            unitEditable: true,
+                            deletable: true
+                        )
+                        .frame(minHeight: 200)
+                        
+                        Button(action: {
+                            showAddItemAlert = true
+                        }) {
+                            Text("+ Add Ingredient")
+                                .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                        }
+                        .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                        .buttonStyle(BorderedButtonStyle())
+                        .contentShape(Rectangle())
+                        .padding(.horizontal)
+                        .alert("Add New Item", isPresented: $showAddItemAlert) {
+                            TextField("Item Name", text: $newIngredientName)
+                            TextField("Item Quantity", value: $newIngredientQuantity, format: .number)
+                            Button("Add") {
+                                if !newIngredientName.isEmpty && newIngredientQuantity > 0 {
+                                    recipeIngredients.append(
+                                        Ingredient(
+                                            name: newIngredientName,
+                                            quantity: newIngredientQuantity,
+                                            unit: .none
+                                        )
+                                    )
+                                    newIngredientName = ""
+                                    newIngredientQuantity = 1
+                                }
+                            }
+                            Button("Cancel", role: .cancel) { }
+                        } message: {
+                            Text("Enter the name for the new item.")
+                        }
+                        
+                        // Add recipe instructions
+                        Text("Instructions")
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                            .padding([.leading, .top])
+                            .font(.title2.bold())
+                        
+                        // Recipe intructions list
+                        List {
+                            ForEach(recipeSteps, id: \.self) { step in
+                                Text(step)
+                                    // Custom delete button
+                                    .swipeActions {
+                                        Button(role: .destructive) {
+                                            // Remove ingredients based on index
+                                            if let idx = recipeSteps.firstIndex(of: step) {
+                                                recipeSteps.remove(at: idx)
+                                            }
+                                        } label: {
+                                            Text("Delete")
+                                        }
+                                        .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                                    }
+                            }
+                            Button(action: {
+                                showAddStepAlert = true
+                            }) {
+                                Text("Add Step")
+                                    .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                            }
+                        }
+                        .frame(minHeight: 300, maxHeight: 1000)
+                        .scrollContentBackground(.hidden)
+                        // Custom button added to button of list
+                        .alert("Add New Step", isPresented: $showAddStepAlert) {
+                            TextField("Step", text: $newStep)
+                            // Add new step to instructions
+                            Button("Add") {
+                                if !newStep.isEmpty {
+                                    recipeSteps.append(newStep)
+                                    newStep = ""
+                                }
+                            }
+                            Button("Cancel", role: .cancel) { }
+                        } message: {
+                            Text("Enter the name for the new item.")
+                        }
                     
+                }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color(hue: 0.7444, saturation: 0.05, brightness: 1))
@@ -259,7 +236,7 @@ struct EditRecipeView: View {
                     recipeDescription = recipe.description
                     // set current image to edit
                     recipeIngredients = recipe.ingredients
-                    recipeSteps = recipe.instructions
+                    recipeSteps = recipe.instructions.split(separator: "\n").map(String.init)
                 }
             }
             .safeAreaInset(edge: .bottom) {
@@ -285,7 +262,7 @@ struct EditRecipeView: View {
                             instructions: recipeSteps.joined(separator: "\n")
                         )
                         if addRecipe {
-                            appState.addSavedRecipe(recipe)
+                            $appState.addSavedRecipe(recipe)
                         }
                     }) {
                         Text("Save")
@@ -294,11 +271,11 @@ struct EditRecipeView: View {
                     .buttonStyle(.borderedProminent)
                     .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
                 }
-<<<<<<< HEAD
+
                 .padding(.horizontal)
                 .padding(.top, 8)
                 .padding(.bottom)
-=======
+
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(Color(hue: 0.7444, saturation: 0.05, brightness: 1))
@@ -309,8 +286,8 @@ struct EditRecipeView: View {
                 recipeDescription = recipe.description
                 // set current image to edit
                 recipeIngredients = recipe.ingredients
-                recipeSteps = recipe.instructions.split(separator: "\n") as! [String]
->>>>>>> main
+                recipeSteps = recipe.instructions.split(separator: "\n").map(String.init)
+
             }
         }
         .background(lightPurple)

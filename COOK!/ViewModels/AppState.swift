@@ -104,50 +104,50 @@ class AppState: ObservableObject {
         groceryList.append(contentsOf: items)
     }
     
-<<<<<<< HEAD
+    
     func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
         groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
-=======
-    func addToGroceryList(name: String, quantity: Int) {
-        groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
->>>>>>> main
-    }
-    
-    func addToPantry(_ items: [Ingredient]) {
-        ingredients.append(contentsOf: items)
-    }
-    
-    func addSavedRecipe(_ recipe: Recipe) {
-        savedRecipes.append(recipe)
-    }
-    
-    func addToFavorites(_ recipe: Recipe) {
-        favoriteRecipes.append(recipe)
-    }
-    
-    func removeFromFavorites(_ recipe: Recipe) {
-        favoriteRecipes.removeAll { $0.id == recipe.id }
-    }
-    
-    func hasAllIngredients(_ items: [Ingredient]) -> Bool {
-        for item in items {
-            guard let matching = ingredients.first(where: { $0.name == item.name }) else {
-                return false
-            }
-            if matching.quantity < item.quantity {
-                return false
-            }
+        
+        func addToGroceryList(name: String, quantity: Int) {
+            groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
+            
         }
         
-        return true
-    }
-    
-    
-    
-    
-    func updateBackend() {
-        // placeholder to save data to backend
-        // could execute on app close or on every update to AppState
+        func addToPantry(_ items: [Ingredient]) {
+            ingredients.append(contentsOf: items)
+        }
+        
+        func addSavedRecipe(_ recipe: Recipe) {
+            savedRecipes.append(recipe)
+        }
+        
+        func addToFavorites(_ recipe: Recipe) {
+            favoriteRecipes.append(recipe)
+        }
+        
+        func removeFromFavorites(_ recipe: Recipe) {
+            favoriteRecipes.removeAll { $0.id == recipe.id }
+        }
+        
+        func hasAllIngredients(_ items: [Ingredient]) -> Bool {
+            for item in items {
+                guard let matching = ingredients.first(where: { $0.name == item.name }) else {
+                    return false
+                }
+                if matching.quantity < item.quantity {
+                    return false
+                }
+            }
+            
+            return true
+        }
+        
+        
+        
+        
+        func updateBackend() {
+            // placeholder to save data to backend
+            // could execute on app close or on every update to AppState
+        }
     }
 }
-
