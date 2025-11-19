@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct Recipe: Identifiable {
     var idChanged: Bool = false
     var id: String = UUID().uuidString
     var name: String
     var description: String
-    var imagePath: String
+    var imagePath: Image?
     var ingredients: [Ingredient]
     var instructions: String
     
-    init(name: String = "", description: String = "", imagePath: String = "", ingredients: [Ingredient] = [], instructions: String = "") {
+    init(name: String = "", description: String = "", imagePath: Image? = nil, ingredients: [Ingredient] = [], instructions: String = "") {
         self.name = name
         self.description = description
         self.imagePath = imagePath
@@ -39,7 +40,7 @@ struct Recipe: Identifiable {
         self.description = description
     }
     
-    mutating func setImagePath(_ path: String) {
+    mutating func setImagePath(_ path: Image?) {
         imagePath = path
     }
     

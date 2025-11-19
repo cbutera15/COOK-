@@ -74,13 +74,13 @@ class AppState: ObservableObject {
         ingredients = [milk, eggs, cheese, toast]
         savedRecipes = [chickenAndRice, pastaSalad, spaghettiWithMeatballs, grilledSalmon, eggsAndToast]
         schedule = [
-            Day(id: 0, name: "Monday", morning: [], afternoon: [], evening: [], snacks: []),
-            Day(id: 1, name: "Tuesday", morning: [], afternoon: [], evening: [], snacks: []),
-            Day(id: 2, name: "Wednesday", morning: [], afternoon: [], evening: [], snacks: []),
-            Day(id: 3, name: "Thursday", morning: [], afternoon: [], evening: [], snacks: []),
-            Day(id: 4, name: "Friday", morning: [], afternoon: [], evening: [], snacks: []),
-            Day(id: 5, name: "Saturday", morning: [], afternoon: [], evening: [], snacks: []),
-            Day(id: 6, name: "Sunday", morning: [], afternoon: [], evening: [], snacks: [])
+            Day(id: 0, name: "Monday", meals: [chickenAndRice, pastaSalad]),
+            Day(id: 1, name: "Tuesday", meals: []),
+            Day(id: 2, name: "Wednesday", meals: []),
+            Day(id: 3, name: "Thursday", meals: []),
+            Day(id: 4, name: "Friday", meals: []),
+            Day(id: 5, name: "Saturday", meals: []),
+            Day(id: 6, name: "Sunday", meals: [])
         ]
     }
     

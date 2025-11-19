@@ -21,6 +21,8 @@ struct ScheduleView: View {
     @State private var showDeleteButtons = false
     @State private var showEventsAddedAlert = false
     
+    @State private var newRecipe = Recipe()
+    
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snacks"]
     
@@ -29,10 +31,9 @@ struct ScheduleView: View {
     @State var selectedDay: String
     @State var selectedTime: String
     
-    
     var body: some View {
         let hasAnyRecipes = appState.schedule.contains {
-            !$0.morning.isEmpty || !$0.afternoon.isEmpty || !$0.evening.isEmpty || !$0.snacks.isEmpty
+            !$0.meals.isEmpty
         }
         
         VStack(alignment: .leading) {
@@ -71,6 +72,22 @@ struct ScheduleView: View {
                     ForEach(0..<days.count, id: \.self) { i in
                         Text(days[i]).font(.title).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                         
+                        Group {
+                            let dayBinding = $appState.schedule[i]
+                            let mealBinding = dayBinding.meals
+                            
+                            ScrollView(.horizontal) {
+                                HStack {
+                                    ForEach(mealBinding) { $meal in
+                                        RecipeCardView(recipe: $meal, color: .gray, showDelete: showDeleteButtons)
+                                    }
+                                    
+                                    RecipeCardView(recipe: $newRecipe, color: .gray, showDelete: false)
+                                }
+                            }
+                        }
+                        
+                        /*
                         // Getting morning recipes
                         if !appState.schedule[i].morning.isEmpty {
                             Text("Morning").font(.title2).foregroundStyle(Color(hue: 0.3389, saturation: 1, brightness: 0.5))
@@ -156,6 +173,7 @@ struct ScheduleView: View {
                             }
                         }
                         Spacer()
+                         */
                     }
                 }
                 .padding(.horizontal, 20)
@@ -177,6 +195,7 @@ struct ScheduleView: View {
                     var dayIndex = monday!
                     
                     // Iterate over master schedule to calculate which day goes to which date.
+                    /*
                     for day in appState.schedule {
                         for recipe in day.morning {
                             calendarManager.addEvent(title: recipe.name, startDate: dayIndex)
@@ -191,7 +210,8 @@ struct ScheduleView: View {
                             dayIndex = dayIndex.withTime(hour: 18)
                         }
                         dayIndex = Calendar.current.date(byAdding: .day, value: 1, to: dayIndex)!
-                    }
+                     }
+                     */
                     showEventsAddedAlert = true
                 }) {
                     Text("Export to Calendar")
@@ -254,7 +274,7 @@ struct ScheduleView: View {
                                 if day == selectedDay {
                                     for recipe in appState.savedRecipes {
                                         if selectedRecipe == recipe.name {
-                                            appState.schedule[index].addRecipe(recipe: recipe, time: selectedTime)
+                                            appState.schedule[index].addRecipe(recipe: recipe)
                                         }
                                     }
                                 }
