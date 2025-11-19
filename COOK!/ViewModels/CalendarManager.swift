@@ -11,7 +11,7 @@ import EventKitUI
 import Combine
 
 
-class CalendarManager: ObservableObject {
+@MainActor class CalendarManager: ObservableObject {
     let eventStore = EKEventStore()
     @Published var calendar: EKCalendar? = nil
     @Published var authorizationStatus: EKAuthorizationStatus = .notDetermined

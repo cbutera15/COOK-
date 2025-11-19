@@ -51,10 +51,14 @@ struct RecipeView: View {
             )
             Spacer()
             Text("Instructions").font(.title2)
-            // add instructions here
+            let recipeSteps = recipe.instructions.split(separator: "\n").map(String.init)
+            ForEach(recipeSteps, id: \.self) { step in
+                Text(step)
+            }
             Spacer()
         }
-        .padding()
+        .background(appState.backgroundColor)
+//        .padding()
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: { showEditRecipe = true}) {
