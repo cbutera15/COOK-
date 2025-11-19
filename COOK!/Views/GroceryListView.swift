@@ -15,8 +15,11 @@ struct GroceryListView: View {
     @State private var showAddItemMenu = false
     @State private var showClearMenu = false
     @State private var itemToAdd = ""
+    @State private var unitToAdd = "None"
+    @State private var ingredientUnit: Ingredient.Unit = .none
     @State private var quantity = 0
     
+    let units = ["None", "Teaspoon", "Tablespoon", "Ounce", "Pound", "Milliliter", "Liter", "Kilogram", "Gram", "Gallon", "Cup"]
     let pink: Color = Color(hue: 0.9361, saturation: 0.84, brightness: 1)
     let white: Color = Color(hue: 0.9361, saturation: 0.008, brightness: 1)
 
@@ -116,6 +119,17 @@ struct GroceryListView: View {
                                     .padding()
                                 Stepper("Quantity: \(quantity)", value: $quantity, in: 0...100)
                                     .padding()
+                                HStack {
+                                    Text("Unit:")
+                                        .padding()
+                                    Spacer()
+                                    Picker("Unit", selection: $unitToAdd) {
+                                        ForEach(units, id: \.self) { unit in
+                                            Text(unit)
+                                        }
+                                    }
+                                    .padding()
+                                }
      
                                 HStack {
                                     // Cancel Button
@@ -126,22 +140,53 @@ struct GroceryListView: View {
                                         Text("Cancel")
                                             .frame(maxWidth: .infinity)
                                     }
-                                    .buttonStyle(.borderedProminent)
+                                    .buttonStyle(.bordered)
+                                    .padding()
+                                    
                                     // Add Item button
                                     Button(action: {
+                                        switch unitToAdd {
+                                        case "None":
+                                            ingredientUnit = .none
+                                        case "Teaspoon":
+                                            ingredientUnit = .teaspoon
+                                        case "Tablespoon":
+                                            ingredientUnit = .tablespoon
+                                        case "Ounce":
+                                            ingredientUnit = .ounce
+                                        case "Pound":
+                                            ingredientUnit = .pound
+                                        case "Milliliter":
+                                            ingredientUnit = .milliliter
+                                        case "Liter":
+                                            ingredientUnit = .liter
+                                        case "Kilogram":
+                                            ingredientUnit = .kilogram
+                                        case "Gram":
+                                            ingredientUnit = .gram
+                                        case "Gallon":
+                                            ingredientUnit = .gallon
+                                        case "Cup":
+                                            ingredientUnit = .cup
+                                        default:
+                                            ingredientUnit = .none
+                                        }
+                                        
                                         if !itemToAdd.isEmpty {
-                                            appState.addToGroceryList(name: itemToAdd, quantity: quantity)
+                                            appState.addToGroceryList(name: itemToAdd, quantity: quantity, unit: ingredientUnit)
                                             showAddItemMenu = false
                                             itemToAdd = ""
+                                            unitToAdd = "None"
                                         }
                                     }) {
                                         Text("Add")
                                             .frame(maxWidth: .infinity)
                                     }
                                     .buttonStyle(.borderedProminent)
+                                    .padding()
                                 }
                             }
-                            .presentationDetents([.height(200)])
+                            .presentationDetents([.height(300)])
                         }
                     }
                 }

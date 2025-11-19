@@ -25,17 +25,10 @@ struct RecipeView: View {
             Text("Description") // placeholder
             Spacer()
             Text("Ingredients").font(.title2)
-            if appState.hasAllIngredients(recipe.ingredients) {
-                HStack {
-                    Text("All ingredients owned")
-                    Image(systemName: "checkmark.circle.fill")
-                }
-            } else {
-                Button(action: {
-                    appState.addToGroceryList(recipe.ingredients) // maybe change this to add only as needed
-                }) {
-                    Text("Add ingredints to grocery list")
-                }
+            HStack {
+                Image(systemName: "cart")
+                Text("Ingredient status unavailable")
+                    .foregroundStyle(.secondary)
             }
             IngredientList(
                 ingredients: $recipe.ingredients,
@@ -67,9 +60,9 @@ struct RecipeView: View {
 }
 
 #Preview {
-    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
-    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
+    var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
+    var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
-    
     RecipeView(recipe: $chickenAndRice).environmentObject(AppState())
 }
+

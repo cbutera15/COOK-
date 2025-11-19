@@ -2,49 +2,33 @@
 //  Recipe.swift
 //  COOK!
 //
-//  Created by Alexa Witkin on 10/24/25.
+//  Created by Alexa Witkin on 10/24/25. Im so big XPPP
 //
 
 import Foundation
 
 struct Recipe: Identifiable {
-    let id = UUID()
+    var idChanged: Bool = false
+    var id: String = UUID().uuidString
     var name: String
     var description: String
     var imagePath: String
     var ingredients: [Ingredient]
-    var instructions: [String]
+    var instructions: String
     
-    init() {
-        self.name = ""
-        self.description = ""
-        self.imagePath = ""
-        self.ingredients = []
-        self.instructions = []
-    }
-    
-    init(name: String) {
-        self.name = name
-        self.description = ""
-        self.imagePath = ""
-        self.ingredients = []
-        self.instructions = []
-    }
-    
-    init(name: String, ingredients: [Ingredient]) {
-        self.name = name
-        self.description = ""
-        self.imagePath = ""
-        self.ingredients = ingredients
-        self.instructions = []
-    }
-    
-    init(name: String, description: String, imagePath: String, ingredients: [Ingredient], instructions: [String]) {
+    init(name: String = "", description: String = "", imagePath: String = "", ingredients: [Ingredient] = [], instructions: String = "") {
         self.name = name
         self.description = description
         self.imagePath = imagePath
         self.ingredients = ingredients
         self.instructions = instructions
+    }
+    
+    mutating func setId(_ id: String) {
+        if !idChanged{
+            self.idChanged = true
+            self.id = id
+        }
     }
     
     mutating func setName(_ name: String) {
@@ -68,18 +52,14 @@ struct Recipe: Identifiable {
     }
     
     mutating func addIngredient(_ name: String, _ quantity: Int) {
-        ingredients.append(Ingredient(name: name, quantity: quantity))
+        ingredients.append(Ingredient(name: name, quantity: quantity, unit: .none))
     }
     
     mutating func addInstruction(_ instruction: String) {
-        instructions.append(instruction)
+        instructions.append(instruction + "\n")
     }
     
     mutating func removeIngredient(at index: Int) {
         ingredients.remove(at: index)
-    }
-    
-    mutating func removeInstruction(at index: Int) {
-        instructions.remove(at: index)
     }
 }

@@ -31,10 +31,20 @@ class CalendarManager: ObservableObject {
     
     func addEvent(title: String, startDate: Date) {
         let event = EKEvent(eventStore: eventStore)
+        var cal: EKCalendar
+        
         event.title = title
         event.startDate = startDate
         event.endDate = Calendar.current.date(byAdding: .minute, value: 30, to: startDate)!
-        event.calendar = eventStore.defaultCalendarForNewEvents
+        
+        if let defaultCal = eventStore.defaultCalendarForNewEvents, defaultCal.allowsContentModifications {
+            cal = defaultCal
+        } else {
+            let writableCalendars = eventStore.calendars(for: .event).filter { $0.allowsContentModifications }
+            cal = writableCalendars.first!
+        }
+        
+        event.calendar = cal
         
         do {
             try eventStore.save(event, span: .thisEvent)

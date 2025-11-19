@@ -10,7 +10,7 @@ import SwiftUI
 struct PlusView: View {
     @EnvironmentObject var appState: AppState
     
-    @State var showAddRecipe = false
+    @State private var showAddRecipe = false
     @State var newRecipe = Recipe()
     
     var body: some View {
@@ -20,8 +20,12 @@ struct PlusView: View {
                 newRecipe = Recipe()
             }) {
                 Text("Add Recipe")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .font(.title)
             }
             .buttonStyle(.borderedProminent)
+            .padding()
+            .tint(.purple)
             .sheet(isPresented: $showAddRecipe) {
                 EditRecipeView(recipe: $newRecipe, addRecipe: true)
             }
@@ -30,13 +34,23 @@ struct PlusView: View {
                 
             }) {
                 Text("Edit Recipe")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .font(.title)
             }
+            .buttonStyle(.borderedProminent)
+            .padding()
+            .tint(.purple)
+            
             Button(action: {
                 
             }) {
                 Text("Add with AI")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .font(.title)
             }
-            Spacer()
+            .buttonStyle(.borderedProminent)
+            .padding()
+            .tint(.purple)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .padding()

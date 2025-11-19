@@ -52,17 +52,17 @@ class AppState: ObservableObject {
     }
     
     func setMockData() {
-        var milk: Ingredient = Ingredient(name: "Milk", quantity: 1)
-        var eggs: Ingredient = Ingredient(name: "Eggs", quantity: 2)
-        var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3)
-        var toast: Ingredient = Ingredient(name: "Toast", quantity: 2)
+        var milk: Ingredient = Ingredient(name: "Milk", quantity: 1, unit: .cup)
+        var eggs: Ingredient = Ingredient(name: "Eggs", quantity: 2, unit: .none)
+        var cheese: Ingredient = Ingredient(name: "Cheese", quantity: 3, unit: .tablespoon)
+        var toast: Ingredient = Ingredient(name: "Toast", quantity: 2, unit: .none)
         
-        var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
-        var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
-        var pasta: Ingredient = Ingredient(name: "Pasta", quantity: 1)
-        var redSauce: Ingredient = Ingredient(name: "Red sauce", quantity: 1)
-        var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6)
-        var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1)
+        var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
+        var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
+        var pasta: Ingredient = Ingredient(name: "Pasta", quantity: 1, unit: .pound)
+        var redSauce: Ingredient = Ingredient(name: "Red sauce", quantity: 1, unit: .none)
+        var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6, unit: .none)
+        var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1, unit: .pound)
         
         var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
         var pastaSalad = Recipe(name: "Pasta salad", ingredients: [pasta, cheese])
@@ -86,7 +86,13 @@ class AppState: ObservableObject {
     
     // grocery list functions
     func addGroceryListToPantry() {
-        ingredients.append(contentsOf: groceryList)
+        // Only add items from groceryList that are not exact duplicates
+        let newItems = groceryList.filter { item in
+            !ingredients.contains(where: { existing in
+                existing.name == item.name && existing.quantity == item.quantity && existing.unit == item.unit
+            })
+        }
+        ingredients.append(contentsOf: newItems)
     }
     
     func clearSelectedFromGroceryList() {
@@ -104,44 +110,51 @@ class AppState: ObservableObject {
         groceryList.append(contentsOf: items)
     }
     
-    func addToGroceryList(name: String, quantity: Int) {
-        groceryList.append(Ingredient(name: name, quantity: quantity))
-    }
     
-    func addToPantry(_ items: [Ingredient]) {
-        ingredients.append(contentsOf: items)
+    func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
+        groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
     }
-    
-    func addSavedRecipe(_ recipe: Recipe) {
-        savedRecipes.append(recipe)
-    }
-    
-    func addToFavorites(_ recipe: Recipe) {
-        favoriteRecipes.append(recipe)
-    }
-    
-    func removeFromFavorites(_ recipe: Recipe) {
-        favoriteRecipes.removeAll { $0.id == recipe.id }
-    }
-    
-    func hasAllIngredients(_ items: [Ingredient]) -> Bool {
-        for item in items {
-            guard let matching = ingredients.first(where: { $0.name == item.name }) else {
-                return false
-            }
-            if matching.quantity < item.quantity {
-                return false
-            }
+        
+        func addToGroceryList(name: String, quantity: Int) {
+            groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
+            
         }
         
-        return true
+        func addToPantry(_ items: [Ingredient]) {
+            ingredients.append(contentsOf: items)
+        }
+        
+        func addSavedRecipe(_ recipe: Recipe) {
+            savedRecipes.append(recipe)
+        }
+        
+        func addToFavorites(_ recipe: Recipe) {
+            favoriteRecipes.append(recipe)
+        }
+        
+        func removeFromFavorites(_ recipe: Recipe) {
+            favoriteRecipes.removeAll { $0.id == recipe.id }
+        }
+        
+        func hasAllIngredients(_ items: [Ingredient]) -> Bool {
+            for item in items {
+                guard let matching = ingredients.first(where: { $0.name == item.name }) else {
+                    return false
+                }
+                if matching.quantity < item.quantity {
+                    return false
+                }
+            }
+            
+            return true
+        }
+        
+        
+        
+        
+        func updateBackend() {
+            // placeholder to save data to backend
+            // could execute on app close or on every update to AppState
+        }
     }
-    
-    
-    
-    
-    func updateBackend() {
-        // placeholder to save data to backend
-        // could execute on app close or on every update to AppState
-    }
-}
+
