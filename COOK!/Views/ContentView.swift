@@ -28,7 +28,7 @@ struct ContentView: View {
                     case .recipes:
                         RecipesView()
                     case .schedule:
-                    ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "", selectedTime: "")
+                    ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "")
                 }
                 
                 HStack() {

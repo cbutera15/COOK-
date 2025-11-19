@@ -7,12 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-
-		828B200D2ECCF24700049D12 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 828B200C2ECCF24700049D12 /* FirebaseFirestore */; };
-		828B200F2ECCF24700049D12 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 828B200E2ECCF24700049D12 /* FirebaseFirestoreCombine-Community */; };
-		828B20112ECCF3ED00049D12 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 828B20102ECCF3ED00049D12 /* FirebaseAuth */; };
-		828B20132ECCF3ED00049D12 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 828B20122ECCF3ED00049D12 /* FirebaseAuthCombine-Community */; };
-
 		6141958A2EB2B2C900667EA2 /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 614195892EB2B2C900667EA2 /* FirebaseAI */; };
 		6141958C2EB2B2C900667EA2 /* FirebaseAILogic in Frameworks */ = {isa = PBXBuildFile; productRef = 6141958B2EB2B2C900667EA2 /* FirebaseAILogic */; };
 		6141958E2EB2B2C900667EA2 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 6141958D2EB2B2C900667EA2 /* FirebaseAnalytics */; };
@@ -37,7 +31,10 @@
 		614195B42EB2B67D00667EA2 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 614195B32EB2B67D00667EA2 /* FirebaseRemoteConfig */; };
 		614195B62EB2B67D00667EA2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 614195B52EB2B67D00667EA2 /* FirebaseStorage */; };
 		614195B82EB2B67D00667EA2 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 614195B72EB2B67D00667EA2 /* FirebaseStorageCombine-Community */; };
-
+		828B200D2ECCF24700049D12 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 828B200C2ECCF24700049D12 /* FirebaseFirestore */; };
+		828B200F2ECCF24700049D12 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 828B200E2ECCF24700049D12 /* FirebaseFirestoreCombine-Community */; };
+		828B20112ECCF3ED00049D12 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 828B20102ECCF3ED00049D12 /* FirebaseAuth */; };
+		828B20132ECCF3ED00049D12 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 828B20122ECCF3ED00049D12 /* FirebaseAuthCombine-Community */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,12 +83,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-
 				828B200D2ECCF24700049D12 /* FirebaseFirestore in Frameworks */,
 				828B20112ECCF3ED00049D12 /* FirebaseAuth in Frameworks */,
 				828B200F2ECCF24700049D12 /* FirebaseFirestoreCombine-Community in Frameworks */,
 				828B20132ECCF3ED00049D12 /* FirebaseAuthCombine-Community in Frameworks */,
-
 				614195962EB2B67D00667EA2 /* FirebaseAppDistribution-Beta in Frameworks */,
 				614195A22EB2B67D00667EA2 /* FirebaseFirestore in Frameworks */,
 				6141959A2EB2B67D00667EA2 /* FirebaseAuthCombine-Community in Frameworks */,
@@ -116,7 +111,6 @@
 				614195A62EB2B67D00667EA2 /* FirebaseFunctions in Frameworks */,
 				614195982EB2B67D00667EA2 /* FirebaseAuth in Frameworks */,
 				614195A42EB2B67D00667EA2 /* FirebaseFirestoreCombine-Community in Frameworks */,
-
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -177,12 +171,10 @@
 			);
 			name = "COOK!";
 			packageProductDependencies = (
-
 				828B200C2ECCF24700049D12 /* FirebaseFirestore */,
 				828B200E2ECCF24700049D12 /* FirebaseFirestoreCombine-Community */,
 				828B20102ECCF3ED00049D12 /* FirebaseAuth */,
 				828B20122ECCF3ED00049D12 /* FirebaseAuthCombine-Community */,
-
 				614195892EB2B2C900667EA2 /* FirebaseAI */,
 				6141958B2EB2B2C900667EA2 /* FirebaseAILogic */,
 				6141958D2EB2B2C900667EA2 /* FirebaseAnalytics */,
@@ -207,7 +199,6 @@
 				614195B32EB2B67D00667EA2 /* FirebaseRemoteConfig */,
 				614195B52EB2B67D00667EA2 /* FirebaseStorage */,
 				614195B72EB2B67D00667EA2 /* FirebaseStorageCombine-Community */,
-
 			);
 			productName = "COOK!";
 			productReference = 82017E112E95D5C200DB07DF /* COOK!.app */;
@@ -694,28 +685,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-
-		828B200C2ECCF24700049D12 /* FirebaseFirestore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 64D5DD202EBFB17400EB7EE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseFirestore;
-		};
-		828B200E2ECCF24700049D12 /* FirebaseFirestoreCombine-Community */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 64D5DD202EBFB17400EB7EE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = "FirebaseFirestoreCombine-Community";
-		};
-		828B20102ECCF3ED00049D12 /* FirebaseAuth */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 64D5DD202EBFB17400EB7EE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseAuth;
-		};
-		828B20122ECCF3ED00049D12 /* FirebaseAuthCombine-Community */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 64D5DD202EBFB17400EB7EE3 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = "FirebaseAuthCombine-Community";
-		};
-
 		614195892EB2B2C900667EA2 /* FirebaseAI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6141955D2EB2B13500667EA2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -836,7 +805,22 @@
 			package = 6141955D2EB2B13500667EA2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
 		};
-
+		828B200C2ECCF24700049D12 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseFirestore;
+		};
+		828B200E2ECCF24700049D12 /* FirebaseFirestoreCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseFirestoreCombine-Community";
+		};
+		828B20102ECCF3ED00049D12 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = FirebaseAuth;
+		};
+		828B20122ECCF3ED00049D12 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = "FirebaseAuthCombine-Community";
+		};
 /* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 82017E092E95D5C200DB07DF /* Project object */;
