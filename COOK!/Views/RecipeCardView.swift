@@ -13,12 +13,36 @@ struct RecipeCardView: View {
     var color: Color
     var showDelete: Bool
     
+    let width: CGFloat = 150
+    let height: CGFloat = 100
+    
+    var textOverlay: some View {
+        VStack {
+            Spacer()
+            HStack {
+                Spacer()
+                Text(recipe.name)
+                    .foregroundColor(.black)
+                    .bold()
+                    .padding(.horizontal)
+                    .background(
+                        Rectangle()
+                            .foregroundColor(.white)
+                            .opacity(0.8)
+                            .cornerRadius(6)
+                    )
+            }
+        }
+        .cornerRadius(10)
+        .padding()
+    }
+    
     var body: some View {
         if recipe.name == "" {
             Rectangle()
                 .foregroundStyle(color)
                 .scaledToFill()
-                .frame(width: 200, height: 100)
+                .frame(width: width, height: height)
                 .cornerRadius(10)
                 .overlay(alignment: .center, content: {
                     VStack {
@@ -28,17 +52,24 @@ struct RecipeCardView: View {
                             .padding()
                     }
                 })
+        } else if recipe.imagePath == nil {
+            Rectangle()
+                .foregroundStyle(color)
+                .scaledToFill()
+                .frame(width: width, height: height)
+                .cornerRadius(10)
+                .overlay(
+                    textOverlay
+                )
         } else {
-            Image(recipe.imagePath)
+            recipe.imagePath?
                 .resizable()
                 .scaledToFill()
-                .frame(width: 200, height: 100)
+                .frame(width: width, height: height)
                 .cornerRadius(10)
-                .overlay(alignment: .bottomTrailing, content: {
-                    Text(recipe.name)
-                        .bold()
-                        .padding()
-                })
+                .overlay(
+                    textOverlay
+                )
         }
     }
 }
@@ -46,7 +77,11 @@ struct RecipeCardView: View {
 #Preview {
     var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2)
     var rice: Ingredient = Ingredient(name: "Rice", quantity: 1)
-    @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
+    @State var chickenAndRice = Recipe(
+        name: "Chicken and Rice",
+        imagePath: Image(systemName: "photo"),
+        ingredients: [chicken, rice]
+    )
     
     RecipeCardView(recipe: $chickenAndRice, color: .gray, showDelete: true)
 }
