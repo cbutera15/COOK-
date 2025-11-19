@@ -20,7 +20,6 @@ struct RecipeView: View {
         VStack {
             Text(recipe.name).font(.largeTitle)
             Spacer()
-            Text("Image")
             if (recipe.imagePath != nil) {
                 recipe.imagePath?
                     .resizable()
@@ -30,7 +29,9 @@ struct RecipeView: View {
                     .padding(.horizontal)
             }
             Spacer()
-            Text("Description") // placeholder
+            Text("Description")
+                .font(.title2)
+            Text(recipe.description)
             Spacer()
             Text("Ingredients").font(.title2)
             HStack {
@@ -51,6 +52,7 @@ struct RecipeView: View {
             Spacer()
             Text("Instructions").font(.title2)
             // add instructions here
+            Spacer()
         }
         .padding()
         .toolbar {
