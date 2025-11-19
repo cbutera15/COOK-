@@ -31,6 +31,7 @@
 		614195B42EB2B67D00667EA2 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = 614195B32EB2B67D00667EA2 /* FirebaseRemoteConfig */; };
 		614195B62EB2B67D00667EA2 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 614195B52EB2B67D00667EA2 /* FirebaseStorage */; };
 		614195B82EB2B67D00667EA2 /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 614195B72EB2B67D00667EA2 /* FirebaseStorageCombine-Community */; };
+		7377CDB92ECE5B57000537E1 /* ScanbotBarcodeScannerSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 7377CDB82ECE5B57000537E1 /* ScanbotBarcodeScannerSDK */; };
 		828B200D2ECCF24700049D12 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 828B200C2ECCF24700049D12 /* FirebaseFirestore */; };
 		828B200F2ECCF24700049D12 /* FirebaseFirestoreCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 828B200E2ECCF24700049D12 /* FirebaseFirestoreCombine-Community */; };
 		828B20112ECCF3ED00049D12 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 828B20102ECCF3ED00049D12 /* FirebaseAuth */; };
@@ -60,9 +61,22 @@
 		82017E282E95D5C300DB07DF /* COOK!UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "COOK!UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		7377CDBF2ECE6058000537E1 /* Exceptions for "COOK!" folder in "COOK!" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 82017E102E95D5C200DB07DF /* COOK! */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		82017E132E95D5C200DB07DF /* COOK! */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				7377CDBF2ECE6058000537E1 /* Exceptions for "COOK!" folder in "COOK!" target */,
+			);
 			path = "COOK!";
 			sourceTree = "<group>";
 		};
@@ -110,6 +124,7 @@
 				614195902EB2B2C900667EA2 /* FirebaseAnalyticsCore in Frameworks */,
 				614195A62EB2B67D00667EA2 /* FirebaseFunctions in Frameworks */,
 				614195982EB2B67D00667EA2 /* FirebaseAuth in Frameworks */,
+				7377CDB92ECE5B57000537E1 /* ScanbotBarcodeScannerSDK in Frameworks */,
 				614195A42EB2B67D00667EA2 /* FirebaseFirestoreCombine-Community in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -199,6 +214,7 @@
 				614195B32EB2B67D00667EA2 /* FirebaseRemoteConfig */,
 				614195B52EB2B67D00667EA2 /* FirebaseStorage */,
 				614195B72EB2B67D00667EA2 /* FirebaseStorageCombine-Community */,
+				7377CDB82ECE5B57000537E1 /* ScanbotBarcodeScannerSDK */,
 			);
 			productName = "COOK!";
 			productReference = 82017E112E95D5C200DB07DF /* COOK!.app */;
@@ -284,6 +300,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				6141955D2EB2B13500667EA2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				7377CDB72ECE5B57000537E1 /* XCRemoteSwiftPackageReference "scanbot-barcode-scanner-sdk-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 82017E122E95D5C200DB07DF /* Products */;
@@ -491,14 +508,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F6NHNHM557;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -525,14 +543,15 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = F6NHNHM557;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.6;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -684,6 +703,14 @@
 				minimumVersion = 12.5.0;
 			};
 		};
+		7377CDB72ECE5B57000537E1 /* XCRemoteSwiftPackageReference "scanbot-barcode-scanner-sdk-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/doo/scanbot-barcode-scanner-sdk-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.1.4;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -806,6 +833,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6141955D2EB2B13500667EA2 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = "FirebaseStorageCombine-Community";
+		};
+		7377CDB82ECE5B57000537E1 /* ScanbotBarcodeScannerSDK */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7377CDB72ECE5B57000537E1 /* XCRemoteSwiftPackageReference "scanbot-barcode-scanner-sdk-ios-spm" */;
+			productName = ScanbotBarcodeScannerSDK;
 		};
 		828B200C2ECCF24700049D12 /* FirebaseFirestore */ = {
 			isa = XCSwiftPackageProductDependency;
