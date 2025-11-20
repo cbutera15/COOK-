@@ -1,5 +1,5 @@
 {
-  "originHash" : "c63c63846d9c539229e96de38d6af51417e28c0ee9a0bc48bd0f0f19d923c329",
+  "originHash" : "94c6e14298c949ef2c70d68642d88be79de95303066c12efeb8de3e0ff939fb6",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -116,6 +116,15 @@
       "state" : {
         "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
         "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "scanbot-barcode-scanner-sdk-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/doo/scanbot-barcode-scanner-sdk-ios-spm",
+      "state" : {
+        "revision" : "2bec7d3d320fa0d25e7fa42403523f82342b1975",
+        "version" : "7.1.4"
       }
     },
     {
