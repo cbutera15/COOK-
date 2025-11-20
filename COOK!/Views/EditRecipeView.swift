@@ -330,7 +330,7 @@ struct EditRecipeView: View {
                         recipe = Recipe(
                             name: recipeTitle,
                             description: recipeDescription,
-                            imagePath: selectedImage!,
+                            //imagePath: selectedImage!,
                             ingredients: recipeIngredients,
                             instructions: recipeSteps.joined(separator: "\n"),
                         )

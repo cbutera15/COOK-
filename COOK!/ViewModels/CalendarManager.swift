@@ -29,6 +29,7 @@ import Combine
         }
     }
     
+    // TODO: fix timing
     func addEvent(title: String, startDate: Date) {
         let event = EKEvent(eventStore: eventStore)
         var cal: EKCalendar

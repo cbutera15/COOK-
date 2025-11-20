@@ -9,10 +9,10 @@ import Combine
 
 class User: AnyObject{
     @Published private(set) var id: String
-    private var email: String
-    private var calendar: [[String]]//Each row is a time slot moring, evening, and afternoon
-    private var customRecipes: [Recipe]
-    private var favoriteRecipes: [Recipe]
+    @Published private(set) var email: String
+    @Published private(set) var calendar: [[String]]//Each row is a time slot moring, evening, and afternoon
+    @Published private(set) var customRecipes: [Recipe]
+    @Published private(set) var favoriteRecipes: [Recipe]
     
     init(){
         id = "N/A"

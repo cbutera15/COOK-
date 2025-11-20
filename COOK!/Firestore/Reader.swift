@@ -13,7 +13,7 @@ import FirebaseCore
 
 class Reader:ObservableObject{
     private var db:Firestore!
-    @Published private(set) var user: User 
+    @Published private(set) var user: User
  
     init(){
         db = Firestore.firestore()
@@ -39,27 +39,40 @@ class Reader:ObservableObject{
             return
         }
         user.rmAll()
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                print("Error signing in: \(error.localizedDescription)")
-                return
+        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<AuthDataResult, Error>) in
+            Auth.auth().signIn(withEmail: email, password: password) { result, error in
+                if let error = error {
+                    print("Error signing in: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let result = result else {
+                    continuation.resume(throwing: NSError(domain: "AuthError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No result returned"]))
+                    return
+                }
+                print("Signed in as: \(result.user.uid)")
+                continuation.resume(returning: result)
             }
-            print("Signed in as: \(result?.user.uid ?? "")")
-            self.user.setId(result!.user.uid)
-            self.user.setEmail(result!.user.email!)
         }
+
+        self.user.setId(result.user.uid)
+        self.user.setEmail(result.user.email!)
+        
+        
         
         //load all user data into the user object
-        let userFav = try await db.collection("Users").document(user.id).collection("user_favorites").getDocuments().documents
-        for doc in userFav{
-            user.addFav(ssToR(doc))
+        let favRef = try await db.collection("Users/\(user.id)/user_favorites").getDocuments()
+        for doc in favRef.documents{
+            user.addFav(try ssToR(doc))
         }
         
-        let userCustom = try await db.collection("Users").document(user.id).collection("user_recipes").getDocuments().documents
-        for doc in userCustom{
-            user.addCustom(ssToR(doc))
+        let customeRef = try await db.collection("Users/\(user.id)/user_recipes").getDocuments()
+        for doc in customeRef.documents{
+            user.addCustom(try ssToR(doc))
         }
+        
     }
+    
     
     func logOut(){
         if user.id == "N/A"{
@@ -76,27 +89,13 @@ class Reader:ObservableObject{
         
     }
     
-    
-    
-    func writeRecipeUser(_ recipe: Recipe) {
+    func addUserRecipe(_ recipe: Recipe){
         if user.id == "N/A"{
             print("no user signed in")
             return
         }
-        
-        let doc = db.collection("Users").document(user.id).collection("user_recipes").document(recipe.id)
-        doc.setData([
-            "name": recipe.name,
-            "instructions": recipe.instructions
-        ])
-        
-        for ingredient in recipe.ingredients{
-            doc.updateData([
-                "ingredients": FieldValue.arrayUnion([ingredient.name]),
-                "amounts": FieldValue.arrayUnion([ingredient.quantity]),
-                "units": FieldValue.arrayUnion([ingredient.unit])
-            ])
-        }
+        let collection = db.collection("Users").document(user.id).collection("user_recipes")
+        writeRecipeTo(cr: collection, recipe: recipe)
     }
     
     //removes a users custom recipe by id
@@ -121,7 +120,8 @@ class Reader:ObservableObject{
         }
         
         //adds the id to the collection makes sure that no duplicates exists
-        db.collection("Users").document(user.id).collection("user_favorites").document(recipe.id)
+        let collection = db.collection("Users").document(user.id).collection("user_favorites")
+        writeRecipeTo(cr: collection, recipe: recipe)
         
         user.addFav(recipe)
     }
@@ -138,15 +138,51 @@ class Reader:ObservableObject{
         user.rmFav(id)
     }
     
-    //Snapshot to Recipe(ssToR): takes a QueryDocumentSnapshot and returns a single recipe obj
-    func ssToR(_ query: QueryDocumentSnapshot) -> Recipe{
-        var recipe = Recipe(name: query.get("title") as! String)
-        recipe.setId(query.get("id") as! String)
-        recipe.instructions = query.get("instructions") as! String
+    //writes the given recipe to the given collection
+    func writeRecipeTo(cr: CollectionReference, recipe: Recipe) {
+        if user.id == "N/A"{
+            print("no user signed in")
+            return
+        }
         
-        let amounts = query.get("amounts") as? [String] ?? []
+        let doc = cr.document(recipe.id)
+        doc.setData([
+            "id": recipe.id,
+            "title": recipe.name,
+            "instructions": recipe.instructions,
+            "description": recipe.description
+        ])
+        
+        var types: [String] = []
+        var amounts: [Int] = []
+        var units: [String] = []
+        for ingredient in recipe.ingredients{
+            units.append(ingredient.unit.name.name)
+            types.append(ingredient.name)
+            amounts.append(ingredient.quantity)
+        }
+        
+        doc.updateData([
+            "ingredients": types,
+            "amounts": amounts,
+            "units": units
+        ])
+    }
+    
+    //Snapshot to Recipe(ssToR): takes a QueryDocumentSnapshot and returns a single recipe obj
+    func ssToR(_ query: QueryDocumentSnapshot) throws -> Recipe{
+        let data = query.data()
+        var recipe = Recipe(name: data["title"] as? String ?? "")
+        recipe.setId(query.get("id") as? String ?? "")
+        recipe.instructions = query.get("instructions") as? String ?? ""
+        
+        if recipe.id == "" || recipe.name == ""{
+            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
+        }
+        
+        let amounts = query.get("amounts") as? [Int] ?? []
         let units = query.get("units") as? [String] ?? []
-        let names = query.get("types") as? [String] ?? []
+        let names = query.get("ingredients") as? [String] ?? []
         
         if names.count < 1{
             return Recipe(name: "Fail")
@@ -172,7 +208,7 @@ class Reader:ObservableObject{
             let snapshot = try await reference.whereField("id", isEqualTo: id!).getDocuments()
             
             if snapshot.count == 1{
-                return ssToR(snapshot.documents.first!)
+                return try ssToR(snapshot.documents.first!)
             }
         }
 
@@ -180,7 +216,7 @@ class Reader:ObservableObject{
             let snapshot = try await reference.whereField("title", isEqualTo: title!).getDocuments()
             
             if snapshot.count == 1{
-                return ssToR(snapshot.documents.first!)
+                return try ssToR(snapshot.documents.first!)
             }
         }
 
@@ -188,7 +224,7 @@ class Reader:ObservableObject{
     }
     
     //will search for any recipes that contain words in the title or ingredients
-    func approxSearch(global: Bool = true, title: String? = nil, ingredients: [String]? = nil) -> [Recipe]{
+    func approxSearch(global: Bool = true, title: String? = nil, ingredients: [String]? = nil) async throws -> [Recipe]{
         var reference = db.collection("App")
         if !global{
             if user.id != "N/A"{
@@ -200,12 +236,9 @@ class Reader:ObservableObject{
         var recipes: [Recipe]?
         if title != nil{
             let title: [String] = title?.split(separator: " ") as! [String]
-            let _: Void = reference.whereField("title keywords", arrayContainsAny: title).getDocuments(){(snapshot, error) in
-                if let snapshot = snapshot, snapshot.count > 1 {
-                    for doc in snapshot.documents{
-                        recipes?.append(self.ssToR(doc))
-                    }
-                }
+            let documents = try await reference.whereField("title keywords", arrayContainsAny: title).getDocuments().documents
+            for doc in documents{
+                recipes?.append(try ssToR(doc))
             }
         }
         if recipes != nil{
@@ -213,12 +246,9 @@ class Reader:ObservableObject{
         }
         
         if ingredients != nil{
-            let _: Void = reference.whereField("title keywords", arrayContainsAny: ingredients!).getDocuments(){(snapshot, error) in
-                if let snapshot = snapshot, snapshot.count > 1 {
-                    for doc in snapshot.documents{
-                        recipes?.append(self.ssToR(doc))
-                    }
-                }
+            let documents = try await reference.whereField("title keywords", arrayContainsAny: ingredients!).getDocuments().documents
+            for doc in documents{
+                recipes?.append(try ssToR(doc))
             }
         }
         

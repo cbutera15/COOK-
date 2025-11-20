@@ -34,6 +34,8 @@ class AppState: ObservableObject {
         case schedule
     }
     
+    @Published var fstore: Reader
+    
     @Published var selectedTab: MenuTab
     @Published var backgroundColor: Color
     
@@ -45,6 +47,8 @@ class AppState: ObservableObject {
     @Published var schedule: [Day] = []
     
     init() {
+        fstore = Reader()
+        
         self.selectedTab = .home
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
@@ -84,6 +88,13 @@ class AppState: ObservableObject {
         ]
     }
     
+    func dbConnectDemo(){
+        Task{
+            try await fstore.signIn(email: "bquacken@uvm.edu", password: "123abc")
+            favoriteRecipes = fstore.user.favoriteRecipes
+        }
+    }
+    
     // grocery list functions
     func addGroceryListToPantry() {
         // Only add items from groceryList that are not exact duplicates
@@ -115,46 +126,55 @@ class AppState: ObservableObject {
         groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
     }
         
-        func addToGroceryList(name: String, quantity: Int) {
-            groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
-            
-        }
-        
-        func addToPantry(_ items: [Ingredient]) {
-            ingredients.append(contentsOf: items)
-        }
-        
-        func addSavedRecipe(_ recipe: Recipe) {
-            savedRecipes.append(recipe)
-        }
-        
-        func addToFavorites(_ recipe: Recipe) {
-            favoriteRecipes.append(recipe)
-        }
-        
-        func removeFromFavorites(_ recipe: Recipe) {
-            favoriteRecipes.removeAll { $0.id == recipe.id }
-        }
-        
-        func hasAllIngredients(_ items: [Ingredient]) -> Bool {
-            for item in items {
-                guard let matching = ingredients.first(where: { $0.name == item.name }) else {
-                    return false
-                }
-                if matching.quantity < item.quantity {
-                    return false
-                }
+    func addToGroceryList(name: String, quantity: Int) {
+        groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
+    }
+    
+    func addToPantry(_ items: [Ingredient]) {
+        ingredients.append(contentsOf: items)
+    }
+    
+    func addSavedRecipe(_ recipe: Recipe) {
+        savedRecipes.append(recipe)
+    }
+    
+    func addToFavorites(_ recipe: Recipe) {
+        favoriteRecipes.append(recipe)
+        fstore.addFav(recipe)
+    }
+    
+    func removeFromFavorites(_ recipe: Recipe) {
+        favoriteRecipes.removeAll { $0.id == recipe.id }
+        fstore.rmFav(recipe.id)
+    }
+    
+    func hasAllIngredients(_ items: [Ingredient]) -> Bool {
+        for item in items {
+            guard let matching = ingredients.first(where: { $0.name == item.name }) else {
+                return false
             }
-            
-            return true
+            if matching.quantity < item.quantity {
+                return false
+            }
         }
         
-        
-        
-        
-        func updateBackend() {
-            // placeholder to save data to backend
-            // could execute on app close or on every update to AppState
+        return true
+    }
+
+    func deleteMealFromSchedule(_ day: Day, _ meal: Recipe) {
+        if let dayIndex = schedule.firstIndex(where: { $0.id == day.id }) {
+            if let mealIndex = schedule[dayIndex].meals.firstIndex(where: { $0.id == meal.id }) {
+                schedule[dayIndex].meals.remove(at: mealIndex)
+            }
         }
     }
+    
+    
+    
+    
+    func updateBackend() {
+        // placeholder to save data to backend
+        // could execute on app close or on every update to AppState
+    }
+}
 

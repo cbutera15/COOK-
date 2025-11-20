@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct RecipeCardView: View {
+    @EnvironmentObject var appState: AppState
+    
+    @Binding var day: Day
     @Binding var recipe: Recipe
+    @Binding var showAddRecipe: Bool
+    @Binding var selectedDay: String
     
     var color: Color
+    var buttonColor: Color
     var showDelete: Bool
     
     let width: CGFloat = 150
@@ -52,24 +58,46 @@ struct RecipeCardView: View {
                             .padding()
                     }
                 })
-        } else if recipe.imagePath == nil {
-            Rectangle()
-                .foregroundStyle(color)
-                .scaledToFill()
-                .frame(width: width, height: height)
-                .cornerRadius(10)
-                .overlay(
-                    textOverlay
-                )
+                .onTapGesture {
+                    showAddRecipe = !showAddRecipe
+                    selectedDay = day.name
+                }
         } else {
-            recipe.imagePath?
-                .resizable()
-                .scaledToFill()
+            ZStack(alignment: .topTrailing) {
+                NavigationLink(destination: RecipeView(recipe: $recipe)) {
+                    if let image = recipe.imagePath {
+                        recipe.imagePath?
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: width, height: height)
+                            .cornerRadius(10)
+                            .overlay(textOverlay)
+                    } else {
+                        Rectangle()
+                            .foregroundStyle(color)
+                            .frame(width: width, height: height)
+                            .cornerRadius(10)
+                            .overlay(textOverlay)
+                    }
+                }
+                .contentShape(Rectangle())
                 .frame(width: width, height: height)
-                .cornerRadius(10)
-                .overlay(
-                    textOverlay
-                )
+                .buttonStyle(.plain)
+                
+                if showDelete {
+                    Button(action: {
+                        appState.deleteMealFromSchedule(day, recipe)
+                    }) {
+                        Image(systemName: "x.circle.fill")
+                            .font(.title)
+                            .foregroundColor(buttonColor)
+                            .padding(6)
+                    }
+                    .buttonStyle(.plain)
+                    .contentShape(Rectangle())
+                    .zIndex(1)
+                }
+            }
         }
     }
 }
@@ -82,6 +110,18 @@ struct RecipeCardView: View {
         imagePath: Image(systemName: "photo"),
         ingredients: [chicken, rice]
     )
+    @State var day = Day(id: 0, name: "Tuesday", meals: [chickenAndRice])
+    @State var selectedDay: String = "Tuesday"
     
-    RecipeCardView(recipe: $chickenAndRice, color: .gray, showDelete: true)
+    @State var showAddRecipe: Bool = false
+    
+    RecipeCardView(
+        day: $day,
+        recipe: $chickenAndRice,
+        showAddRecipe: $showAddRecipe,
+        selectedDay: $selectedDay,
+        color: .gray,
+        buttonColor: .red,
+        showDelete: true
+    ).environmentObject(AppState())
 }
