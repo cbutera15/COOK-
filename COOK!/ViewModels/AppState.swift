@@ -34,6 +34,8 @@ class AppState: ObservableObject {
         case schedule
     }
     
+    @Published var fstore: Reader
+    
     @Published var selectedTab: MenuTab
     @Published var backgroundColor: Color
     
@@ -45,6 +47,8 @@ class AppState: ObservableObject {
     @Published var schedule: [Day] = []
     
     init() {
+        fstore = Reader()
+        
         self.selectedTab = .home
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
@@ -82,6 +86,13 @@ class AppState: ObservableObject {
             Day(id: 5, name: "Saturday", meals: []),
             Day(id: 6, name: "Sunday", meals: [])
         ]
+    }
+    
+    func dbConnectDemo(){
+        Task{
+            try await fstore.signIn(email: "bquacken@uvm.edu", password: "123abc")
+            favoriteRecipes = fstore.user.favoriteRecipes
+        }
     }
     
     // grocery list functions
@@ -129,10 +140,12 @@ class AppState: ObservableObject {
     
     func addToFavorites(_ recipe: Recipe) {
         favoriteRecipes.append(recipe)
+        fstore.addFav(recipe)
     }
     
     func removeFromFavorites(_ recipe: Recipe) {
         favoriteRecipes.removeAll { $0.id == recipe.id }
+        fstore.rmFav(recipe.id)
     }
     
     func hasAllIngredients(_ items: [Ingredient]) -> Bool {
