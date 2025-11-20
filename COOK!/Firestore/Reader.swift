@@ -16,6 +16,7 @@ class Reader:ObservableObject{
     @Published private(set) var user: User
  
     init(){
+        FirebaseApp.configure()
         db = Firestore.firestore()
         user = User()
     }

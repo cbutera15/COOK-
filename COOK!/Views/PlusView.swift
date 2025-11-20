@@ -13,19 +13,25 @@ struct PlusView: View {
     @State private var showAddRecipe = false
     @State var newRecipe = Recipe()
     
+    let lightPurple: Color = Color(hue: 0.7444, saturation: 0.05, brightness: 1)
+    let purple: Color = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
+    
     var body: some View {
-        VStack {
+        VStack() {
+            Text("COOK!")
+                .font(.title)
+            Spacer()
             Button(action: {
                 showAddRecipe = true
                 newRecipe = Recipe()
             }) {
-                Text("Add Recipe")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Text("Create Recipe \nFrom Scratch")
+                    .frame(maxWidth: .infinity)
                     .font(.title)
             }
             .buttonStyle(.borderedProminent)
             .padding()
-            .tint(.purple)
+            .tint(purple)
             .sheet(isPresented: $showAddRecipe) {
                 EditRecipeView(recipe: $newRecipe, addRecipe: true)
             }
@@ -33,24 +39,14 @@ struct PlusView: View {
             Button(action: {
                 
             }) {
-                Text("Edit Recipe")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                Text("Create Recipe \nfrom Ingredients")
+                    .frame(maxWidth: .infinity)
                     .font(.title)
             }
             .buttonStyle(.borderedProminent)
-            .padding()
-            .tint(.purple)
-            
-            Button(action: {
-                
-            }) {
-                Text("Add with AI")
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .font(.title)
-            }
-            .buttonStyle(.borderedProminent)
-            .padding()
-            .tint(.purple)
+            .padding(.bottom, 15)
+            .padding(.horizontal)
+            .tint(purple)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .padding()

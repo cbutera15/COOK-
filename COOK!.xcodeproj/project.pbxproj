@@ -61,22 +61,9 @@
 		82017E282E95D5C300DB07DF /* COOK!UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "COOK!UITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		7377CDBF2ECE6058000537E1 /* Exceptions for "COOK!" folder in "COOK!" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 82017E102E95D5C200DB07DF /* COOK! */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		82017E132E95D5C200DB07DF /* COOK! */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				7377CDBF2ECE6058000537E1 /* Exceptions for "COOK!" folder in "COOK!" target */,
-			);
 			path = "COOK!";
 			sourceTree = "<group>";
 		};
@@ -509,7 +496,7 @@
 				DEVELOPMENT_TEAM = F6NHNHM557;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/COOK!/GoogleService-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -544,7 +531,7 @@
 				DEVELOPMENT_TEAM = F6NHNHM557;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = "$(SRCROOT)/COOK!/GoogleService-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

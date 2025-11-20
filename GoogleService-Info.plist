@@ -2,14 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CFBundleExecutable</key>
-	<string>$(TARGET_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>name.colinbutera.COOK-</string>
-	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-	<string>Allow write only access to add recipes to device calendar</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Grant camera access to scan barcodes</string>
 	<key>API_KEY</key>
 	<string>AIzaSyB6Oz2WoemEjFU0Bz5DrvLv9hdX13JJNsU</string>
 	<key>GCM_SENDER_ID</key>
