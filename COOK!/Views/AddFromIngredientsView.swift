@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AddFromIngredientsView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) private var dismiss
     
     @State private var showAddedAlert = false
     @State private var lastAddedRecipeName: String = ""
@@ -83,6 +84,15 @@ struct AddFromIngredientsView: View {
             }
             
             Spacer()
+            Button(action: {
+                dismiss()
+            }) {
+                Text("Cancel")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(purple)
+            .padding()
                 
         }
         .background(lightPurple)
