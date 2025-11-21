@@ -33,46 +33,49 @@ struct ContentView: View {
                     ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "")
                 }
                 
-                HStack() {
-                    CustomTabButton(
-                        iconName: "list.dash",
-                        destination: .groceryList,
-                        tabColor: .pink,
-                        appColor: Color(hue: 0.9361, saturation: 0.03, brightness: 1))
-                    
-                    CustomTabButton(
-                        iconName: "cabinet",
-                        destination: .pantry,
-                        tabColor: .yellow,
-                        appColor: Color(hue: 0.1528, saturation: 0.04, brightness: 1))
-                    
-                    CustomTabButton(
-                        iconName: "plus",
-                        destination: .plus,
-                        tabColor: Color(hue: 0.7444, saturation: 0.46, brightness: 0.93),
-                        appColor: Color(hue: 0.7444, saturation: 0.05, brightness: 1))
-                    
-                    CustomTabButton(
-                        iconName: "bookmark",
-                        destination: .recipes,
-                        tabColor: Color(hue: 0.5611, saturation: 0.88, brightness: 1),
-                        appColor: Color(hue: 0.5611, saturation: 0.05, brightness: 1))
-                    
-                    CustomTabButton(
-                        iconName: "calendar",
-                        destination: .schedule,
-                        tabColor: Color(hue: 0.3389, saturation: 1, brightness: 0.85),
-                        appColor: Color(hue: 0.3389, saturation: 0.05, brightness: 1)   )
+                if appState.selectedTab != .signIn{
+                    HStack() {
+                        CustomTabButton(
+                            iconName: "list.dash",
+                            destination: .groceryList,
+                            tabColor: .pink,
+                            appColor: Color(hue: 0.9361, saturation: 0.03, brightness: 1))
+                        
+                        CustomTabButton(
+                            iconName: "cabinet",
+                            destination: .pantry,
+                            tabColor: .yellow,
+                            appColor: Color(hue: 0.1528, saturation: 0.04, brightness: 1))
+                        
+                        CustomTabButton(
+                            iconName: "plus",
+                            destination: .plus,
+                            tabColor: Color(hue: 0.7444, saturation: 0.46, brightness: 0.93),
+                            appColor: Color(hue: 0.7444, saturation: 0.05, brightness: 1))
+                        
+                        CustomTabButton(
+                            iconName: "bookmark",
+                            destination: .recipes,
+                            tabColor: Color(hue: 0.5611, saturation: 0.88, brightness: 1),
+                            appColor: Color(hue: 0.5611, saturation: 0.05, brightness: 1))
+                        
+                        CustomTabButton(
+                            iconName: "calendar",
+                            destination: .schedule,
+                            tabColor: Color(hue: 0.3389, saturation: 1, brightness: 0.85),
+                            appColor: Color(hue: 0.3389, saturation: 0.05, brightness: 1)   )
+                    }
+                    .frame(maxWidth: .infinity)
+                    .background(appState.backgroundColor)
+                    .ignoresSafeArea(edges: .bottom)
+                    .overlay(
+                        Rectangle()
+                            .frame(height: 1)
+                            .foregroundColor(.black),
+                        alignment: .top
+                    )
                 }
-                .frame(maxWidth: .infinity)
-                .background(appState.backgroundColor)
-                .ignoresSafeArea(edges: .bottom)
-                .overlay(
-                    Rectangle()
-                        .frame(height: 1)
-                        .foregroundColor(.black),
-                    alignment: .top
-                )
+                
                 
             }
             .background(appState.backgroundColor)
