@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//import FirebaseCore
+import FirebaseCore
 
 // Import the SDK
 //import ScanbotBarcodeScannerSDK
@@ -22,7 +22,7 @@ func application(_ application: UIApplication,
 struct SimpleTabViewApp: App {
     @StateObject private var appState = AppState()
     init() {
-            //FirebaseApp.configure()
+            FirebaseApp.configure()
             //Scanbot.setLicense("<YOUR_LICENSE_KEY_HERE>")
         }
     var body: some Scene {

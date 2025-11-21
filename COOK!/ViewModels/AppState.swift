@@ -26,6 +26,7 @@ extension Date {
 
 class AppState: ObservableObject {
     enum MenuTab {
+        case signIn
         case home
         case groceryList
         case pantry
@@ -35,6 +36,9 @@ class AppState: ObservableObject {
     }
     
     @Published var fstore: Reader
+    @Published var nvEmail: String = ""//not verified(nv) email address, is cleared on signin
+    @Published var nvPassword: String = ""//not verified(nv) user password, is cleared on signin
+    @Published var signInStatus: Bool = false
     
     @Published var selectedTab: MenuTab
     @Published var backgroundColor: Color
@@ -49,7 +53,7 @@ class AppState: ObservableObject {
     init() {
         fstore = Reader()
         
-        self.selectedTab = .home
+        self.selectedTab = .signIn
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()

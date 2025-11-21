@@ -17,6 +17,8 @@ struct ContentView: View {
                 Text("COOK")
                 
                 switch appState.selectedTab {
+                    case .signIn:
+                        SignInView()
                     case .home:
                         HomeView()
                     case .groceryList:
