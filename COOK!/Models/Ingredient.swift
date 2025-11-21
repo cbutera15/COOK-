@@ -53,18 +53,27 @@ struct Ingredient: Identifiable {
         }
     }
     
-    let id = UUID()
+    var id: String
     var name: String
     var quantity: Int
     var unit: Unit
     
     init(name: String, quantity: Int) {
+        self.id = UUID().uuidString
         self.name = name
         self.quantity = quantity
         self.unit = .none
     }
     
     init(name: String, quantity: Int, unit: Unit) {
+        self.id = UUID().uuidString
+        self.name = name
+        self.quantity = quantity
+        self.unit = unit
+    }
+    
+    init(id: String, name: String, quantity: Int, unit: Unit) {
+        self.id = id
         self.name = name
         self.quantity = quantity
         self.unit = unit

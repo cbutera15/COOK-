@@ -16,12 +16,11 @@ class Reader:ObservableObject{
     @Published private(set) var user: User
  
     init(){
-        FirebaseApp.configure()
         db = Firestore.firestore()
         user = User()
     }
     
-    func createAccount(email: String, password: String) async throws{
+    func createAccount(email: String, password: String) async throws -> Bool{
         user.rmAll()
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
@@ -33,11 +32,13 @@ class Reader:ObservableObject{
             self.user.setEmail(result!.user.email!)
         }
         
+        return user.id != "N/A"
+        
     }
     
-    func signIn(email: String, password: String) async throws{
+    func signIn(email: String, password: String) async throws -> Bool{
         if user.id != "N/A"{
-            return
+            return false
         }
         user.rmAll()
         let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<AuthDataResult, Error>) in
@@ -55,10 +56,13 @@ class Reader:ObservableObject{
                 continuation.resume(returning: result)
             }
         }
-
-        self.user.setId(result.user.uid)
-        self.user.setEmail(result.user.email!)
         
+        user.setId(result.user.uid)
+
+        //check if sign in was succsessful
+        if user.id == "N/A"{
+            return false
+        }
         
         
         //load all user data into the user object
@@ -71,6 +75,8 @@ class Reader:ObservableObject{
         for doc in customeRef.documents{
             user.addCustom(try ssToR(doc))
         }
+        
+        return true
         
     }
     
@@ -139,6 +145,19 @@ class Reader:ObservableObject{
         user.rmFav(id)
     }
     
+    func addToPantry(_ ingredient:Ingredient){
+        let doc = db.collection("Users/\(user.id)/pantry").document(ingredient.id)
+        doc.setData([
+            "name": ingredient.name,
+            "quantity": ingredient.quantity,
+            "unit": ingredient.unit.name.name
+        ])
+    }
+    
+    func rmFromPantry(_ ingredient:Ingredient){
+        db.collection("Users/\(user.id)/pantry").document(ingredient.id).delete()
+    }
+    
     //writes the given recipe to the given collection
     func writeRecipeTo(cr: CollectionReference, recipe: Recipe) {
         if user.id == "N/A"{
@@ -186,7 +205,11 @@ class Reader:ObservableObject{
         let names = query.get("ingredients") as? [String] ?? []
         
         if names.count < 1{
-            return Recipe(name: "Fail")
+            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
+        }
+        
+        if names.count != units.count && units.count != amounts.count{
+            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
         }
         
         for i in 0...names.count-1{

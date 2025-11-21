@@ -9,6 +9,10 @@ import SwiftUI
 
 struct AddFromIngredientsView: View {
     @EnvironmentObject var appState: AppState
+    @Environment(\.dismiss) private var dismiss
+    
+    @State private var showAddedAlert = false
+    @State private var lastAddedRecipeName: String = ""
     
     let purple: Color = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
     let lightPurple: Color = Color(hue: 0.7444, saturation: 0.05, brightness: 1)
@@ -39,11 +43,56 @@ struct AddFromIngredientsView: View {
             .padding()
             .foregroundStyle(purple)
             
-            ForEach(suggestedRecipes, id: \.id) { recipe in
-                Text(recipe.name)
+            ScrollView {
+                ForEach(suggestedRecipes.indices, id: \.self) { index in
+                    let recipe = suggestedRecipes[index]
+                    
+                    HStack {
+                        Text("\(index + 1). \(recipe.name)")
+                        
+                        Button(action: {
+                            appState.addSavedRecipe(recipe)
+                            lastAddedRecipeName = recipe.name
+                            showAddedAlert = true
+                        }) {
+                            Image(systemName: "plus.circle")
+                        }
+                        
+                        
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.title2)
+                    .foregroundStyle(purple)
+                    .padding([.top, .horizontal])
+                    
+                    Text(recipe.description)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal)
+                        
+                    ForEach(recipe.ingredients, id: \.id) { ingredient in
+                        Text(ingredient.name)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                    }
+                }
+            }
+            .alert("Added", isPresented: $showAddedAlert) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("\(lastAddedRecipeName) was added to your saved recipes.")
             }
             
             Spacer()
+            Button(action: {
+                dismiss()
+            }) {
+                Text("Cancel")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.borderedProminent)
+            .tint(purple)
+            .padding()
                 
         }
         .background(lightPurple)

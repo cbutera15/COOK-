@@ -12,6 +12,7 @@ struct PlusView: View {
     
     @State private var showAddRecipe = false
     @State var newRecipe = Recipe()
+    @State private var showFromIngredients = false
     
     let lightPurple: Color = Color(hue: 0.7444, saturation: 0.05, brightness: 1)
     let purple: Color = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
@@ -37,7 +38,7 @@ struct PlusView: View {
             }
             
             Button(action: {
-                
+                showFromIngredients = true
             }) {
                 Text("Create Recipe \nfrom Ingredients")
                     .frame(maxWidth: .infinity)
@@ -47,6 +48,9 @@ struct PlusView: View {
             .padding(.bottom, 15)
             .padding(.horizontal)
             .tint(purple)
+            .sheet(isPresented: $showFromIngredients) {
+                AddFromIngredientsView()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
 //        .padding()

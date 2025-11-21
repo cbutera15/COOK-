@@ -26,6 +26,7 @@ extension Date {
 
 class AppState: ObservableObject {
     enum MenuTab {
+        case signIn
         case home
         case groceryList
         case pantry
@@ -34,7 +35,18 @@ class AppState: ObservableObject {
         case schedule
     }
     
+    
     @Published var fstore: Reader
+    @Published var nvEmail: String = ""//not verified(nv) email address, is cleared on signin
+    @Published var nvPassword: String = ""//not verified(nv) user password, is cleared on signin
+    @Published var signInStatus: Bool = false
+    
+    //vars for handling async operations
+    @Published var isLoading = false
+    @Published var signedIn = false
+    @Published var operationFailed = false
+    @Published var showError = false
+    @Published var error = ""
     
     @Published var selectedTab: MenuTab
     @Published var backgroundColor: Color
@@ -49,7 +61,7 @@ class AppState: ObservableObject {
     init() {
         fstore = Reader()
         
-        self.selectedTab = .home
+        self.selectedTab = .signIn
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()
@@ -68,11 +80,11 @@ class AppState: ObservableObject {
         var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6, unit: .none)
         var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1, unit: .pound)
         
-        var chickenAndRice = Recipe(name: "Chicken and Rice", description: "Placeholder", ingredients: [chicken, rice], instructions: "Placeholder \n Placeholder1")
-        var pastaSalad = Recipe(name: "Pasta salad", ingredients: [pasta, cheese])
-        var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", ingredients: [pasta, redSauce, meatballs, cheese])
-        var grilledSalmon = Recipe(name: "Grilled salmon", ingredients: [salmon])
-        var eggsAndToast = Recipe(name: "Eggs and toast", ingredients: [eggs, toast])
+        var chickenAndRice = Recipe(name: "Chicken and Rice", description: "Classic, easy chicken and rice.", imagePath: Image(.chickenAndRice), ingredients: [chicken, rice], instructions: "Placeholder \n Placeholder1")
+        var pastaSalad = Recipe(name: "Pasta salad", description: "Cold, refreshing pasta salad.", imagePath: Image(.pastaSalad), ingredients: [pasta, cheese])
+        var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", description: "Beef Meatballs with red sauce and spaghetti", imagePath: Image(.spaghettiAndMeatballs), ingredients: [pasta, redSauce, meatballs, cheese])
+        var grilledSalmon = Recipe(name: "Grilled salmon", description: "Tender grilled salmon fillet", imagePath: Image(.grilledSalmon), ingredients: [salmon])
+        var eggsAndToast = Recipe(name: "Eggs and toast", description: "Classic simple breakfast", imagePath: Image(.eggsAndToast), ingredients: [eggs, toast])
         
         groceryList = [chicken, pasta]
         ingredients = [milk, eggs, cheese, toast]
@@ -88,11 +100,48 @@ class AppState: ObservableObject {
         ]
     }
     
-    func dbConnectDemo(){
-        Task{
-            try await fstore.signIn(email: "bquacken@uvm.edu", password: "123abc")
-            favoriteRecipes = fstore.user.favoriteRecipes
+    func signIn(email: String, password: String)async{
+        isLoading = true
+        operationFailed = false
+        do{
+            let result = try await fstore.signIn(email: email, password: password)
+            if result{
+                signedIn = true
+                loadUserData()
+            }else{
+                operationFailed = true
+            }
+        }catch{
+            self.error = error.localizedDescription
+            showError = true
+            print(error.localizedDescription)
         }
+        isLoading = false
+    }
+    
+    func createUser(email: String, password: String) async{
+        isLoading = true
+        operationFailed = false
+        do{
+            let result = try await fstore.createAccount(email: email, password: password)
+            if result{
+                signedIn = true
+            }else{
+                operationFailed = true
+            }
+        }catch{
+            self.error = error.localizedDescription
+            showError = true
+            print(error.localizedDescription)
+        }
+        isLoading = false
+    }
+    
+    func loadUserData(){
+        if fstore.user.id == "N/A"{
+            return
+        }
+        favoriteRecipes = fstore.user.favoriteRecipes
     }
     
     // grocery list functions

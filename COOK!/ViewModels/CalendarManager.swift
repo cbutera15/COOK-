@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import EventKit
+internal import EventKit
 import EventKitUI
 import Combine
 
@@ -31,22 +31,29 @@ import Combine
     
     // TODO: fix timing
     func addEvent(title: String, startDate: Date) {
+        // Ensure we have write access
+        guard authorizationStatus == .writeOnly else {
+            print("Cannot add event: no calendar write access.")
+            return
+        }
+
         let event = EKEvent(eventStore: eventStore)
-        var cal: EKCalendar
-        
         event.title = title
         event.startDate = startDate
-        event.endDate = Calendar.current.date(byAdding: .minute, value: 30, to: startDate)!
-        
+        event.endDate = Calendar.current.date(byAdding: .minute, value: 30, to: startDate)
+
+        // Safely pick a calendar
         if let defaultCal = eventStore.defaultCalendarForNewEvents, defaultCal.allowsContentModifications {
-            cal = defaultCal
+            event.calendar = defaultCal
         } else {
             let writableCalendars = eventStore.calendars(for: .event).filter { $0.allowsContentModifications }
-            cal = writableCalendars.first!
+            guard let cal = writableCalendars.first else {
+                print("No writable calendars available.")
+                return
+            }
+            event.calendar = cal
         }
-        
-        event.calendar = cal
-        
+
         do {
             try eventStore.save(event, span: .thisEvent)
             print("Event saved successfully.")

@@ -8,6 +8,7 @@
 // TODO - Scrollable Cards
 
 import SwiftUI
+internal import EventKit
 
 struct ScheduleView: View {
     // Calendar manager for EventKit
@@ -89,7 +90,15 @@ struct ScheduleView: View {
                     // Add to calendar button (uses EventKit)
                     Button(action: {
                         // Request write only access to user's calendar
-                        Task { await calendarManager.requestAccess() }
+                        Task { @MainActor in
+                            await calendarManager.requestAccess()
+                            // Then call addEvent only if authorized
+                            if calendarManager.authorizationStatus == .writeOnly {
+                                calendarManager.addEvent(title: "Test", startDate: Date())
+                            } else {
+                                print("User did not grant calendar write access.")
+                            }
+                        }
                         
                         let dayOfWeek = Date().getWeekdayNumber()
                         
