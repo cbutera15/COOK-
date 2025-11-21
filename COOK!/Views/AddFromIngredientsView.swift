@@ -17,18 +17,8 @@ struct AddFromIngredientsView: View {
     let purple: Color = Color(hue: 0.7444, saturation: 0.46, brightness: 0.93)
     let lightPurple: Color = Color(hue: 0.7444, saturation: 0.05, brightness: 1)
     
-    private var suggestedRecipes: [Recipe] {
-        var suggested = [Recipe]()
-        for recipe in appState.savedRecipes {
-            for ingredient in recipe.ingredients {
-                if appState.ingredients.contains(where: { $0.name == ingredient.name }) {
-                    suggested.append(recipe)
-                    break
-                }
-            }
-        }
-        return suggested
-    }
+    @State private var suggestedRecipes: [Recipe] = []
+    
     
     var body: some View {
         VStack {
@@ -96,6 +86,14 @@ struct AddFromIngredientsView: View {
                 
         }
         .background(lightPurple)
+        .task{
+            var names = appState.ingredients.map { $0.name.lowercased() }
+            do {
+                suggestedRecipes = try await appState.fstore.approxSearch(global: true, ingredients: names)
+            } catch {
+                print("Error loading suggestions: \(error)")
+            }
+        }
     }
 }
 

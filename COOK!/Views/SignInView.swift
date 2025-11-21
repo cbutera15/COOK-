@@ -69,23 +69,18 @@ struct SignInView: View {
                 }
             }
             
-            if appState.operationFailed && !appState.isLoading{
+            if appState.showError && !appState.isLoading{
                 ZStack{
                     Rectangle()
                         .frame(width: UIScreen.main.bounds.width * 0.5,height: UIScreen.main.bounds.height * 0.5)
                     VStack{
                         Text(appState.error)
                         Button("Ok"){
-                            appState.operationFailed = false
+                            appState.showError = false
                         }
                     }
                 }
             }
-            
-            if appState.isLoading{
-                Text("Loading")
-            }
-            
         }
     }
 }

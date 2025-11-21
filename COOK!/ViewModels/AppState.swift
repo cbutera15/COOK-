@@ -26,6 +26,7 @@ extension Date {
 
 class AppState: ObservableObject {
     enum MenuTab {
+        case loading
         case signIn
         case home
         case groceryList
@@ -49,6 +50,7 @@ class AppState: ObservableObject {
     @Published var error = ""
     
     @Published var selectedTab: MenuTab
+    @Published var lastSelectedTab: MenuTab
     @Published var backgroundColor: Color
     
     @Published var groceryList: [Ingredient] = []
@@ -62,6 +64,7 @@ class AppState: ObservableObject {
         fstore = Reader()
         
         self.selectedTab = .signIn
+        self.lastSelectedTab = .loading
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()
@@ -98,6 +101,17 @@ class AppState: ObservableObject {
             Day(id: 5, name: "Saturday", meals: []),
             Day(id: 6, name: "Sunday", meals: [])
         ]
+    }
+    
+    func startAsync(){
+        lastSelectedTab = selectedTab
+        selectedTab = .loading
+        isLoading = true
+    }
+    
+    func endAsync(){
+        selectedTab = lastSelectedTab
+        isLoading = false
     }
     
     func signIn(email: String, password: String)async{
@@ -181,6 +195,9 @@ class AppState: ObservableObject {
     
     func addToPantry(_ items: [Ingredient]) {
         ingredients.append(contentsOf: items)
+        for ing in items{
+            fstore.addToPantry(ing)
+        }
     }
     
     func addSavedRecipe(_ recipe: Recipe) {
