@@ -62,6 +62,19 @@ struct SignInView: View {
                 }.font(Font.largeTitle.bold())
                 Spacer()
             }
+            if manager.operationFailed{
+                ZStack{
+                    Rectangle()
+                        .frame(width: UIScreen.main.bounds.width * 0.5,height: UIScreen.main.bounds.height * 0.5)
+                    VStack{
+                        Text(manager.error)
+                        Button("Ok"){
+                            manager.operationFailed = false
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }
