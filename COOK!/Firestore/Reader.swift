@@ -41,19 +41,23 @@ class Reader:ObservableObject{
             return false
         }
         user.rmAll()
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
-            if let error = error {
-                print("Error signing in: \(error.localizedDescription)")
-                return
+        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<AuthDataResult, Error>) in
+            Auth.auth().signIn(withEmail: email, password: password) { result, error in
+                if let error = error {
+                    print("Error signing in: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let result = result else {
+                    continuation.resume(throwing: NSError(domain: "AuthError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No result returned"]))
+                    return
+                }
+                print("Signed in as: \(result.user.uid)")
+                continuation.resume(returning: result)
             }
-            guard let result = result else {
-                return
-            }
-            print("Signed in as: \(result.user.uid)")
-            
-            self.user.setId(result.user.uid)
-            self.user.setEmail(result.user.email!)
         }
+        
+        user.setId(result.user.uid)
 
         //check if sign in was succsessful
         if user.id == "N/A"{

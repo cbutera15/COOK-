@@ -35,10 +35,18 @@ class AppState: ObservableObject {
         case schedule
     }
     
+    
     @Published var fstore: Reader
     @Published var nvEmail: String = ""//not verified(nv) email address, is cleared on signin
     @Published var nvPassword: String = ""//not verified(nv) user password, is cleared on signin
     @Published var signInStatus: Bool = false
+    
+    //vars for handling async operations
+    @Published var isLoading = false
+    @Published var signedIn = false
+    @Published var operationFailed = false
+    @Published var showError = false
+    @Published var error = ""
     
     @Published var selectedTab: MenuTab
     @Published var backgroundColor: Color
@@ -92,11 +100,48 @@ class AppState: ObservableObject {
         ]
     }
     
-    func dbConnectDemo(){
-        Task{
-            try await fstore.signIn(email: "bquacken@uvm.edu", password: "123abc")
-            favoriteRecipes = fstore.user.favoriteRecipes
+    func signIn(email: String, password: String)async{
+        isLoading = true
+        operationFailed = false
+        do{
+            let result = try await fstore.signIn(email: email, password: password)
+            if result{
+                signedIn = true
+                loadUserData()
+            }else{
+                operationFailed = true
+            }
+        }catch{
+            self.error = error.localizedDescription
+            showError = true
+            print(error.localizedDescription)
         }
+        isLoading = false
+    }
+    
+    func createUser(email: String, password: String) async{
+        isLoading = true
+        operationFailed = false
+        do{
+            let result = try await fstore.createAccount(email: email, password: password)
+            if result{
+                signedIn = true
+            }else{
+                operationFailed = true
+            }
+        }catch{
+            self.error = error.localizedDescription
+            showError = true
+            print(error.localizedDescription)
+        }
+        isLoading = false
+    }
+    
+    func loadUserData(){
+        if fstore.user.id == "N/A"{
+            return
+        }
+        favoriteRecipes = fstore.user.favoriteRecipes
     }
     
     // grocery list functions
