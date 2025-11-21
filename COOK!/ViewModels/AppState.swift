@@ -26,6 +26,7 @@ extension Date {
 
 class AppState: ObservableObject {
     enum MenuTab {
+        case signIn
         case home
         case groceryList
         case pantry
@@ -35,6 +36,10 @@ class AppState: ObservableObject {
     }
     
     @Published var fstore: Reader
+    @Published var nvEmail: String = ""//not verified(nv) email address, is cleared on signin
+    @Published var nvPassword: String = ""//not verified(nv) user password, is cleared on signin
+    @Published var signInStatus: Int = -1//-1 = not attempted, 0 = attempted and failed, and 1 = signed in
+    @Published var accountCreationStatus = -1//same codes as signInStatus
     
     @Published var selectedTab: MenuTab
     @Published var backgroundColor: Color
