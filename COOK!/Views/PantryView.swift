@@ -45,6 +45,10 @@ struct PantryView: View {
             unitEditable: false,
             deletable: true
         )
+        Text("Swipe left on list item to delete")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 30)
+        Spacer()
     }
     .padding()
     .background(appState.backgroundColor)

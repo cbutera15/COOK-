@@ -77,6 +77,8 @@ struct RecipesView: View {
 
 // MARK: - Row View
 struct RecipeRow: View {
+    @State private var selectedIngredients: [Ingredient] = []
+    
     @State var recipe: Recipe
     let isFavorite: Bool
     let toggleFavorite: () -> Void
@@ -90,7 +92,7 @@ struct RecipeRow: View {
             }
             .buttonStyle(.plain)
             
-            NavigationLink(destination: RecipeView(recipe: $recipe)) {
+            NavigationLink(destination: RecipeView(recipe: $recipe, selected: $selectedIngredients)) {
                 Text(recipe.name)
                     .foregroundStyle(.primary)
             }

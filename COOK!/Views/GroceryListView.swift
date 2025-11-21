@@ -26,18 +26,23 @@ struct GroceryListView: View {
     var body: some View {
         VStack {
             // Heading + Title
-            HStack {
-                Image(systemName: "list.dash")
+            VStack {
+                HStack {
+                    Image(systemName: "list.dash")
+                        .foregroundStyle(pink)
+                        .padding()
+                    Text("Grocery List")
+                        .foregroundStyle(pink)
+                    Spacer()
+                }
+                .font(Font.largeTitle.bold())
+                Text("Swipe left on list delete ingredients.")
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
                     .foregroundStyle(pink)
-                    .padding()
-                Text("Grocery List")
-                    .foregroundStyle(pink)
-                Spacer()
+                    .font(.callout)
             }
-            .font(Font.largeTitle.bold())
-
             Spacer()
-            
             VStack(alignment: .leading, spacing: 0) {
                 // List content
                 IngredientList(

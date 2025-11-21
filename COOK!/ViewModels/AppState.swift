@@ -72,7 +72,7 @@ class AppState: ObservableObject {
         var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6, unit: .none)
         var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1, unit: .pound)
         
-        var chickenAndRice = Recipe(name: "Chicken and Rice", description: "Classic, easy chicken and rice.", imagePath: Image(.chickenAndRice), ingredients: [chicken, rice], instructions: "Placeholder \n Placeholder1")
+        var chickenAndRice = Recipe(name: "Chicken and Rice", description: "Classic, easy chicken and rice.", imagePath: Image(.chickenAndRice), ingredients: [chicken, rice], instructions: "Cook Chicken \n Cook Rice \n Combine")
         var pastaSalad = Recipe(name: "Pasta salad", description: "Cold, refreshing pasta salad.", imagePath: Image(.pastaSalad), ingredients: [pasta, cheese])
         var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", description: "Beef Meatballs with red sauce and spaghetti", imagePath: Image(.spaghettiAndMeatballs), ingredients: [pasta, redSauce, meatballs, cheese])
         var grilledSalmon = Recipe(name: "Grilled salmon", description: "Tender grilled salmon fillet", imagePath: Image(.grilledSalmon), ingredients: [salmon])

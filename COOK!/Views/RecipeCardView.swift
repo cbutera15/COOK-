@@ -15,6 +15,8 @@ struct RecipeCardView: View {
     @Binding var showAddRecipe: Bool
     @Binding var selectedDay: String
     
+    @State private var selected: [Ingredient] = []
+    
     var color: Color
     var buttonColor: Color
     var showDelete: Bool
@@ -64,7 +66,7 @@ struct RecipeCardView: View {
                 }
         } else {
             ZStack(alignment: .topTrailing) {
-                NavigationLink(destination: RecipeView(recipe: $recipe)) {
+                NavigationLink(destination: RecipeView(recipe: $recipe, selected: $selected)) {
                     if let image = recipe.imagePath {
                         recipe.imagePath?
                             .resizable()
@@ -88,8 +90,8 @@ struct RecipeCardView: View {
                     Button(action: {
                         appState.deleteMealFromSchedule(day, recipe)
                     }) {
-                        Image(systemName: "x.circle.fill")
-                            .font(.title)
+                        Image(systemName: "x.square.fill")
+                            .font(Font.title.bold())
                             .foregroundColor(buttonColor)
                             .padding(6)
                     }

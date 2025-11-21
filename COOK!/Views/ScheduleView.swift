@@ -74,8 +74,8 @@ struct ScheduleView: View {
                                 day: dayBinding,
                                 showAddRecipe: $showAddRecipe,
                                 selectedDay: $selectedDay,
-                                color: Color(hue: 0.3389, saturation: 1, brightness: 0.05),
-                                buttonColor: Color(hue: 0.3389, saturation: 1, brightness: 0.5),
+                                color: Color(hue: 0.3389, saturation: 0.2, brightness: 0.9),
+                                buttonColor: Color(hue: 0.3389, saturation: 0.05, brightness: 0.95),
                                 showDelete: showDeleteButtons
                             )
                         }
@@ -163,7 +163,6 @@ struct ScheduleView: View {
                             .listStyle(.plain)
                             Spacer()
                             
-                            // Mapping to the correct recipe (recipe required to be Hashable to display in picker so had to create a seconday list to choose from. TODO - fix this? can recipe be Hashable?)
                             Button(action: {
                                 showAddRecipe = false
                                 for (index, day) in days.enumerated() {
