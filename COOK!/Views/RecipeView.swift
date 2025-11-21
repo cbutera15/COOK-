@@ -66,7 +66,7 @@ struct RecipeView: View {
             }
         }
         .sheet(isPresented: $showEditRecipe) {
-            EditRecipeView(recipe: $recipe, addRecipe: false)
+            EditRecipeView(recipe: $recipe, addRecipe: false, showDay: false, selectedDay: "")
                 .interactiveDismissDisabled(true)
         }
     }

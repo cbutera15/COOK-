@@ -21,6 +21,7 @@ struct ScheduleView: View {
     @State private var showAddRecipe = false
     @State private var showDeleteButtons = false
     @State private var showEventsAddedAlert = false
+    @State private var newRecipe = Recipe(name: "", ingredients: [], instructions: "")
     
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snacks"]
@@ -131,7 +132,7 @@ struct ScheduleView: View {
                     Button(action: {
                         showAddRecipe = true
                     }) {
-                        Text("Add To Schedule")
+                        Text("Add From Scratch")
                             .frame(maxWidth: .infinity)
                         
                     }
@@ -139,51 +140,9 @@ struct ScheduleView: View {
                     .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                     // Pop up sheet for adding recipes to shedule.
                     .sheet(isPresented: $showAddRecipe) {
-                        VStack {
-                            Spacer()
-                            Text("Add Recipe to Schedule")
-                                .font(.title)
-                                .padding()
-                            Spacer()
-                            
-                            List {
-                                Picker("Recipe", selection: $selectedRecipe) {
-                                    ForEach(appState.savedRecipes, id: \.name) { recipe in
-                                        Text(recipe.name)
-                                            .tag(recipe.name)
-                                    }
-                                }
-                                Picker("Day", selection: $selectedDay) {
-                                    ForEach(days, id: \.self) { day in
-                                        Text(day)
-                                            .tag(day)
-                                    }
-                                }
-                            }
-                            .listStyle(.plain)
-                            Spacer()
-                            
-                            Button(action: {
-                                showAddRecipe = false
-                                for (index, day) in days.enumerated() {
-                                    if day == selectedDay {
-                                        for recipe in appState.savedRecipes {
-                                            if selectedRecipe == recipe.name {
-                                                appState.schedule[index].addRecipe(recipe: recipe)
-                                            }
-                                        }
-                                    }
-                                }
-                                
-                            }) {
-                                Text("Add")
-                                    .frame(maxWidth: .infinity)
-                            }
-                            .buttonStyle(.borderedProminent)
-                            .padding()
-                            .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
-                            Spacer()
-                        }.presentationDetents([.height(300)])
+                        // FIX
+                        
+                        EditRecipeView(recipe: $newRecipe, addRecipe: true, showDay: true, selectedDay: "Monday")
                     }
                 }
             }
