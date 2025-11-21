@@ -72,11 +72,11 @@ class AppState: ObservableObject {
         var meatballs: Ingredient = Ingredient(name: "Meatballs", quantity: 6, unit: .none)
         var salmon: Ingredient = Ingredient(name: "Salmon", quantity: 1, unit: .pound)
         
-        var chickenAndRice = Recipe(name: "Chicken and Rice", description: "Placeholder", ingredients: [chicken, rice], instructions: "Placeholder \n Placeholder1")
-        var pastaSalad = Recipe(name: "Pasta salad", ingredients: [pasta, cheese])
-        var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", ingredients: [pasta, redSauce, meatballs, cheese])
-        var grilledSalmon = Recipe(name: "Grilled salmon", ingredients: [salmon])
-        var eggsAndToast = Recipe(name: "Eggs and toast", ingredients: [eggs, toast])
+        var chickenAndRice = Recipe(name: "Chicken and Rice", description: "Classic, easy chicken and rice.", imagePath: Image(.chickenAndRice), ingredients: [chicken, rice], instructions: "Placeholder \n Placeholder1")
+        var pastaSalad = Recipe(name: "Pasta salad", description: "Cold, refreshing pasta salad.", imagePath: Image(.pastaSalad), ingredients: [pasta, cheese])
+        var spaghettiWithMeatballs = Recipe(name: "Spaghetti with meatballs", description: "Beef Meatballs with red sauce and spaghetti", imagePath: Image(.spaghettiAndMeatballs), ingredients: [pasta, redSauce, meatballs, cheese])
+        var grilledSalmon = Recipe(name: "Grilled salmon", description: "Tender grilled salmon fillet", imagePath: Image(.grilledSalmon), ingredients: [salmon])
+        var eggsAndToast = Recipe(name: "Eggs and toast", description: "Classic simple breakfast", imagePath: Image(.eggsAndToast), ingredients: [eggs, toast])
         
         groceryList = [chicken, pasta]
         ingredients = [milk, eggs, cheese, toast]
