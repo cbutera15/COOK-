@@ -22,15 +22,23 @@ class Reader:ObservableObject{
     
     func createAccount(email: String, password: String) async throws -> Bool{
         user.rmAll()
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
-            if let error = error {
-                print("Error creating account: \(error.localizedDescription)")
-                return
+        let result = try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<AuthDataResult, Error>) in
+            Auth.auth().createUser(withEmail: email, password: password) { result, error in
+                if let error = error {
+                    print("Error signing in: \(error.localizedDescription)")
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let result = result else {
+                    continuation.resume(throwing: NSError(domain: "AuthError", code: -1, userInfo: [NSLocalizedDescriptionKey: "No result returned"]))
+                    return
+                }
+                print("Signed in as: \(result.user.uid)")
+                continuation.resume(returning: result)
             }
-            print("User created: \(result?.user.uid ?? "")")
-            self.user.setId(result!.user.uid)
-            self.user.setEmail(result!.user.email!)
         }
+        user.setId(result.user.uid)
+
         
         return user.id != "N/A"
         
@@ -158,6 +166,29 @@ class Reader:ObservableObject{
         db.collection("Users/\(user.id)/pantry").document(ingredient.id).delete()
     }
     
+    func addToList(_ ingredient:Ingredient){
+        let doc = db.collection("User/\(user.id)/list").document(ingredient.id)
+        doc.setData([
+            "name": ingredient.name,
+            "quantity": ingredient.quantity,
+            "unit": ingredient.unit.name.name
+        ])
+    }
+    
+    func rmList(_ ingredient: Ingredient){
+        db.collection("Users\(user.id)/list").document(ingredient.id).delete()
+    }
+    
+    func clearList(){
+        Task{
+            let docs = try await db.collection("Users/\(user.id)/list").getDocuments()
+            for document in docs.documents{
+                try await document.reference.delete()
+            }
+            
+        }
+    }
+    
     //writes the given recipe to the given collection
     func writeRecipeTo(cr: CollectionReference, recipe: Recipe) {
         if user.id == "N/A"{
@@ -174,16 +205,16 @@ class Reader:ObservableObject{
         ])
         
         var types: [String] = []
-        var amounts: [Int] = []
+        var amounts: [String] = []
         var units: [String] = []
         for ingredient in recipe.ingredients{
             units.append(ingredient.unit.name.name)
             types.append(ingredient.name)
-            amounts.append(ingredient.quantity)
+            amounts.append(String(ingredient.quantity))
         }
         
         doc.updateData([
-            "ingredients": types,
+            "types": types,
             "amounts": amounts,
             "units": units
         ])
@@ -197,19 +228,19 @@ class Reader:ObservableObject{
         recipe.instructions = query.get("instructions") as? String ?? ""
         
         if recipe.id == "" || recipe.name == ""{
-            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
+            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Error parsing data from firestore(no name and/or id)"])
         }
         
-        let amounts = query.get("amounts") as? [Int] ?? []
+        let amounts = query.get("amounts") as? [String] ?? []
         let units = query.get("units") as? [String] ?? []
-        let names = query.get("ingredients") as? [String] ?? []
+        let names = query.get("types") as? [String] ?? []
         
         if names.count < 1{
-            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
+            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Error parsing data from firestore(no names)"])
         }
         
         if names.count != units.count && units.count != amounts.count{
-            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Something went wrong"])
+            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Error parsing data from firestore(incomplete lists)"])
         }
         
         for i in 0...names.count-1{
@@ -248,7 +279,7 @@ class Reader:ObservableObject{
     }
     
     //will search for any recipes that contain words in the title or ingredients
-    func approxSearch(global: Bool = true, title: String? = nil, ingredients: [String]? = nil) async throws -> [Recipe]{
+    func approxSearch(global: Bool, title: String? = nil, ingredients: [String]? = nil) async throws -> [Recipe]{
         var reference = db.collection("App")
         if !global{
             if user.id != "N/A"{
@@ -270,10 +301,16 @@ class Reader:ObservableObject{
         }
         
         if ingredients != nil{
-            let documents = try await reference.whereField("title keywords", arrayContainsAny: ingredients!).getDocuments().documents
-            for doc in documents{
-                recipes?.append(try ssToR(doc))
+            recipes = []
+            do{
+                let documents = try await reference.whereField("types", arrayContainsAny: ingredients!).limit(to:10).getDocuments().documents
+                for doc in documents{
+                    recipes?.append(try ssToR(doc))
+                }
+            }catch{
+                print(error.localizedDescription)
             }
+            
         }
         
         if recipes != nil{
