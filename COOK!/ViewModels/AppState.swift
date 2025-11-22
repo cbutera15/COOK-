@@ -61,7 +61,7 @@ class AppState: ObservableObject {
     init() {
         fstore = Reader()
         
-        self.selectedTab = .signIn
+        self.selectedTab = .home
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()
