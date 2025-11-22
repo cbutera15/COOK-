@@ -22,3 +22,6 @@ Adding to calendar works, but does not prevent duplicate events due to write-onl
 Due to the number of permissions required and the FirebaseAPI, we've had to do extensive plist editing.  Because of this, there will
 sometimes be error when building if the plist cannot be correctly accessed. Sometimes this happens if git pull does not work properly.
 Ensure you have a GoogleService-INFO.plist file in the COOK project folder as github can be finnicky with this.
+
+This file in git also contains a placeholder for the firebase API key due to this being a public repo. If you download our zip from brightspace, the plist
+includes the API key variable filled in properly so the firebase connection can be established.
