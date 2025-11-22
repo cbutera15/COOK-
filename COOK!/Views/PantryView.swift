@@ -59,7 +59,7 @@ struct PantryView: View {
         IngredientList(
             ingredients: $appState.ingredients,
             selected: .constant([]),
-            color: .black,
+            color: yellow,
             backgroundColor: appState.backgroundColor,
             selectable: false,
             incrementable: true,
