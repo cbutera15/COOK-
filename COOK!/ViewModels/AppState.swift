@@ -103,17 +103,6 @@ class AppState: ObservableObject {
         ]
     }
     
-    func startAsync(){
-        lastSelectedTab = selectedTab
-        selectedTab = .loading
-        isLoading = true
-    }
-    
-    func endAsync(){
-        selectedTab = lastSelectedTab
-        isLoading = false
-    }
-    
     func signIn(email: String, password: String)async{
         isLoading = true
         operationFailed = false
@@ -156,6 +145,7 @@ class AppState: ObservableObject {
             return
         }
         favoriteRecipes = fstore.user.favoriteRecipes
+        savedRecipes = fstore.user.customRecipes
     }
     
     // grocery list functions
@@ -173,24 +163,36 @@ class AppState: ObservableObject {
         groceryList.removeAll { item in
             selectedGroceryItems.contains(where: { $0.id == item.id })
         }
+        for ing in selectedGroceryItems{
+            fstore.rmList(ing)
+        }
         selectedGroceryItems = []
     }
     
     func clearGroceryList() {
         groceryList.removeAll()
+        fstore.clearList()
     }
     
     func addToGroceryList(_ items: [Ingredient]) {
         groceryList.append(contentsOf: items)
+        for ing in items{
+            fstore.addToList(ing)
+        }
+        
     }
     
     
     func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
-        groceryList.append(Ingredient(name: name, quantity: quantity, unit: unit))
+        let item = Ingredient(name: name, quantity: quantity, unit: unit)
+        groceryList.append(item)
+        fstore.addToList(item)
     }
         
     func addToGroceryList(name: String, quantity: Int) {
-        groceryList.append(Ingredient(name: name, quantity: quantity, unit: .none))
+        let item = Ingredient(name: name, quantity: quantity, unit: .none)
+        groceryList.append(item)
+        fstore.addToList(item)
     }
     
     func addToPantry(_ items: [Ingredient]) {
@@ -202,6 +204,7 @@ class AppState: ObservableObject {
     
     func addSavedRecipe(_ recipe: Recipe) {
         savedRecipes.append(recipe)
+        fstore.addUserRecipe(recipe)
     }
     
     func addToFavorites(_ recipe: Recipe) {

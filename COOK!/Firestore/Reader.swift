@@ -179,6 +179,16 @@ class Reader:ObservableObject{
         db.collection("Users\(user.id)/list").document(ingredient.id).delete()
     }
     
+    func clearList(){
+        Task{
+            let docs = try await db.collection("Users/\(user.id)/list").getDocuments()
+            for document in docs.documents{
+                try await document.reference.delete()
+            }
+            
+        }
+    }
+    
     //writes the given recipe to the given collection
     func writeRecipeTo(cr: CollectionReference, recipe: Recipe) {
         if user.id == "N/A"{
@@ -195,12 +205,12 @@ class Reader:ObservableObject{
         ])
         
         var types: [String] = []
-        var amounts: [Int] = []
+        var amounts: [String] = []
         var units: [String] = []
         for ingredient in recipe.ingredients{
             units.append(ingredient.unit.name.name)
             types.append(ingredient.name)
-            amounts.append(ingredient.quantity)
+            amounts.append(String(ingredient.quantity))
         }
         
         doc.updateData([
