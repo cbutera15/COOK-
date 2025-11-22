@@ -140,10 +140,58 @@ struct ScheduleView: View {
                     .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
                     // Pop up sheet for adding recipes to shedule.
                     .sheet(isPresented: $showAddRecipe) {
-                        // FIX
-                        
-                        EditRecipeView(recipe: $newRecipe, addRecipe: true, showDay: true, selectedDay: "Monday")
+                        VStack {
+                            Spacer()
+                            Text("Add Recipe to Schedule")
+                                .font(.title)
+                                .padding()
+                            Spacer()
+
+                            List {
+                                Picker("Recipe", selection: $selectedRecipe) {
+                                    ForEach(appState.savedRecipes, id: \.name) { recipe in
+                                        Text(recipe.name)
+                                            .tag(recipe.name)
+                                    }
+                                }
+                                Picker("Day", selection: $selectedDay) {
+                                    ForEach(days, id: \.self) { day in
+                                        Text(day)
+                                            .tag(day)
+                                    }
+                                }
+                            }
+                            .listStyle(.plain)
+                            Spacer()
+
+                            // Mapping to the correct recipe (recipe required to be Hashable to display in picker so had to create a seconday list to choose from. TODO - fix this? can recipe be Hashable?)
+                            Button(action: {
+                                showAddRecipe = false
+                                for (index, day) in days.enumerated() {
+                                    if day == selectedDay {
+                                        for recipe in appState.savedRecipes {
+                                            if selectedRecipe == recipe.name {
+                                                appState.schedule[index].addRecipe(recipe: recipe)
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }) {
+                                Text("Add")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .padding()
+                            .tint(Color(hue: 0.3389, saturation: 1, brightness: 0.85))
+                            Spacer()
+                        }.presentationDetents([.height(300)])
                     }
+//                    .sheet(isPresented: $showAddRecipe) {
+//                        // FIX
+//                        
+//                        EditRecipeView(recipe: $newRecipe, addRecipe: true, showDay: true, selectedDay: "Monday")
+//                    }
                 }
             }
             .padding()
