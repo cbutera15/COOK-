@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AddFromIngredientsView: View {
+struct AddRecipeView: View {
     @EnvironmentObject var appState: AppState
     @Environment(\.dismiss) private var dismiss
     
@@ -87,17 +87,44 @@ struct AddFromIngredientsView: View {
         }
         .background(lightPurple)
         .task{
-            var names = appState.ingredients.map { $0.name.lowercased() }
-            do {
-                suggestedRecipes = try await appState.fstore.approxSearch(global: true, ingredients: names)
-            } catch {
-                print("Error loading suggestions: \(error)")
+            if appState.searchFeild == "title"{
+                do{
+                    suggestedRecipes = try await appState.fstore.searchByTitle(title: appState.searchName)
+                }catch{
+                    print("Error loading suggestions: \(error)")
+                }
+            }else if appState.searchFeild == "ingredients"{
+                let names = appState.ingredients.map { $0.name.lowercased() }
+                do {
+                    suggestedRecipes = try await appState.fstore.searchByIngredient(names)
+                } catch {
+                    print("Error loading suggestions: \(error)")
+                }
+            }else if appState.searchFeild == "category"{
+                do {
+                    suggestedRecipes = try await appState.fstore.searchByCategory(appState.searchName)
+                } catch {
+                    print("Error loading suggestions: \(error)")
+                }
+            }else if appState.searchFeild == "num_steps"{
+                do {
+                    suggestedRecipes = try await appState.fstore.searchByNumSteps(appState.searchLower, appState.searchUpper)
+                } catch {
+                    print("Error loading suggestions: \(error)")
+                }
+            }else if appState.searchFeild == "num_ingredients"{
+                do {
+                    suggestedRecipes = try await appState.fstore.searchByNumIngredients(appState.searchLower, appState.searchUpper)
+                } catch {
+                    print("Error loading suggestions: \(error)")
+                }
             }
+            
         }
     }
 }
 
 #Preview {
-    AddFromIngredientsView()
+    AddRecipeView()
         .environmentObject(AppState())
 }

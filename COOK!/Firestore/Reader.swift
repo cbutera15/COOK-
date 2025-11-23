@@ -374,61 +374,109 @@ class Reader:ObservableObject{
         return Recipe(name:"Fail")
     }
     
-    //will search for any recipes that contain words in the title or ingredients
-    func approxSearch(global: Bool, title: String? = nil, ingredients: [String]? = nil) async throws -> [Recipe]{
-        var reference = db.collection("App")
-        if !global{
-            if user.id != "N/A"{
-                reference = db.collection("Users").document(user.id).collection("user_recipes")
-            }
-        }
-        
-                
-        var recipes: [Recipe]?
-        if title != nil{
-            var titleIn: [String] = []
-            if title?.contains(" ") != false && title?.contains(" ") != nil{
-                let titleSplit = title?.lowercased().split(separator: " ") as! [String]
-                for word in titleSplit{
-                    titleIn.append(word)
-                }
-                
-            }else{
-                titleIn.append(title!.lowercased())
-            }
-            do{
-                let documents = try await reference.whereField("title keywords", arrayContainsAny: titleIn).limit(to: 10).getDocuments().documents
-                for doc in documents{
-                    recipes?.append(try ssToR(doc))
-                }
-            }catch{
-                print(error.localizedDescription)
+    func searchByTitle(title: String) async throws -> [Recipe]{
+        let reference = db.collection("App")
+        var titleIn: [String] = []
+        var recipes: [Recipe] = []
+        if title.contains(" ") != false{
+            let titleSplit = title.lowercased().split(separator: " ") as! [String]
+            for word in titleSplit{
+                titleIn.append(word)
             }
             
-        }
-        if recipes != nil{
-            return recipes!
-        }
-        
-        if ingredients != nil{
-            recipes = []
-            do{
-                let documents = try await reference.whereField("types", arrayContainsAny: ingredients!).limit(to:10).getDocuments().documents
-                for doc in documents{
-                    recipes?.append(try ssToR(doc))
-                }
-            }catch{
-                print(error.localizedDescription)
-            }
-            
-        }
-        
-        if recipes != nil{
-            return recipes!
         }else{
-            return []
+            titleIn.append(title.lowercased())
         }
+        do{
+            let documents = try await reference.whereField("title keywords", arrayContainsAny: titleIn).limit(to: 10).getDocuments().documents
+            for doc in documents{
+                recipes.append(try ssToR(doc))
+            }
+        }catch{
+            print(error.localizedDescription)
+        }
+        
+        return recipes
     }
+    
+    func searchByCategory(_ category: String) async throws -> [Recipe]{
+        let reference = db.collection("App")
+        var categoryIn: [String] = []
+        var recipes: [Recipe] = []
+        if category.contains(" ") != false{
+            let categorySplit = category.lowercased().split(separator: " ") as! [String]
+            for word in categorySplit{
+                categoryIn.append(word)
+            }
+            
+        }else{
+            categoryIn.append(category.lowercased())
+        }
+        do{
+            let documents = try await reference.whereField("title keywords", arrayContainsAny: categoryIn).limit(to: 20).getDocuments().documents
+            for doc in documents{
+                recipes.append(try ssToR(doc))
+            }
+        }catch{
+            print(error.localizedDescription)
+        }
+        
+        return recipes
+    }
+
+    
+    func searchByIngredient(_ ingredients:[String])async throws -> [Recipe]{
+        let reference = db.collection("App")
+        var recipes: [Recipe] = []
+        recipes = []
+        do{
+            let documents = try await reference.whereField("types", arrayContainsAny: ingredients).limit(to:20).getDocuments().documents
+            for doc in documents{
+                recipes.append(try ssToR(doc))
+            }
+        }catch{
+            print(error.localizedDescription)
+        }
+        return recipes
+    }
+    
+    func searchByNumSteps(_ lower:Int, _ upper: Int) async throws -> [Recipe]{
+        let reference = db.collection("App")
+        var recipes: [Recipe] = []
+        do{
+            let documents = try await reference
+                .whereField("num_steps", isLessThanOrEqualTo: upper)
+                .whereField("num_steps", isGreaterThanOrEqualTo: lower)
+                .limit(to: 20)
+                .getDocuments().documents
+            for doc in documents{
+                recipes.append(try ssToR(doc))
+            }
+        }catch{
+            print(error.localizedDescription)
+        }
+        return recipes
+    }
+    
+    func searchByNumIngredients(_ lower:Int, _ upper: Int) async throws -> [Recipe]{
+        let reference = db.collection("App")
+        var recipes: [Recipe] = []
+        do{
+            let documents = try await reference
+                .whereField("num_ingredients", isLessThanOrEqualTo: upper)
+                .whereField("num_ingredients", isGreaterThanOrEqualTo: lower)
+                .limit(to: 20)
+                .getDocuments().documents
+            for doc in documents{
+                recipes.append(try ssToR(doc))
+            }
+        }catch{
+            print(error.localizedDescription)
+        }
+        return recipes
+    }
+    
+        
         
 }
 

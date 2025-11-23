@@ -54,6 +54,9 @@ class AppState: ObservableObject {
     @Published var backgroundColor: Color
     
     @Published var searchName:String = ""
+    @Published var searchFeild: String = ""
+    @Published var searchLower: Int = 0
+    @Published var searchUpper: Int = 10
     
     @Published var groceryList: [Ingredient] = []
     @Published var selectedGroceryItems: [Ingredient] = []
@@ -70,6 +73,26 @@ class AppState: ObservableObject {
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()
+    }
+    
+    func changeLowerSearch(_ n:Int){
+        searchLower += n
+        if searchLower >= searchUpper{
+            searchLower = searchUpper - 1
+        }
+        if searchLower < 0 {
+            searchLower = 0
+        }
+    }
+    
+    func changeUpperSearch(_ n:Int){
+        searchUpper += n
+        if searchUpper <= searchLower{
+            searchUpper = searchLower + 1
+        }
+        if searchUpper > 50{
+            searchUpper = 50
+        }
     }
     
     func setMockData() {
