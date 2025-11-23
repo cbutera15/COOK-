@@ -171,7 +171,7 @@ struct ScheduleView: View {
                                     if day == selectedDay {
                                         for recipe in appState.savedRecipes {
                                             if selectedRecipe == recipe.name {
-                                                appState.schedule[index].addRecipe(recipe: recipe)
+                                                appState.schedule[index].addRecipe(recipe)
                                             }
                                         }
                                     }

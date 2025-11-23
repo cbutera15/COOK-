@@ -18,6 +18,7 @@ struct CustomTabButton: View {
         Button(action: {
             appState.selectedTab = destination
             appState.backgroundColor = appColor
+            appState.updateBackend()
         }) {
             Image(systemName: iconName)
                 .font(.system(size: 28))  

@@ -53,6 +53,8 @@ class AppState: ObservableObject {
     @Published var lastSelectedTab: MenuTab
     @Published var backgroundColor: Color
     
+    @Published var searchName:String = ""
+    
     @Published var groceryList: [Ingredient] = []
     @Published var selectedGroceryItems: [Ingredient] = []
     @Published var ingredients: [Ingredient] = []
@@ -92,18 +94,27 @@ class AppState: ObservableObject {
         groceryList = [chicken, pasta]
         ingredients = [milk, eggs, cheese, toast]
         savedRecipes = [chickenAndRice, pastaSalad, spaghettiWithMeatballs, grilledSalmon, eggsAndToast]
-        schedule = [
-            Day(id: 0, name: "Monday", meals: [chickenAndRice, pastaSalad]),
-            Day(id: 1, name: "Tuesday", meals: []),
-            Day(id: 2, name: "Wednesday", meals: []),
-            Day(id: 3, name: "Thursday", meals: []),
-            Day(id: 4, name: "Friday", meals: []),
-            Day(id: 5, name: "Saturday", meals: []),
-            Day(id: 6, name: "Sunday", meals: [])
-        ]
+        schedule = []
+    }
+    
+    func signOut(){
+        if fstore.user.id == "N/A"{
+            return
+        }
+        
+        fstore.logOut()
+        signedIn = false
+        nvEmail = ""
+        nvPassword = ""
+        
+        selectedTab = .signIn
     }
     
     func signIn(email: String, password: String)async{
+        if fstore.user.id != "N/A"{
+            signedIn = true
+            loadUserData()
+        }
         isLoading = true
         operationFailed = false
         do{
@@ -146,6 +157,9 @@ class AppState: ObservableObject {
         }
         favoriteRecipes = fstore.user.favoriteRecipes
         savedRecipes = fstore.user.customRecipes
+        schedule = fstore.user.calendar
+        ingredients = fstore.user.pantry
+        groceryList = fstore.user.list
     }
     
     // grocery list functions
@@ -182,7 +196,6 @@ class AppState: ObservableObject {
         
     }
     
-    
     func addToGroceryList(name: String, quantity: Int, unit: Ingredient.Unit) {
         let item = Ingredient(name: name, quantity: quantity, unit: unit)
         groceryList.append(item)
@@ -193,6 +206,10 @@ class AppState: ObservableObject {
         let item = Ingredient(name: name, quantity: quantity, unit: .none)
         groceryList.append(item)
         fstore.addToList(item)
+    }
+    
+    func saveGroceryList(){
+        fstore.saveList(groceryList)
     }
     
     func addToPantry(_ items: [Ingredient]) {
@@ -238,12 +255,10 @@ class AppState: ObservableObject {
         }
     }
     
-    
-    
-    
     func updateBackend() {
-        // placeholder to save data to backend
-        // could execute on app close or on every update to AppState
+        fstore.saveList(groceryList)
+        fstore.savePantry(ingredients)
+        fstore.saveCalendar(schedule)
     }
 }
 

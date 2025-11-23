@@ -16,10 +16,11 @@ struct SignInView: View {
             if !appState.isLoading{
                 VStack{
                     Spacer()
+
                     Text("COOK!")
                         .foregroundStyle(Color(#colorLiteral(red: 0.7972043157, green: 0.1877797246, blue: 0.8800705075, alpha: 1)))
                         .font(.system(size: 100))
-                        .padding([.bottom], 50)
+                        .padding([.top], 200)
                     VStack{
                         Image(systemName: "person.crop.circle")
                             .foregroundStyle(Color(#colorLiteral(red: 0.7972043157, green: 0.1877797246, blue: 0.8800705075, alpha: 1)))
@@ -39,9 +40,6 @@ struct SignInView: View {
                             .textInputAutocapitalization(.none)
                             .multilineTextAlignment(.center)
                             .frame(width:UIScreen.main.bounds.width * 0.8)
-                        VStack{
-                            
-                        }
                         Button(action: {
                             Task{
                                 await appState.signIn(email: appState.nvEmail, password: appState.nvPassword)
@@ -59,25 +57,28 @@ struct SignInView: View {
                             Text("Create Account")
                                 .foregroundStyle(Color(#colorLiteral(red: 0.7972043157, green: 0.1877797246, blue: 0.8800705075, alpha: 1)))
                         }
-                    }.font(Font.largeTitle)
+                    }.font(Font.largeTitle).frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
+                        .padding([.bottom], 50)
                     Spacer()
                 }.task {
                     if appState.signedIn{
-                        appState.selectedTab = .home
+                        appState.selectedTab = .plus
                         appState.loadUserData()
                     }
                 }
+                .disabled(appState.showError)
             }
             
             if appState.showError && !appState.isLoading{
                 ZStack{
-                    Rectangle()
-                        .frame(width: UIScreen.main.bounds.width * 0.5,height: UIScreen.main.bounds.height * 0.5)
+                    Rectangle().fill(Color(.white)).opacity(0.5)
+                        .frame(width: .infinity ,height: .infinity)
+                        
                     VStack{
                         Text(appState.error)
                         Button("Ok"){
                             appState.showError = false
-                        }
+                        }.padding([.bottom],100)
                     }
                 }
             }
