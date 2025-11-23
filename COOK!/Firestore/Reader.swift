@@ -14,7 +14,7 @@ import FirebaseCore
 class Reader:ObservableObject{
     private var db:Firestore!
     @Published private(set) var user: User
- 
+    
     init(){
         db = Firestore.firestore()
         user = User()
@@ -38,7 +38,7 @@ class Reader:ObservableObject{
             }
         }
         user.setId(result.user.uid)
-
+        
         
         return user.id != "N/A"
         
@@ -66,7 +66,7 @@ class Reader:ObservableObject{
         }
         
         user.setId(result.user.uid)
-
+        
         //check if sign in was succsessful
         if user.id == "N/A"{
             return false
@@ -76,13 +76,28 @@ class Reader:ObservableObject{
         //load all user data into the user object
         let favRef = try await db.collection("Users/\(user.id)/user_favorites").getDocuments()
         for doc in favRef.documents{
-            user.addFav(try ssToR(doc))
+            let check = try ssToR(doc)
+            if check.name != "NAR"{
+                user.addFav(check)
+                user.addCustom(check)
+            }else{
+                try await doc.reference.delete()
+            }
         }
         
         let customeRef = try await db.collection("Users/\(user.id)/user_recipes").getDocuments()
         for doc in customeRef.documents{
-            user.addCustom(try ssToR(doc))
+            let check = try ssToR(doc)
+            if check.name != "NAR"{
+                user.addCustom(check)
+            }else{
+                try await doc.reference.delete()
+            }
         }
+        
+        try await self.loadPantry()
+        try await self.loadList()
+        try await self.loadCalendar()
         
         return true
         
@@ -166,14 +181,31 @@ class Reader:ObservableObject{
         db.collection("Users/\(user.id)/pantry").document(ingredient.id).delete()
     }
     
+    func savePantry(_ pantry: [Ingredient]){
+        if user.id == "N/A"{
+            return
+        }
+        for ingredient in pantry{
+            self.addToPantry(ingredient)
+        }
+    }
+    
+    func loadPantry()async throws{
+        let documents = try await db.collection("Users/\(user.id)/pantry").getDocuments().documents
+        for doc in documents{
+            user.addToPantry(ssToI(doc))
+        }
+    }
+    
     func addToList(_ ingredient:Ingredient){
-        let doc = db.collection("User/\(user.id)/list").document(ingredient.id)
+        let doc = db.collection("Users/\(user.id)/list").document(ingredient.id)
         doc.setData([
             "name": ingredient.name,
             "quantity": ingredient.quantity,
             "unit": ingredient.unit.name.name
         ])
     }
+    
     
     func rmList(_ ingredient: Ingredient){
         db.collection("Users\(user.id)/list").document(ingredient.id).delete()
@@ -189,6 +221,61 @@ class Reader:ObservableObject{
         }
     }
     
+    func saveList(_ list: [Ingredient]){
+        if user.id == "N/A"{
+            return
+        }
+        
+        for ingredient in list{
+            self.addToList(ingredient)
+        }
+    }
+    
+    func loadList() async throws{
+        let documents = try await db.collection("Users/\(user.id)/list").getDocuments().documents
+        for doc in documents{
+            user.addToList(ssToI(doc))
+        }
+    }
+    
+    func saveCalendar(_ cal: [Day]){
+        if user.id == "N/A"{
+            return
+        }
+        let colref = db.collection("Users/\(user.id)/schedule")
+        for day in cal{
+            colref.document(String(day.id)).setData([
+                "name":day.name,
+            ])
+            
+            let mealsCol = colref.document(String(day.id)).collection("meals")
+            
+            for meal in day.meals{
+                writeRecipeTo(cr: mealsCol, recipe: meal)
+            }
+        }
+    }
+    
+    func loadCalendar() async throws {
+        let documents = try await db.collection("Users/\(user.id)/schedule").getDocuments().documents
+        for doc in documents{
+            var day = Day()
+            day.id = Int(doc.documentID) ?? -1
+            day.name = doc.data()["name"] as? String ?? ""
+            
+            var mealList:[Recipe] = []
+            let mealDocs = try await db.collection("Users/\(user.id)/schedule/\(day.id)/meals").getDocuments().documents
+            for doc in mealDocs{
+                mealList.append(try ssToR(doc))
+            }
+            
+            user.setCalList(id: day.id,list: mealList)
+        }
+        
+    }
+    
+    
+    
     //writes the given recipe to the given collection
     func writeRecipeTo(cr: CollectionReference, recipe: Recipe) {
         if user.id == "N/A"{
@@ -200,6 +287,7 @@ class Reader:ObservableObject{
         doc.setData([
             "id": recipe.id,
             "title": recipe.name,
+            "title keywords": recipe.name.split(separator: " "),
             "instructions": recipe.instructions,
             "description": recipe.description
         ])
@@ -220,6 +308,14 @@ class Reader:ObservableObject{
         ])
     }
     
+    func ssToI(_ query: QueryDocumentSnapshot) -> Ingredient{
+        let name = query.get("name") as? String ?? ""
+        let amount = query.data()["quantity"] as? Int ?? 0
+        let unit = Ingredient.Unit(rawValue: query.get("unit") as? String ?? "") ?? .none
+        let ing = Ingredient(name: name, quantity: amount, unit: unit)
+        return ing
+    }
+    
     //Snapshot to Recipe(ssToR): takes a QueryDocumentSnapshot and returns a single recipe obj
     func ssToR(_ query: QueryDocumentSnapshot) throws -> Recipe{
         let data = query.data()
@@ -228,7 +324,7 @@ class Reader:ObservableObject{
         recipe.instructions = query.get("instructions") as? String ?? ""
         
         if recipe.id == "" || recipe.name == ""{
-            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Error parsing data from firestore(no name and/or id)"])
+            return Recipe(name: "NAR")
         }
         
         let amounts = query.get("amounts") as? [String] ?? []
@@ -236,11 +332,11 @@ class Reader:ObservableObject{
         let names = query.get("types") as? [String] ?? []
         
         if names.count < 1{
-            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Error parsing data from firestore(no names)"])
+            return Recipe(name: "NAR")
         }
         
         if names.count != units.count && units.count != amounts.count{
-            throw NSError(domain: "MyApp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Error parsing data from firestore(incomplete lists)"])
+            return Recipe(name: "NAR")
         }
         
         for i in 0...names.count-1{
@@ -290,11 +386,25 @@ class Reader:ObservableObject{
                 
         var recipes: [Recipe]?
         if title != nil{
-            let title: [String] = title?.split(separator: " ") as! [String]
-            let documents = try await reference.whereField("title keywords", arrayContainsAny: title).getDocuments().documents
-            for doc in documents{
-                recipes?.append(try ssToR(doc))
+            var titleIn: [String] = []
+            if title?.contains(" ") != false && title?.contains(" ") != nil{
+                let titleSplit = title?.lowercased().split(separator: " ") as! [String]
+                for word in titleSplit{
+                    titleIn.append(word)
+                }
+                
+            }else{
+                titleIn.append(title!.lowercased())
             }
+            do{
+                let documents = try await reference.whereField("title keywords", arrayContainsAny: titleIn).limit(to: 10).getDocuments().documents
+                for doc in documents{
+                    recipes?.append(try ssToR(doc))
+                }
+            }catch{
+                print(error.localizedDescription)
+            }
+            
         }
         if recipes != nil{
             return recipes!

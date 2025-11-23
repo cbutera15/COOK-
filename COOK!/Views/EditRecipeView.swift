@@ -327,6 +327,7 @@ struct EditRecipeView: View {
                     
                     Button(action: {
                         dismiss()
+                        
                         recipe = Recipe(
                             name: recipeTitle,
                             description: recipeDescription,

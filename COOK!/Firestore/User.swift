@@ -10,16 +10,28 @@ import Combine
 class User: AnyObject{
     @Published private(set) var id: String
     @Published private(set) var email: String
-    @Published private(set) var calendar: [[String]]//Each row is a time slot moring, evening, and afternoon
     @Published private(set) var customRecipes: [Recipe]
     @Published private(set) var favoriteRecipes: [Recipe]
+    @Published private(set) var calendar: [Day]
+    @Published private(set) var list: [Ingredient]
+    @Published private(set) var pantry: [Ingredient]
     
     init(){
         id = "N/A"
         email = ""
-        calendar = []
         customRecipes = []
         favoriteRecipes = []
+        calendar = [
+            Day(id: 0, name: "Monday", meals: []),
+            Day(id: 1, name: "Tuesday", meals: []),
+            Day(id: 2, name: "Wednesday", meals: []),
+            Day(id: 3, name: "Thursday", meals: []),
+            Day(id: 4, name: "Friday", meals: []),
+            Day(id: 5, name: "Saturday", meals: []),
+            Day(id: 6, name: "Sunday", meals: [])
+        ]
+        list = []
+        pantry = []
     }
     
     //DO NOT CALL outside signin and createUa
@@ -50,13 +62,37 @@ class User: AnyObject{
         customRecipes.append(recipe)
     }
     
+    func addToList(_ ingredient: Ingredient){
+        list.append(ingredient)
+    }
+    
+    func addToPantry(_ ingredient: Ingredient){
+        pantry.append(ingredient)
+    }
+    
+    func setCalList(id: Int, list: [Recipe]){
+        for recipe in list{
+            calendar[id].addRecipe(recipe)
+        }
+    }
+    
     //resets all data to what it would be at init
     func rmAll(){
         id = "N/A"
         email = ""
-        calendar = []
         customRecipes = []
         favoriteRecipes = []
+        calendar = [
+            Day(id: 0, name: "Monday", meals: []),
+            Day(id: 1, name: "Tuesday", meals: []),
+            Day(id: 2, name: "Wednesday", meals: []),
+            Day(id: 3, name: "Thursday", meals: []),
+            Day(id: 4, name: "Friday", meals: []),
+            Day(id: 5, name: "Saturday", meals: []),
+            Day(id: 6, name: "Sunday", meals: [])
+        ]
+        list = []
+        pantry = []
     }
     
 }
