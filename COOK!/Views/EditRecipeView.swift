@@ -370,7 +370,7 @@ struct EditRecipeView: View {
                             if showDay {
                                 for (index, day) in days.enumerated() {
                                     if day == selectedDay {
-                                        appState.schedule[index].addRecipe(recipe: recipe)
+                                        appState.schedule[index].addRecipe(recipe)
                                     }
                                 }
                             }
