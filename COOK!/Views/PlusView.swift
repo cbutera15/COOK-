@@ -21,7 +21,23 @@ struct PlusView: View {
         VStack() {
             Text("COOK!")
                 .font(.title)
+        
             Spacer()
+            
+            Button(action: {
+                
+            }) {
+                HStack {
+                    Image(systemName: "person.badge.minus")
+                    Text("Sign Out")
+                        .font(.title)
+                }
+                .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(BorderedButtonStyle())
+            .tint(purple)
+            .padding(.horizontal)
+            
             Button(action: {
                 showAddRecipe = true
                 newRecipe = Recipe()
