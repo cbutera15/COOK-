@@ -26,7 +26,7 @@ struct PlusView: View {
             Spacer()
             
             Button(action: {
-                
+                appState.signOut()
             }) {
                 HStack {
                     Image(systemName: "person.badge.minus")
