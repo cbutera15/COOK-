@@ -59,13 +59,17 @@ struct PantryView: View {
         IngredientList(
             ingredients: $appState.ingredients,
             selected: .constant([]),
-            color: .black,
+            color: yellow,
             backgroundColor: appState.backgroundColor,
             selectable: false,
             incrementable: true,
             unitEditable: false,
             deletable: true
         )
+        Text("Swipe left on list item to delete")
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, 30)
+        Spacer()
     }
     .padding()
     .background(appState.backgroundColor)

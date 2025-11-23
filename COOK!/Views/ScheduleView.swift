@@ -21,6 +21,7 @@ struct ScheduleView: View {
     @State private var showAddRecipe = false
     @State private var showDeleteButtons = false
     @State private var showEventsAddedAlert = false
+    @State private var newRecipe = Recipe(name: "", ingredients: [], instructions: "")
     
     @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     @State private var times: [String] = ["Morning", "Afternoon", "Evening", "Snacks"]
@@ -74,8 +75,8 @@ struct ScheduleView: View {
                                 day: dayBinding,
                                 showAddRecipe: $showAddRecipe,
                                 selectedDay: $selectedDay,
-                                color: Color(hue: 0.3389, saturation: 1, brightness: 0.05),
-                                buttonColor: Color(hue: 0.3389, saturation: 1, brightness: 0.5),
+                                color: Color(hue: 0.3389, saturation: 0.2, brightness: 0.9),
+                                buttonColor: Color(hue: 0.3389, saturation: 0.05, brightness: 0.95),
                                 showDelete: showDeleteButtons
                             )
                         }
@@ -131,7 +132,7 @@ struct ScheduleView: View {
                     Button(action: {
                         showAddRecipe = true
                     }) {
-                        Text("Add To Schedule")
+                        Text("Add From Scratch")
                             .frame(maxWidth: .infinity)
                         
                     }
@@ -145,7 +146,7 @@ struct ScheduleView: View {
                                 .font(.title)
                                 .padding()
                             Spacer()
-                            
+
                             List {
                                 Picker("Recipe", selection: $selectedRecipe) {
                                     ForEach(appState.savedRecipes, id: \.name) { recipe in
@@ -162,7 +163,7 @@ struct ScheduleView: View {
                             }
                             .listStyle(.plain)
                             Spacer()
-                            
+
                             // Mapping to the correct recipe (recipe required to be Hashable to display in picker so had to create a seconday list to choose from. TODO - fix this? can recipe be Hashable?)
                             Button(action: {
                                 showAddRecipe = false
@@ -175,7 +176,7 @@ struct ScheduleView: View {
                                         }
                                     }
                                 }
-                                
+
                             }) {
                                 Text("Add")
                                     .frame(maxWidth: .infinity)
@@ -186,6 +187,11 @@ struct ScheduleView: View {
                             Spacer()
                         }.presentationDetents([.height(300)])
                     }
+//                    .sheet(isPresented: $showAddRecipe) {
+//                        // FIX
+//                        
+//                        EditRecipeView(recipe: $newRecipe, addRecipe: true, showDay: true, selectedDay: "Monday")
+//                    }
                 }
             }
             .padding()

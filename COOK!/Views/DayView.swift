@@ -30,7 +30,7 @@ struct DayView: View {
                         recipe: $meal,
                         showAddRecipe: $showAddRecipe,
                         selectedDay: $selectedDay,
-                        color: .gray,
+                        color: color,
                         buttonColor: buttonColor,
                         showDelete: showDelete
                     )
@@ -41,7 +41,7 @@ struct DayView: View {
                     recipe: $newRecipe,
                     showAddRecipe: $showAddRecipe,
                     selectedDay: $selectedDay,
-                    color: .gray,
+                    color: color,
                     buttonColor: buttonColor,
                     showDelete: false
                 )

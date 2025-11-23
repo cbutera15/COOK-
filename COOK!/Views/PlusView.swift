@@ -35,7 +35,7 @@ struct PlusView: View {
             .padding()
             .tint(purple)
             .sheet(isPresented: $showAddRecipe) {
-                EditRecipeView(recipe: $newRecipe, addRecipe: true)
+                EditRecipeView(recipe: $newRecipe, addRecipe: true, showDay: false, selectedDay: "")
             }
             
             Button(action: {

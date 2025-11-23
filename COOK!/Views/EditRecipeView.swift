@@ -17,6 +17,7 @@ struct EditRecipeView: View {
     @Binding var recipe: Recipe
     
     let addRecipe: Bool
+    let showDay: Bool
     
     @State private var recipeTitle = ""
     @State private var recipeDescription = ""
@@ -35,6 +36,11 @@ struct EditRecipeView: View {
     // Photo picker variables (encrypted photo, loaded photo)
     @State private var selectedPhoto: PhotosPickerItem?
     @State private var selectedImage: Image?
+    
+    // Days list
+    @State private var days: [String] = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    @State var selectedDay: String
+
     
     // Unit list
     let units = ["None", "Teaspoon", "Tablespoon", "Ounce", "Pound", "Milliliter", "Liter", "Kilogram", "Gram", "Gallon", "Cup"]
@@ -296,6 +302,30 @@ struct EditRecipeView: View {
                         } message: {
                             Text("Enter the name for the new item.")
                         }
+                        
+                        if showDay {
+                            VStack {
+                                Text("Schedule Day to Add")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .foregroundStyle(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                                    .padding([.leading, .top])
+                                    .font(.title2.bold())
+                                
+                                HStack {
+                                    Text("Day:")
+                                    
+                                    Picker("Day", selection: $selectedDay) {
+                                        ForEach(days, id: \.self) { day in
+                                            Text(day)
+                                                .tag(day)
+                                        }
+                                    }
+                                    .tint(Color(hue: 0.7444, saturation: 0.46, brightness: 0.93))
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding()
+                            }
+                        }
                     
                 }
                 }
@@ -337,6 +367,13 @@ struct EditRecipeView: View {
                         )
                         if addRecipe {
                             appState.addSavedRecipe(recipe)
+                            if showDay {
+                                for (index, day) in days.enumerated() {
+                                    if day == selectedDay {
+                                        appState.schedule[index].addRecipe(recipe: recipe)
+                                    }
+                                }
+                            }
                         }
                     }) {
                         Text("Save")
@@ -375,6 +412,6 @@ struct EditRecipeView: View {
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
     @State var blankRecipe = Recipe()
     
-    EditRecipeView(recipe: $chickenAndRice, addRecipe: false).environmentObject(AppState())
+    EditRecipeView(recipe: $chickenAndRice, addRecipe: false, showDay: false, selectedDay: "").environmentObject(AppState())
 }
 

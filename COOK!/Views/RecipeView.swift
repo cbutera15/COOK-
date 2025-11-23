@@ -11,8 +11,7 @@ struct RecipeView: View {
     @EnvironmentObject var appState: AppState
     
     @Binding var recipe: Recipe
-    
-    @State var selected: [Ingredient] = []
+    @Binding var selected: [Ingredient]
     
     @State private var showEditRecipe = false
     
@@ -35,9 +34,9 @@ struct RecipeView: View {
             Spacer()
             Text("Ingredients").font(.title2)
             HStack {
-                Image(systemName: "cart")
-                Text("Ingredient status unavailable")
-                    .foregroundStyle(.secondary)
+//                Image(systemName: "cart")
+//                Text("Ingredient status unavailable")
+//                    .foregroundStyle(.secondary)
             }
             IngredientList(
                 ingredients: $recipe.ingredients,
@@ -67,7 +66,7 @@ struct RecipeView: View {
             }
         }
         .sheet(isPresented: $showEditRecipe) {
-            EditRecipeView(recipe: $recipe, addRecipe: false)
+            EditRecipeView(recipe: $recipe, addRecipe: false, showDay: false, selectedDay: "")
                 .interactiveDismissDisabled(true)
         }
     }
@@ -77,6 +76,7 @@ struct RecipeView: View {
     var chicken: Ingredient = Ingredient(name: "Chicken breast", quantity: 2, unit: .pound)
     var rice: Ingredient = Ingredient(name: "Rice", quantity: 1, unit: .cup)
     @State var chickenAndRice = Recipe(name: "Chicken and Rice", ingredients: [chicken, rice])
-    RecipeView(recipe: $chickenAndRice).environmentObject(AppState())
+    @State var selected: [Ingredient] = []
+    return RecipeView(recipe: $chickenAndRice, selected: $selected)
+        .environmentObject(AppState())
 }
-
