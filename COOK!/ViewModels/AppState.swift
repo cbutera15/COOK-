@@ -97,6 +97,19 @@ class AppState: ObservableObject {
         schedule = []
     }
     
+    func signOut(){
+        if fstore.user.id == "N/A"{
+            return
+        }
+        
+        fstore.logOut()
+        signedIn = false
+        nvEmail = ""
+        nvPassword = ""
+        
+        selectedTab = .signIn
+    }
+    
     func signIn(email: String, password: String)async{
         if fstore.user.id != "N/A"{
             signedIn = true
