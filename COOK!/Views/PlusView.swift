@@ -52,7 +52,7 @@ struct PlusView: View {
                 showSearch = true
                 newRecipe = Recipe()
             }) {
-                Text("Create Recipe \nFrom Scratch")
+                Text("Create Recipe")
                     .frame(maxWidth: .infinity)
                     .font(.title)
             }
@@ -108,7 +108,7 @@ struct PlusView: View {
                         }
                             .buttonStyle(PlainButtonStyle())
                     }
-                }
+                }.padding(.top,13)
                 Button(action: {
                     appState.searchFeild = "num_steps"
                     showFromNumSteps = true

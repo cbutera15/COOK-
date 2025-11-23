@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SignInView: View {
     @EnvironmentObject var appState: AppState
+    @State private var progress: Double = 0.0
+
     
     
     var body: some View {
@@ -79,6 +81,28 @@ struct SignInView: View {
                         Button("Ok"){
                             appState.showError = false
                         }.padding([.bottom],100)
+                    }
+                }
+            }
+            
+            if appState.isLoading{
+                ZStack{
+                    Rectangle().fill(Color(.white))
+                        .frame(width: UIScreen.main.bounds.width,height: UIScreen.main.bounds.height)
+                    VStack{
+                        
+                        Text("COOK!")
+                            .foregroundStyle(Color(#colorLiteral(red: 0.7972043157, green: 0.1877797246, blue: 0.8800705075, alpha: 1)))
+                            .font(.system(size: 100))
+                            .bold()
+                        ProgressView(value: progress)
+                            .progressViewStyle(LinearProgressViewStyle(tint: .purple))
+                            .onAppear {
+                                    withAnimation(.linear(duration: 1.0)) {
+                                        progress = 1.0 // Fill to 100%
+                                    }
+                                }
+                        
                     }
                 }
             }

@@ -17,8 +17,6 @@ struct ContentView: View {
                 Text("COOK")
                 
                 switch appState.selectedTab {
-                    case .loading:
-                        LoadingView()
                     case .signIn:
                         SignInView()
                     case .home:
@@ -35,7 +33,7 @@ struct ContentView: View {
                     ScheduleView(recipesHash: [], selectedRecipe: "", selectedDay: "")
                 }
                 
-                if appState.selectedTab != .signIn && appState.selectedTab != .loading{
+                if appState.selectedTab != .signIn{
                     HStack() {
                         CustomTabButton(
                             iconName: "list.dash",

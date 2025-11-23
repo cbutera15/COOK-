@@ -26,7 +26,6 @@ extension Date {
 
 class AppState: ObservableObject {
     enum MenuTab {
-        case loading
         case signIn
         case home
         case groceryList
@@ -50,7 +49,6 @@ class AppState: ObservableObject {
     @Published var error = ""
     
     @Published var selectedTab: MenuTab
-    @Published var lastSelectedTab: MenuTab
     @Published var backgroundColor: Color
     
     @Published var searchName:String = ""
@@ -69,7 +67,6 @@ class AppState: ObservableObject {
         fstore = Reader()
         
         self.selectedTab = .signIn
-        self.lastSelectedTab = .loading
         self.backgroundColor = Color(hue: 0.7444, saturation: 0.05, brightness: 0.93)
         
         setMockData()
@@ -131,9 +128,11 @@ class AppState: ObservableObject {
         nvPassword = ""
         
         selectedTab = .signIn
+        self.resetData()
     }
     
     func signIn(email: String, password: String)async{
+        self.resetData()
         if fstore.user.id != "N/A"{
             signedIn = true
             loadUserData()
@@ -282,6 +281,12 @@ class AppState: ObservableObject {
         fstore.saveList(groceryList)
         fstore.savePantry(ingredients)
         fstore.saveCalendar(schedule)
+    }
+    
+    func resetData(){
+        groceryList = []
+        ingredients = []
+        schedule = []
     }
 }
 
